@@ -8,12 +8,14 @@
 
     /* Bundler mode */
     "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react",
     "jsxFragmentFactory": "React.Fragment",
     "jsxFactory": "React.createElement",
-
+    
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
