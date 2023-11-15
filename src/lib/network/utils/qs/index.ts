@@ -33,7 +33,6 @@ export function getParamsStr(data = {}) {
  * @param Params 追加的query
  * @return {string}
  */
-
 export function setUrlParams(url, Params = {}) {
   url = new URL(url);
   for (const key in Params) {
@@ -41,6 +40,16 @@ export function setUrlParams(url, Params = {}) {
   }
   return url.toString();
 }
+
+/**
+ * 获取路径
+ */
+export function getPath(url?:string){
+  url = url || location.href
+  const urlObj = new URL(url);
+  return urlObj.pathname
+}
+
 export default {
   getQuery,
   getParamsStr,
