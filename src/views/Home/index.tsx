@@ -1,9 +1,10 @@
 import React from "react";
 
-export default function Comp2() {
+const Home = () => {
   return (
     <div>
-      <p>bbbbbbb</p>
+      <p>Home</p>
     </div>
   );
-}
+};
+export default Home;

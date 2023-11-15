@@ -1,12 +1,14 @@
 import React from "react";
-import Comp2 from "./components/Comp2/index";
-import Comp from "./components/Comp/index";
+import router from "./router";
+import { Link, useRoutes } from "react-router-dom";
 
 function App() {
+  const routes = useRoutes(router);
   return (
     <div className="app">
-      <Comp></Comp>
-      <Comp2></Comp2>
+      <Link to="/home">Home</Link>
+      <Link to="/about">About</Link>
+      {routes}
     </div>
   );
 }
