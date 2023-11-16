@@ -1,19 +1,45 @@
 import { Menu } from "antd";
 import { getPath } from "@/lib/network/utils/qs";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "@/config";
 import { IMenuCompProps } from "../typing";
 
+const { menuItems } = config;
+const path = getPath();
 const MenuComp = function (props: IMenuCompProps) {
   const navigateTo = useNavigate();
   const { onPathChange } = props;
-  const [openKeys, setOpenKeys] = useState([""]);
-  const path = getPath();
-  const { menuItems } = config;
+
+  const openkeys = generateOpenkeys();
+
+  const [currentOpenkeys, setCurrentOpenkeys] = useState(openkeys);
+
+  function generateOpenkeys() {
+    let openkeys: any[] = [];
+    function findMenuItem(items, path) {
+      for (let item of items) {
+        if (item?.key === path) {
+          openkeys.push(path);
+          return true;
+        }
+
+        if (item?.children) {
+          if (findMenuItem(item.children, path)) {
+            const pathArr = path.split("/");
+            openkeys.push("/" + pathArr[pathArr.length - 2]);
+            return true;
+          }
+        }
+      }
+      return false;
+    }
+    findMenuItem(menuItems, path);
+    return openkeys;
+  }
 
   function handleOpenChange(keys: string[]) {
-    setOpenKeys([keys[keys.length - 1]]);
+    setCurrentOpenkeys(keys);
   }
 
   function routerJump(e: { key: string }) {
@@ -28,7 +54,7 @@ const MenuComp = function (props: IMenuCompProps) {
       items={menuItems}
       onClick={routerJump}
       onOpenChange={handleOpenChange}
-      openKeys={openKeys}
+      openKeys={currentOpenkeys}
     />
   );
 };
