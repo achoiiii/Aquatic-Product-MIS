@@ -1,14 +1,13 @@
-import type { MenuProps } from "antd";
 import { Menu } from "antd";
 import { getPath } from "@/lib/network/utils/qs";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "@/config";
+import { IMenuCompProps } from "../typing";
 
-const MenuComp = function () {
-  type MenuItem = Required<MenuProps>["items"][number];
-
+const MenuComp = function (props: IMenuCompProps) {
   const navigateTo = useNavigate();
+  const { onPathChange } = props;
   const [openKeys, setOpenKeys] = useState([""]);
   const path = getPath();
   const { menuItems } = config;
@@ -19,19 +18,7 @@ const MenuComp = function () {
 
   function routerJump(e: { key: string }) {
     navigateTo(e.key);
-  }
-  function getItem(
-    label: React.ReactNode,
-    key: React.Key,
-    icon?: React.ReactNode,
-    children?: MenuItem[]
-  ): MenuItem {
-    return {
-      key,
-      icon,
-      children,
-      label,
-    } as MenuItem;
+    onPathChange(menuItems, e.key);
   }
   return (
     <Menu

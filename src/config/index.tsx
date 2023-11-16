@@ -29,7 +29,7 @@ export default {
       label: "管理",
       children: [
         {
-          key: "manage/apartment",
+          key: "/manage/apartment",
           label: "部门管理",
         },
       ],
@@ -40,7 +40,7 @@ export default {
       label: "可视化",
       children: [
         {
-          key: "chart/breed",
+          key: "/chart/breed",
           label: "养殖面积",
         },
       ],
