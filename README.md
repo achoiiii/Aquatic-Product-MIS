@@ -1,5 +1,13 @@
 # Aquatic-Product-MIS
 
+## 前端项目技术栈
+
+React + react-router + rematch + antd + Typescript + axios
+
+## 代码规范
+
+TODO
+
 ## 项目启动
 
 ### `npm i`
