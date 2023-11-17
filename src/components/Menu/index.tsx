@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "@/config";
 import { IMenuCompProps } from "../typing";
+import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { menuItems } = config;
 const path = getPath();
@@ -17,7 +18,7 @@ const MenuComp = function (props: IMenuCompProps) {
 
   function generateOpenkeys() {
     let openkeys: any[] = [];
-    function findMenuItem(items, path) {
+    function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
       for (let item of items) {
         if (item?.key === path) {
           openkeys.push(path);
