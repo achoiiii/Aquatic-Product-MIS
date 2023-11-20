@@ -1,0 +1,27 @@
+# 忽略目录
+# scripts/
+build/
+test/
+tests/
+node_modules/
+dist/
+out/
+
+# node 覆盖率文件
+coverage/
+
+# 忽略测试文件
+__tests__/
+/packages/*/lib/
+
+# 忽略文件
+**/*-min.js
+**/*.min.js
+
+# workspace/
+__mocks__/
+
+.eslintrc.js
+commitlint.config.js
+
+.temp

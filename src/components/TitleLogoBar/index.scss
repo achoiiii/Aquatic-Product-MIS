@@ -1,0 +1,15 @@
+.demo-logo-vertical{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px;
+    .demo-logo{
+        background-image: url('../../assets/logo.png');
+        width: 40px;
+        height: 40px;
+        background-size: cover;
+    }
+    .demo-title{
+        color: #ffffff;
+    }
+}
