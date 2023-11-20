@@ -1,8 +1,11 @@
 import axios from 'axios';
+import config from '@/config';
 const instance = axios.create({
-    baseURL: 'https://some-domain.com/api/',
-    timeout: 1000,
-    headers: {'X-Custom-Header': 'foobar'}
+  baseURL: config.serviceUrl.baseURL, // API 的基础 URL
+  timeout: 5000, // 请求超时时间（单位：毫秒）
+  headers: {
+    'Content-Type': 'application/json', // 请求头部信息
+  },
 });
 // 添加请求拦截器
 instance.interceptors.request.use(function (config) {

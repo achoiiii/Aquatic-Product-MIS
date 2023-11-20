@@ -12,7 +12,9 @@ type MenuItem = Required<MenuProps>["items"][number];
 export default {
   // 接口域名
   serviceUrl: {
+    baseURL: "http://localhost:3000",
     member: "http://localhost:3000",
+    dog: "https://dog.ceo",
   },
   // 接口通用参数配置
   serviceInfo: {},
