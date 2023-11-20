@@ -1,5 +1,5 @@
 import { Menu } from "antd";
-import { getPath } from "@/lib/network/utils/qs";
+import { getPath } from "@/utils/url";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "@/config";

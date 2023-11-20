@@ -5,7 +5,7 @@ import { Outlet } from "react-router-dom";
 import MenuComp from "@/components/Menu";
 import TitleLogoBar from "@/components/TitleLogoBar";
 import config from "@/config";
-import { getPath } from "@/lib/network/utils/qs";
+import { getPath } from "@/utils/url";
 import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
 
 const { Header, Content, Footer, Sider } = Layout;
