@@ -1,10 +1,10 @@
-import React from "react";
-import { Navigate } from "react-router-dom";
-import Home from "../views/Home";
-import About from "../views/About";
-import View from "../views/index";
-import Apartment from "@/views/Apartment";
-import Login from "@/views/Login";
+import React from 'react';
+import { Navigate } from 'react-router-dom';
+import Home from '../views/Home';
+import About from '../views/About';
+import View from '../views/index';
+import Apartment from '@/views/Apartment';
+import Login from '@/views/Login';
 
 /**
  * 路由表
@@ -13,30 +13,30 @@ import Login from "@/views/Login";
  */
 const routes = [
   {
-    path: "/",
+    path: '/',
     element: <Navigate to="/home" />,
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
   {
-    path: "/",
+    path: '/',
     element: <View />,
     children: [
       {
-        path: "/home",
+        path: '/home',
         element: <Home />,
       },
       {
-        path: "/about",
+        path: '/about',
         element: <About />,
       },
       {
-        path: "/manage",
+        path: '/manage',
         children: [
           {
-            path: "/manage/apartment",
+            path: '/manage/apartment',
             element: <Apartment />,
           },
         ],
@@ -45,7 +45,7 @@ const routes = [
   },
   // 兜底路由
   {
-    path: "*",
+    path: '*',
     element: <Navigate to="/home" />,
   },
 ];

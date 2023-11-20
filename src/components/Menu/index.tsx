@@ -1,10 +1,10 @@
-import { Menu } from "antd";
-import { getPath } from "@/utils/url";
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import config from "@/config";
-import { IMenuCompProps } from "../typing";
-import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
+import { Menu } from 'antd';
+import { getPath } from '@/utils/url';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import config from '@/config';
+import { IMenuCompProps } from '../typing';
+import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 
 const { menuItems } = config;
 const path = getPath();
@@ -27,8 +27,8 @@ const MenuComp = function (props: IMenuCompProps) {
 
         if (item?.children) {
           if (findMenuItem(item.children, path)) {
-            const pathArr = path.split("/");
-            openkeys.push("/" + pathArr[pathArr.length - 2]);
+            const pathArr = path.split('/');
+            openkeys.push('/' + pathArr[pathArr.length - 2]);
             return true;
           }
         }

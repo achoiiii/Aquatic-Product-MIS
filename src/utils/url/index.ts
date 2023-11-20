@@ -44,12 +44,12 @@ export function setUrlParams(url, Params = {}) {
 /**
  * 获取路径
  */
-export function getPath(url?:string){
+export function getPath(url?: string) {
   url = url || location.href;
   const urlObj = new URL(url);
-  return urlObj.pathname
+  return urlObj.pathname;
 }
-export function getOrigin(url?:string){
+export function getOrigin(url?: string) {
   url = url || location.href;
   const urlObj = new URL(url);
   return urlObj.origin;

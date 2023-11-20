@@ -1,6 +1,6 @@
 import { Models, RematchDispatch, RematchRootState, init } from '@rematch/core';
 import { TypedUseSelectorHook, useSelector as ReactReduxUseSelector } from 'react-redux';
-import app from './models/app'
+import app from './models/app';
 import count from './models/count';
 import user from './models/user';
 
@@ -13,7 +13,7 @@ export interface IAppStoreModels extends Models<IAppStoreModels> {
 const models: IAppStoreModels = {
   app,
   count,
-  user
+  user,
 };
 
 export const store = init<IAppStoreModels>({

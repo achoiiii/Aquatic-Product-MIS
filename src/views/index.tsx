@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
-import "./index.scss";
-import { Breadcrumb, Layout, theme } from "antd";
-import { Outlet } from "react-router-dom";
-import MenuComp from "@/components/Menu";
-import TitleLogoBar from "@/components/TitleLogoBar";
-import config from "@/config";
-import { getPath } from "@/utils/url";
-import { ItemType, MenuItemType } from "antd/es/menu/hooks/useItems";
+import React, { useEffect, useState } from 'react';
+import './index.scss';
+import { Breadcrumb, Layout, theme } from 'antd';
+import { Outlet } from 'react-router-dom';
+import MenuComp from '@/components/Menu';
+import TitleLogoBar from '@/components/TitleLogoBar';
+import config from '@/config';
+import { getPath } from '@/utils/url';
+import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -24,10 +24,7 @@ const View: React.FC = () => {
   }, []);
 
   // 生成面包屑
-  function generateBreadcrumb(
-    menuItems: ItemType<MenuItemType>[],
-    currentPath: string
-  ) {
+  function generateBreadcrumb(menuItems: ItemType<MenuItemType>[], currentPath: string) {
     let breadcrumb: { title: any }[] | { title: any; href?: any }[] = [];
 
     function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
@@ -58,33 +55,25 @@ const View: React.FC = () => {
     setBreadcrumbItems(breadcrumb);
   }
   return (
-    <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={(value) => setCollapsed(value)}
-      >
+    <Layout style={{ minHeight: '100vh' }}>
+      <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <TitleLogoBar collapsed={collapsed} />
         <MenuComp onPathChange={generateBreadcrumb} />
       </Sider>
       <Layout>
         <Header
           style={{
-            padding: "0 24px",
+            padding: '0 24px',
             background: colorBgContainer,
-            justifyContent: "space-between",
-            alignItems: "center",
-            display: "flex",
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            display: 'flex',
           }}
         >
-          <Breadcrumb
-            style={{ margin: "16px 0" }}
-            separator="/"
-            items={breadcrumbItems}
-          />
+          <Breadcrumb style={{ margin: '16px 0' }} separator="/" items={breadcrumbItems} />
           <div>User</div>
         </Header>
-        <Content style={{ margin: "16px" }}>
+        <Content style={{ margin: '16px' }}>
           <div
             style={{
               padding: 24,
@@ -95,9 +84,7 @@ const View: React.FC = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer style={{ textAlign: "center" }}>
-          Create By Ant Design ©2023
-        </Footer>
+        <Footer style={{ textAlign: 'center' }}>Create By Ant Design ©2023</Footer>
       </Layout>
     </Layout>
   );

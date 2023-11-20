@@ -1,13 +1,9 @@
-import { createModel } from "@rematch/core";
-import { IAppStoreModels } from "@/store";
+import { createModel } from '@rematch/core';
+import { IAppStoreModels } from '@/store';
 export default createModel<IAppStoreModels>()({
   state: {
-    isLogin: true
+    isLogin: true,
   }, // initial state
-  reducers: {
-    
-  },
-  effects: (dispatch) => ({
-    
-  }),
+  reducers: {},
+  effects: (dispatch) => ({}),
 });

@@ -1,6 +1,6 @@
-import React from "react";
-import { ITitleLogoBarProps } from "../typing";
-import "./index.scss";
+import React from 'react';
+import { ITitleLogoBarProps } from '../typing';
+import './index.scss';
 
 function TitleLogoBar(props: ITitleLogoBarProps) {
   return (

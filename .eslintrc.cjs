@@ -3,7 +3,7 @@ module.exports = {
     // For some ci and jest test env, we chose require.resolve instead 'plugin:@iceworks/best-practices/react-ts'
     require.resolve('@iceworks/eslint-plugin-best-practices/src/configs/react-ts'),
     // 解决eslint和prettier冲突问题
-    'plugin:prettier/recommended'
+    'plugin:prettier/recommended',
   ],
   rules: {
     'no-useless-escape': 'off',
@@ -14,9 +14,9 @@ module.exports = {
     '@typescript-eslint/restrict-plus-operands': 'off',
     '@iceworks/best-practices/recommend-functional-component': 'off',
     'max-len': 'off',
-    "@typescript-eslint/ban-ts-comment": 'off',
-    "no-bitwise": "off",
-    "no-mixed-operators": "off",
-    "@typescript-eslint/no-require-imports": "off",
+    '@typescript-eslint/ban-ts-comment': 'off',
+    'no-bitwise': 'off',
+    'no-mixed-operators': 'off',
+    '@typescript-eslint/no-require-imports': 'off',
   },
-}
+};

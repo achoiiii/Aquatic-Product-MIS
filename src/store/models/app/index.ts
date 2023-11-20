@@ -1,5 +1,5 @@
-import { createModel } from "@rematch/core";
-import { IAppStoreModels } from "@/store";
+import { createModel } from '@rematch/core';
+import { IAppStoreModels } from '@/store';
 export default createModel<IAppStoreModels>()({
   state: 0, // initial state
   reducers: {
