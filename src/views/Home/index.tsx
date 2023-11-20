@@ -1,10 +1,10 @@
-import { getUserInfo } from "@/request/mock";
-import { useSelector, store } from "@/store";
-import React, { useEffect, useState } from "react";
+import { getUserInfo } from '@/request/mock';
+import { useSelector, store } from '@/store';
+import React, { useEffect, useState } from 'react';
 
 const Home = () => {
   const num = useSelector((state) => state.count.num);
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState('');
   useEffect(() => {
     getUserInfo().then((res) => {
       setImage(res.data.message);

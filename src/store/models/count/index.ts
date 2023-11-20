@@ -1,13 +1,13 @@
-import { createModel } from "@rematch/core";
-import { IAppStoreModels } from "@/store";
+import { createModel } from '@rematch/core';
+import { IAppStoreModels } from '@/store';
 export default createModel<IAppStoreModels>()({
   state: {
-    num:0
+    num: 0,
   }, // initial state
   reducers: {
     // handle state changes with pure functions
     increment(state, payload: number) {
-      return {...state,num:state.num+payload}
+      return { ...state, num: state.num + payload };
     },
   },
   effects: (dispatch) => ({
