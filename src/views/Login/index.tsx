@@ -3,12 +3,13 @@ import { Button, Checkbox, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './index.scss';
+import { store } from '@/store';
 
 const Login = () => {
   const navigateTo = useNavigate();
   const onFinish = (values: any) => {
     // TODO: 请求接口
-    console.log('Received values of form: ', values);
+    store.dispatch.user.login();
     navigateTo('/home');
   };
   const captchaImg =

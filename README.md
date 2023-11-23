@@ -3,6 +3,7 @@
 ## 技术栈
 
 React + react-router + rematch + antd + Typescript + axios + scss
+node版本：16.20.1
 
 ## Github
 
@@ -33,6 +34,7 @@ React + react-router + rematch + antd + Typescript + axios + scss
 │   ├── main.tsx               // 入口 加载组件 初始化等
 │   ├── vite-env.d.ts          //
 ├── .editorconfig              // ide编码格式配置
+├── .env                       // vite环境变量配置文件
 ├── .eslintignore              // eslint忽略语法检查
 ├── .eslintrc.cjs              // eslint 配置项
 ├── .gitignore                 // git 忽略项

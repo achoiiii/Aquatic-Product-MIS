@@ -7,6 +7,7 @@ import TitleLogoBar from '@/components/TitleLogoBar';
 import config from '@/config';
 import { getPath } from '@/utils/url';
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
+import DropdownBar from '@/components/DropdownBar';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -71,7 +72,7 @@ const View: React.FC = () => {
           }}
         >
           <Breadcrumb style={{ margin: '16px 0' }} separator="/" items={breadcrumbItems} />
-          <div>User</div>
+          <DropdownBar />
         </Header>
         <Content style={{ margin: '16px' }}>
           <div

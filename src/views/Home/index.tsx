@@ -1,7 +1,6 @@
 import { getUserInfo } from '@/request/mock';
 import { useSelector, store } from '@/store';
 import React, { useEffect, useState } from 'react';
-
 const Home = () => {
   const num = useSelector((state) => state.count.num);
   const [image, setImage] = useState('');

@@ -5,6 +5,8 @@ import React from 'react';
 type MenuItem = Required<MenuProps>['items'][number];
 // 配置信息都写在这里
 export default {
+  // 前端版本
+  VERSION: import.meta.env.VITE_PROJECT_VERSION,
   // 接口域名
   serviceUrl: {
     baseURL: 'http://localhost:3000',
