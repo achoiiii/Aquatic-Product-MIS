@@ -5,6 +5,7 @@ import { IUserState } from './typings';
 const defaultState: IUserState = {
   isLogin: false,
   nickname: 'Achoi',
+  identity: 'normal',
 };
 export default createModel<IAppStoreModels>()({
   state: defaultState,
@@ -22,7 +23,7 @@ export default createModel<IAppStoreModels>()({
   },
   effects: (dispatch) => ({
     async login() {
-      dispatch.user.update({ isLogin: true, nickname: 'Logined AChoi' });
+      dispatch.user.update({ isLogin: true, nickname: 'Logined AChoi', identity: 'admin' });
     },
     async logout() {
       dispatch.user.reset();

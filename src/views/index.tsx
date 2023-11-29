@@ -79,7 +79,6 @@ const View: React.FC = () => {
             style={{
               padding: 24,
               minHeight: 360,
-              background: colorBgContainer,
             }}
           >
             <Outlet />
