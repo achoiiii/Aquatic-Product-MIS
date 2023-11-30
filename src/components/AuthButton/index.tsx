@@ -5,7 +5,7 @@ import { getPermission } from '@/utils/permission';
 // 封装antd按钮，带权限控制
 function AuthButton(props: Partial<IAuthButtonProps>) {
   const { auth = [], text } = props;
-  const disabled = getPermission(auth);
+  const disabled = !getPermission(auth);
 
   return (
     <Button {...props} disabled={disabled}>
