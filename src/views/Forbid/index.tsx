@@ -7,7 +7,8 @@ function Forbid() {
 
   return (
     <div id="forbid">
-      {prePathname}
+      <p className="forbid-title">您无权访问 {prePathname} 页面</p>
+      <p>如需申请访问，请联系管理员</p>
       <div className="forbid-bg" />
     </div>
   );
