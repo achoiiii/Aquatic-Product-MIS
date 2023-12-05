@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './index.scss';
 import { Breadcrumb, Layout, theme } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
 import MenuComp from '@/components/Menu';
 import TitleLogoBar from '@/components/TitleLogoBar';
 import config from '@/config';
@@ -15,18 +15,20 @@ const View: React.FC = () => {
   const { menuItems } = config;
   const [collapsed, setCollapsed] = useState(false);
   const [breadcrumbItems, setBreadcrumbItems] = useState([]);
+  const location = useLocation();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {
+    if (location.pathname === '/forbid') return setBreadcrumbItems([{ title: '权限限制' }]);
     generateBreadcrumb(menuItems, getPath());
   }, []);
 
   // 生成面包屑
   function generateBreadcrumb(menuItems: ItemType<MenuItemType>[], currentPath: string) {
-    let breadcrumb: { title: any }[] | { title: any; href?: any }[] = [];
+    let breadcrumb: { title: string }[] | { title: any; href?: any }[] = [];
 
     function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
       for (let item of items) {

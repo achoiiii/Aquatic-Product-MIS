@@ -5,6 +5,7 @@ import About from '../views/About';
 import View from '../views/index';
 import Apartment from '@/views/Apartment';
 import Login from '@/views/Login';
+import Forbid from '@/views/Forbid';
 
 /**
  * 路由表
@@ -24,6 +25,10 @@ const routes = [
     path: '/',
     element: <View />,
     children: [
+      {
+        path: '/forbid',
+        element: <Forbid />,
+      },
       {
         path: '/home',
         element: <Home />,

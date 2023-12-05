@@ -1,0 +1,14 @@
+#forbid {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 70vh;
+
+  .forbid-bg {
+    width: 368px;
+    height: 276px;
+    background-image: url('../../assets/forbid.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+}
