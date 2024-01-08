@@ -10,7 +10,7 @@ import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 import DropdownBar from '@/components/DropdownBar';
 import { useSelector } from '@/store';
 
-const { Header, Content, Footer, Sider } = Layout;
+const { Header, Content, Sider } = Layout;
 
 const View: React.FC = () => {
   const { menuItems } = config;
@@ -85,7 +85,6 @@ const View: React.FC = () => {
             <Outlet />
           </div>
         </Content>
-        <Footer style={{ textAlign: 'center' }}>Create By Ant Design ©2023</Footer>
       </Layout>
     </Layout>
   );

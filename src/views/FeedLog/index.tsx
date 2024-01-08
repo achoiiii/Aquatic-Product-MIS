@@ -1,91 +1,44 @@
 import React, { useState } from 'react';
-import { Button, Form, Input, Select, Table } from 'antd';
+import { Button, Form, Input, Select, Table, DatePicker } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import exportTableToExcel from '@/utils/exportXlsx';
+import { Dayjs } from 'dayjs';
 
-const { Option } = Select;
-
-type Currency = 'rmb' | 'dollar';
-
-interface PriceValue {
-  number?: number;
-  currency?: Currency;
-}
-
-interface PriceInputProps {
-  value?: PriceValue;
-  onChange?: (value: PriceValue) => void;
-}
-
-const PriceInput: React.FC<PriceInputProps> = ({ value = {}, onChange }) => {
-  const [number, setNumber] = useState(0);
-  const [currency, setCurrency] = useState<Currency>('rmb');
-
-  const triggerChange = (changedValue: { number?: number; currency?: Currency }) => {
-    onChange?.({ number, currency, ...value, ...changedValue });
-  };
-
-  const onNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newNumber = parseInt(e.target.value || '0', 10);
-    if (Number.isNaN(number)) {
-      return;
-    }
-    if (!('number' in value)) {
-      setNumber(newNumber);
-    }
-    triggerChange({ number: newNumber });
-  };
-
-  const onCurrencyChange = (newCurrency: Currency) => {
-    if (!('currency' in value)) {
-      setCurrency(newCurrency);
-    }
-    triggerChange({ currency: newCurrency });
-  };
-
-  return (
-    <span>
-      <Input type="text" value={value.number || number} onChange={onNumberChange} style={{ width: 100 }} />
-      <Select value={value.currency || currency} style={{ width: 80, margin: '0 8px' }} onChange={onCurrencyChange}>
-        <Option value="rmb">RMB</Option>
-        <Option value="dollar">Dollar</Option>
-      </Select>
-    </span>
-  );
-};
+const { RangePicker } = DatePicker;
 
 const SearchBar: React.FC = () => {
-  const onFinish = (values: any) => {
+  interface searchParams {
+    poolId: string;
+    dateRange: Dayjs[];
+  }
+  const onFinish = (values: searchParams) => {
+    const timestampArr = values.dateRange.map((value) => {
+      return value.valueOf();
+    });
+    values['timestampArr'] = timestampArr;
     console.log('Received values from form: ', values);
   };
 
-  const checkPrice = (_: any, value: { number: number }) => {
-    if (value.number > 0) {
-      return Promise.resolve();
-    }
-    return Promise.reject(new Error('Price must be greater than zero!'));
-  };
-
   return (
-    <Form
-      name="customized_form_controls"
-      layout="inline"
-      onFinish={onFinish}
-      initialValues={{
-        price: {
-          number: 0,
-          currency: 'rmb',
-        },
-      }}
-      className="content-box search-bar"
-    >
-      <Form.Item name="price" label="Price" rules={[{ validator: checkPrice }]}>
-        <PriceInput />
+    <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
+      <Form.Item name="poolId" label="塘号">
+        <Input style={{ width: 100 }} />
+      </Form.Item>
+      <Form.Item name="dateRange" label="日期">
+        <RangePicker />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
           Submit
         </Button>
       </Form.Item>
+      <Button
+        type="primary"
+        style={{ backgroundColor: '#18bc69' }}
+        onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+      >
+        导出
+      </Button>
     </Form>
   );
 };
@@ -105,7 +58,7 @@ const TableContainer: React.FC = () => {
       key: '1',
       firstName: 'John',
       lastName: 'Brown',
-      age: 32,
+      age: 1,
       address: 'New York No. 1 Lake Park',
       tags: ['nice', 'developer'],
     },
@@ -113,7 +66,7 @@ const TableContainer: React.FC = () => {
       key: '2',
       firstName: 'Jim',
       lastName: 'Green',
-      age: 42,
+      age: 2,
       address: 'London No. 1 Lake Park',
       tags: ['loser'],
     },
@@ -121,7 +74,7 @@ const TableContainer: React.FC = () => {
       key: '3',
       firstName: 'Joe',
       lastName: 'Black',
-      age: 32,
+      age: 3,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
@@ -129,7 +82,7 @@ const TableContainer: React.FC = () => {
       key: '4',
       firstName: 'Joe',
       lastName: 'Black',
-      age: 32,
+      age: 4,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
@@ -137,7 +90,7 @@ const TableContainer: React.FC = () => {
       key: '5',
       firstName: 'Joe',
       lastName: 'Black',
-      age: 32,
+      age: 5,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
@@ -145,7 +98,7 @@ const TableContainer: React.FC = () => {
       key: '6',
       firstName: 'Joe',
       lastName: 'Black',
-      age: 32,
+      age: 6,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
@@ -153,7 +106,63 @@ const TableContainer: React.FC = () => {
       key: '7',
       firstName: 'Joe',
       lastName: 'Black',
-      age: 32,
+      age: 7,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '8',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 8,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '9',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 9,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '10',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 10,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '11',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 11,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '12',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 12,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '13',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 13,
+      address: 'Sydney No. 1 Lake Park',
+      tags: ['cool', 'teacher'],
+    },
+    {
+      key: '14',
+      firstName: 'Joe',
+      lastName: 'Black',
+      age: 14,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
@@ -301,7 +310,15 @@ const TableContainer: React.FC = () => {
   return (
     <div className="content-box">
       <div className="table-result-text">总共匹配到：{11111}条数据</div>
-      <Table dataSource={data} bordered size="middle" scroll={{ x: 3000, y: 235 }} columns={columns} />
+      <Table
+        dataSource={data}
+        bordered
+        pagination={{ pageSize: 10 }}
+        size="small"
+        scroll={{ x: 3000 }}
+        columns={columns}
+        id="feedlog-table"
+      />
     </div>
   );
 };
