@@ -8,6 +8,7 @@ import config from '@/config';
 import { getPath } from '@/utils/url';
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 import DropdownBar from '@/components/DropdownBar';
+import { useSelector } from '@/store';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -16,12 +17,14 @@ const View: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [breadcrumbItems, setBreadcrumbItems] = useState([]);
   const location = useLocation();
+  const { isLogin } = useSelector((state) => state.user);
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
   useEffect(() => {
+    if (!isLogin) return;
     if (location.pathname === '/forbid') return setBreadcrumbItems([{ title: '权限限制' }]);
     generateBreadcrumb(menuItems, getPath());
   }, []);
@@ -29,6 +32,7 @@ const View: React.FC = () => {
   // 生成面包屑
   function generateBreadcrumb(menuItems: ItemType<MenuItemType>[], currentPath: string) {
     let breadcrumb: { title: string }[] | { title: any; href?: any }[] = [];
+    console.log(currentPath, 'currentPathcurrentPathcurrentPath');
 
     function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
       for (let item of items) {
@@ -77,12 +81,7 @@ const View: React.FC = () => {
           <DropdownBar />
         </Header>
         <Content style={{ margin: '16px' }}>
-          <div
-            style={{
-              padding: 24,
-              minHeight: 360,
-            }}
-          >
+          <div>
             <Outlet />
           </div>
         </Content>
