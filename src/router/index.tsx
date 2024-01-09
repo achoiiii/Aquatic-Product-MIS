@@ -3,22 +3,15 @@ import { Navigate } from 'react-router-dom';
 import Home from '../views/Home';
 import About from '../views/About';
 import View from '../views/index';
-import Apartment from '@/views/Apartment';
 import Login from '@/views/Login';
 import Forbid from '@/views/Forbid';
 import FeedManage from '@/views/FeedManage';
-import FishManage from '@/views/FishManage';
-import MedicineManage from '@/views/MedicineManage';
-import PoolManage from '@/views/PoolManage';
-import StaffManage from '@/views/StaffManage';
-import FeedLog from '@/views/FeedLog';
-import FishLog from '@/views/FishLog';
-import HealthLog from '@/views/HealthLog';
-import MedicineLog from '@/views/MedicineLog';
-import ProcessLog from '@/views/ProcessLog';
-import SellLog from '@/views/SellLog';
-import WaterDetection from '@/views/WaterDetection';
-import WeatherDetection from '@/views/WeatherDetection';
+import FeedSheet from '@/views/FeedSheet';
+import FishSheet from '@/views/FishSheet';
+import LossSheet from '@/views/LossSheet';
+import SaleSheet from '@/views/SaleSheet';
+import StockSheet from '@/views/StockSheet';
+import SummarySheet from '@/views/SummarySheet';
 
 /**
  * 路由表
@@ -51,31 +44,31 @@ const routes = [
         element: <About />,
       },
       {
-        path: '/manage',
+        path: '/sheet',
         children: [
           {
-            path: '/manage/apartment',
-            element: <Apartment />,
+            path: '/sheet/feed',
+            element: <FeedSheet />,
           },
           {
-            path: '/manage/staff',
-            element: <StaffManage />,
+            path: '/sheet/fish',
+            element: <FishSheet />,
           },
           {
-            path: '/manage/pool',
-            element: <PoolManage />,
+            path: '/sheet/sale',
+            element: <SaleSheet />,
           },
           {
-            path: '/manage/fish',
-            element: <FishManage />,
+            path: '/sheet/loss',
+            element: <LossSheet />,
           },
           {
-            path: '/manage/feed',
-            element: <FeedManage />,
+            path: '/sheet/stock',
+            element: <StockSheet />,
           },
           {
-            path: '/manage/medicine',
-            element: <MedicineManage />,
+            path: '/sheet/summary',
+            element: <SummarySheet />,
           },
         ],
       },
@@ -83,41 +76,8 @@ const routes = [
         path: '/log',
         children: [
           {
-            path: '/log/fish',
-            element: <FishLog />,
-          },
-          {
             path: '/log/feed',
-            element: <FeedLog />,
-          },
-          {
-            path: '/log/medicine',
-            element: <MedicineLog />,
-          },
-          {
-            path: '/log/health',
-            element: <HealthLog />,
-          },
-          {
-            path: '/log/process',
-            element: <ProcessLog />,
-          },
-          {
-            path: '/log/sell',
-            element: <SellLog />,
-          },
-        ],
-      },
-      {
-        path: '/detection',
-        children: [
-          {
-            path: '/detection/water',
-            element: <WaterDetection />,
-          },
-          {
-            path: '/detection/weather',
-            element: <WeatherDetection />,
+            element: <FeedManage />,
           },
         ],
       },

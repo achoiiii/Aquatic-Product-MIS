@@ -1,10 +1,10 @@
 import React from 'react';
 
-const FishLog = () => {
+const FishSheet = () => {
   return (
     <div>
       <p>鱼种投放记录</p>
     </div>
   );
 };
-export default FishLog;
+export default FishSheet;

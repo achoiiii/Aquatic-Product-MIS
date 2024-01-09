@@ -21,6 +21,9 @@ const SearchBar: React.FC = () => {
 
   return (
     <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
+      <Form.Item name="poolId" label="场号">
+        <Input style={{ width: 100 }} />
+      </Form.Item>
       <Form.Item name="poolId" label="塘号">
         <Input style={{ width: 100 }} />
       </Form.Item>
@@ -29,7 +32,7 @@ const SearchBar: React.FC = () => {
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
-          Submit
+          查询
         </Button>
       </Form.Item>
       <Button
@@ -46,8 +49,8 @@ const SearchBar: React.FC = () => {
 const TableContainer: React.FC = () => {
   interface DataType {
     key: React.Key;
-    firstName: string;
-    lastName: string;
+    quantity: string;
+    weight: string;
     age: number;
     address: string;
     tags: string[];
@@ -56,128 +59,150 @@ const TableContainer: React.FC = () => {
   const data: DataType[] = [
     {
       key: '1',
-      firstName: 'John',
-      lastName: 'Brown',
+      quantity: 'John',
+      weight: 'Brown',
       age: 1,
       address: 'New York No. 1 Lake Park',
       tags: ['nice', 'developer'],
     },
     {
       key: '2',
-      firstName: 'Jim',
-      lastName: 'Green',
+      quantity: 'Jim',
+      weight: 'Green',
       age: 2,
       address: 'London No. 1 Lake Park',
       tags: ['loser'],
     },
     {
       key: '3',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 3,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '4',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 4,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '5',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 5,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '6',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 6,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '7',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 7,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '8',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 8,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '9',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 9,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '10',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 10,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '11',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 11,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '12',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 12,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '13',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 13,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
     {
       key: '14',
-      firstName: 'Joe',
-      lastName: 'Black',
+      quantity: 'Joe',
+      weight: 'Black',
       age: 14,
       address: 'Sydney No. 1 Lake Park',
       tags: ['cool', 'teacher'],
     },
   ];
   const columns: ColumnsType<DataType> = [
-    { title: '塘号', dataIndex: 'age', key: 'age', align: 'center' },
-    { title: '面积（亩）', dataIndex: 'age', key: 'age', align: 'center' },
+    {
+      title: '塘号',
+      dataIndex: 'age',
+      key: 'age',
+      align: 'center',
+      onCell: (_, index) => {
+        if (index !== undefined && index % 2 === 0) {
+          return { rowSpan: 2 };
+        }
+        return {};
+      },
+    },
+    {
+      title: '面积（亩）',
+      dataIndex: 'age',
+      key: 'age',
+      align: 'center',
+      onCell: (_, index) => {
+        if (index !== undefined && index % 2 === 0) {
+          return { rowSpan: 2 };
+        }
+        return {};
+      },
+    },
     { title: '新/老', dataIndex: 'age', key: 'age', align: 'center' },
     {
       title: '1',
       key: '1',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -185,8 +210,8 @@ const TableContainer: React.FC = () => {
       key: '2',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -194,8 +219,8 @@ const TableContainer: React.FC = () => {
       key: '3',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -203,8 +228,8 @@ const TableContainer: React.FC = () => {
       key: '4',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -212,8 +237,8 @@ const TableContainer: React.FC = () => {
       key: '5',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -221,8 +246,8 @@ const TableContainer: React.FC = () => {
       key: '6',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -230,8 +255,8 @@ const TableContainer: React.FC = () => {
       key: '7',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -239,8 +264,8 @@ const TableContainer: React.FC = () => {
       key: '8',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -248,8 +273,8 @@ const TableContainer: React.FC = () => {
       key: '9',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -257,8 +282,8 @@ const TableContainer: React.FC = () => {
       key: '10',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -266,8 +291,8 @@ const TableContainer: React.FC = () => {
       key: '11',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -275,8 +300,8 @@ const TableContainer: React.FC = () => {
       key: '12',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -284,8 +309,8 @@ const TableContainer: React.FC = () => {
       key: '13',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -293,8 +318,8 @@ const TableContainer: React.FC = () => {
       key: '14',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
     {
@@ -302,8 +327,8 @@ const TableContainer: React.FC = () => {
       key: '15',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'firstName', key: 'firstName', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'lastName', key: 'lastName', align: 'center' },
+        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
+        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
       ],
     },
   ];
@@ -323,7 +348,7 @@ const TableContainer: React.FC = () => {
   );
 };
 
-const FeedLog: React.FC = () => {
+const FeedSheet: React.FC = () => {
   return (
     <>
       <SearchBar />
@@ -331,4 +356,4 @@ const FeedLog: React.FC = () => {
     </>
   );
 };
-export default FeedLog;
+export default FeedSheet;
