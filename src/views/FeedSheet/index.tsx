@@ -5,7 +5,103 @@ import exportTableToExcel from '@/utils/exportXlsx';
 import { Dayjs } from 'dayjs';
 
 const { RangePicker } = DatePicker;
+interface DataType {
+  id: string;
+  area?: number;
+  newOrOld?: string;
+  forage: number;
+  loss: number;
+}
+interface IProps {
+  data?: DataType[];
+}
 
+const sharedData: DataType[] = [
+  {
+    id: '1',
+    newOrOld: '新',
+    forage: 1290,
+    loss: 2,
+  },
+  {
+    id: '1',
+    newOrOld: '老',
+    forage: 220,
+    loss: 14,
+  },
+  {
+    id: '3',
+    newOrOld: '新',
+    forage: 2080,
+    loss: 0,
+  },
+  {
+    id: '3',
+    newOrOld: '老',
+    forage: 640,
+    loss: 0,
+  },
+  {
+    id: '4',
+    newOrOld: '新',
+    forage: 1420,
+    loss: 0,
+  },
+  {
+    id: '4',
+    newOrOld: '老',
+    forage: 220,
+    loss: 0,
+  },
+  {
+    id: '5',
+    newOrOld: '新',
+    forage: 1290,
+    loss: 2,
+  },
+  {
+    id: '5',
+    newOrOld: '老',
+    forage: 220,
+    loss: 14,
+  },
+  {
+    id: '6',
+    newOrOld: '新',
+    forage: 1290,
+    loss: 2,
+  },
+  {
+    id: '6',
+    newOrOld: '老',
+    forage: 220,
+    loss: 14,
+  },
+  {
+    id: '8',
+    newOrOld: '新',
+    forage: 1290,
+    loss: 2,
+  },
+  {
+    id: '8',
+    newOrOld: '老',
+    forage: 220,
+    loss: 14,
+  },
+  {
+    id: '9',
+    newOrOld: '新',
+    forage: 1860,
+    loss: 1,
+  },
+  {
+    id: '9',
+    newOrOld: '老',
+    forage: 235,
+    loss: 3,
+  },
+];
 const SearchBar: React.FC = () => {
   interface searchParams {
     poolId: string;
@@ -46,163 +142,44 @@ const SearchBar: React.FC = () => {
   );
 };
 
-const TableContainer: React.FC = () => {
-  interface DataType {
-    key: React.Key;
-    quantity: string;
-    weight: string;
-    age: number;
-    address: string;
-    tags: string[];
-  }
-
-  const data: DataType[] = [
-    {
-      key: '1',
-      quantity: 'John',
-      weight: 'Brown',
-      age: 1,
-      address: 'New York No. 1 Lake Park',
-      tags: ['nice', 'developer'],
-    },
-    {
-      key: '2',
-      quantity: 'Jim',
-      weight: 'Green',
-      age: 2,
-      address: 'London No. 1 Lake Park',
-      tags: ['loser'],
-    },
-    {
-      key: '3',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 3,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '4',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 4,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '5',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 5,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '6',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 6,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '7',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 7,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '8',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 8,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '9',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 9,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '10',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 10,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '11',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 11,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '12',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 12,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '13',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 13,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-    {
-      key: '14',
-      quantity: 'Joe',
-      weight: 'Black',
-      age: 14,
-      address: 'Sydney No. 1 Lake Park',
-      tags: ['cool', 'teacher'],
-    },
-  ];
+const TableContainer = (props: IProps) => {
   const columns: ColumnsType<DataType> = [
     {
       title: '塘号',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'id',
+      key: 'id',
       align: 'center',
+      fixed: 'left',
       onCell: (_, index) => {
         if (index !== undefined && index % 2 === 0) {
           return { rowSpan: 2 };
+        } else {
+          return { colSpan: 0 };
         }
-        return {};
       },
     },
     {
       title: '面积（亩）',
-      dataIndex: 'age',
-      key: 'age',
+      dataIndex: 'area',
+      key: 'area',
       align: 'center',
+      fixed: 'left',
       onCell: (_, index) => {
         if (index !== undefined && index % 2 === 0) {
           return { rowSpan: 2 };
+        } else {
+          return { colSpan: 0 };
         }
-        return {};
       },
     },
-    { title: '新/老', dataIndex: 'age', key: 'age', align: 'center' },
+    { title: '新/老', dataIndex: 'newOrOld', key: 'newOrOld', align: 'center', fixed: 'left' },
     {
       title: '1',
       key: '1',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -210,8 +187,8 @@ const TableContainer: React.FC = () => {
       key: '2',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -219,8 +196,8 @@ const TableContainer: React.FC = () => {
       key: '3',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -228,8 +205,8 @@ const TableContainer: React.FC = () => {
       key: '4',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -237,8 +214,8 @@ const TableContainer: React.FC = () => {
       key: '5',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -246,8 +223,8 @@ const TableContainer: React.FC = () => {
       key: '6',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -255,8 +232,8 @@ const TableContainer: React.FC = () => {
       key: '7',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -264,8 +241,8 @@ const TableContainer: React.FC = () => {
       key: '8',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -273,8 +250,8 @@ const TableContainer: React.FC = () => {
       key: '9',
       align: 'center',
       children: [
-        { title: '饲料（kg）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -282,8 +259,8 @@ const TableContainer: React.FC = () => {
       key: '10',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -291,8 +268,8 @@ const TableContainer: React.FC = () => {
       key: '11',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -300,8 +277,8 @@ const TableContainer: React.FC = () => {
       key: '12',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -309,8 +286,8 @@ const TableContainer: React.FC = () => {
       key: '13',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -318,8 +295,8 @@ const TableContainer: React.FC = () => {
       key: '14',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
     {
@@ -327,11 +304,12 @@ const TableContainer: React.FC = () => {
       key: '15',
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity', align: 'center' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight', align: 'center' },
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
       ],
     },
   ];
+  const { data } = props;
   return (
     <div className="content-box">
       <div className="table-result-text">总共匹配到：{11111}条数据</div>
@@ -348,11 +326,191 @@ const TableContainer: React.FC = () => {
   );
 };
 
+const SummaryTable = (props: IProps) => {
+  const columns: ColumnsType<Pick<DataType, 'forage' | 'loss'>> = [
+    {
+      title: '',
+      dataIndex: 'title',
+      key: 'title',
+      align: 'center',
+      rowScope: 'row',
+      fixed: 'left',
+    },
+    {
+      title: '1',
+      key: '1',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '2',
+      key: '2',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '3',
+      key: '3',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '4',
+      key: '4',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '5',
+      key: '5',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '6',
+      key: '6',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '7',
+      key: '7',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '8',
+      key: '8',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '9',
+      key: '9',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '10',
+      key: '10',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '11',
+      key: '11',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '12',
+      key: '12',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '13',
+      key: '13',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '14',
+      key: '14',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+    {
+      title: '15',
+      key: '15',
+      align: 'center',
+      children: [
+        { title: '饲料（kg）', dataIndex: 'forage', key: 'forage', align: 'center' },
+        { title: '损耗（尾）', dataIndex: 'loss', key: 'loss', align: 'center' },
+      ],
+    },
+  ];
+  const { data } = props;
+  const dataSource = [
+    {
+      title: '合计',
+      forage: 12815,
+      loss: 50,
+    },
+    {
+      title: '本期新鳗',
+      forage: 10285,
+      loss: 10,
+    },
+    {
+      title: '本期老鳗',
+      forage: 2530,
+      loss: 40,
+    },
+  ];
+  return (
+    <div className="content-box">
+      <Table
+        dataSource={dataSource}
+        bordered
+        pagination={false}
+        size="small"
+        scroll={{ x: 3000 }}
+        columns={columns}
+        id="feedlog-table"
+      />
+    </div>
+  );
+};
+
 const FeedSheet: React.FC = () => {
   return (
     <>
       <SearchBar />
-      <TableContainer />
+      <TableContainer data={sharedData} />
+      <SummaryTable data={sharedData} />
     </>
   );
 };
