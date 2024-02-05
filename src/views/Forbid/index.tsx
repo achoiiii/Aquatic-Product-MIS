@@ -1,16 +1,22 @@
 import React from 'react';
 import './index.scss';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Button, Result } from 'antd';
 
 function Forbid() {
   const { prePathname } = useLocation().state;
-
+  const navigateTo = useNavigate();
   return (
-    <div id="forbid">
-      <p className="forbid-title">您无权访问 {prePathname} 页面</p>
-      <p>如需申请访问，请联系管理员</p>
-      <div className="forbid-bg" />
-    </div>
+    <Result
+      status="403"
+      title="403"
+      subTitle={`你没有访问${prePathname}的权限，如需访问请联系管理员`}
+      extra={
+        <Button type="primary" onClick={() => navigateTo('/home')}>
+          回到主页
+        </Button>
+      }
+    />
   );
 }
 export default Forbid;

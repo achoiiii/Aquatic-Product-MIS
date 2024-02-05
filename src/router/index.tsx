@@ -12,6 +12,8 @@ import LossSheet from '@/views/LossSheet';
 import SaleSheet from '@/views/SaleSheet';
 import StockSheet from '@/views/StockSheet';
 import SummarySheet from '@/views/SummarySheet';
+import SitePoolManage from '@/views/SitePoolManage';
+import CoefficientManage from '@/views/CoefficientManage';
 
 /**
  * 路由表
@@ -78,6 +80,19 @@ const routes = [
           {
             path: '/log/feed',
             element: <FeedManage />,
+          },
+        ],
+      },
+      {
+        path: '/data',
+        children: [
+          {
+            path: '/data/sitePool',
+            element: <SitePoolManage />,
+          },
+          {
+            path: '/data/coefficient',
+            element: <CoefficientManage />,
           },
         ],
       },

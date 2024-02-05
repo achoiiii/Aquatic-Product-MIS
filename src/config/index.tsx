@@ -7,6 +7,7 @@ type MenuItem = Required<MenuProps>['items'][number];
 export default {
   // 前端版本
   VERSION: import.meta.env.VITE_PROJECT_VERSION,
+  isMock: true,
   // 接口域名
   serviceUrl: {
     baseURL: 'http://localhost:3000',
@@ -65,13 +66,24 @@ export default {
       ],
     },
     {
+      key: '/data',
+      icon: <FileOutlined />,
+      label: '基础数据管理',
+      children: [
+        {
+          key: '/data/sitePool',
+          label: '场塘管理',
+        },
+        {
+          key: '/data/coefficient',
+          label: '系数管理',
+        },
+      ],
+    },
+    {
       key: '/about',
       icon: <FileOutlined />,
       label: '关于',
     },
   ] as MenuItem[],
-  // 场/塘数组对象 TODO
-  fisheryNPool: {
-    first: [],
-  },
 };

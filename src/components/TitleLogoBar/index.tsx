@@ -8,7 +8,7 @@ function TitleLogoBar(props: ITitleLogoBarProps) {
       <div className="demo-logo" />
       {!props.collapsed ? (
         <div className="demo-title" style={{ opacity: 1 }}>
-          水产管理系统
+          共荣食品公司
         </div>
       ) : (
         <div className="demo-title" style={{ opacity: 0 }} />
