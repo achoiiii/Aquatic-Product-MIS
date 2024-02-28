@@ -1,12 +1,20 @@
 import React from 'react';
 import type { TableColumnsType } from 'antd';
-import { Space, Table, Modal } from 'antd';
+import { Space, Table, Modal, Button } from 'antd';
 import './index.scss';
 import { PoolItem, SiteItem } from '@/store/models/app/typings';
 import { dispatch, useSelector } from '@/store';
 import { ExclamationCircleFilled } from '@ant-design/icons';
 
 const { confirm } = Modal;
+
+const SearchBar = () => {
+  return (
+    <div className="content-box">
+      <Button type="primary">新增</Button>
+    </div>
+  );
+};
 
 const handleDelete = (item: SiteItem | PoolItem) => {
   confirm({
@@ -78,13 +86,21 @@ const TableContainer: React.FC = () => {
     },
   ];
   return (
-    <Table rowKey={'siteNo'} columns={columns} expandable={{ expandedRowRender }} dataSource={siteData} size="small" />
+    <Table
+      className="content-box"
+      rowKey={'siteNo'}
+      columns={columns}
+      expandable={{ expandedRowRender }}
+      dataSource={siteData}
+      size="small"
+    />
   );
 };
 
 const SitePoolManage: React.FC = () => {
   return (
     <div id="SitePoolManage">
+      <SearchBar />
       <TableContainer />
     </div>
   );

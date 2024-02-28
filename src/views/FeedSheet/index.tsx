@@ -3,6 +3,7 @@ import { Button, Form, Input, Select, Table, DatePicker } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { Dayjs } from 'dayjs';
+import SitePoolSelector from '@/components/SitePoolSelector';
 
 const { RangePicker } = DatePicker;
 interface DataType {
@@ -11,6 +12,7 @@ interface DataType {
   newOrOld?: string;
   forage: number;
   loss: number;
+  key: string;
 }
 interface IProps {
   data?: DataType[];
@@ -18,12 +20,14 @@ interface IProps {
 
 const sharedData: DataType[] = [
   {
+    key: '1',
     id: '1',
     newOrOld: '新',
     forage: 1290,
     loss: 2,
   },
   {
+    key: '2',
     id: '1',
     newOrOld: '老',
     forage: 220,
@@ -33,24 +37,28 @@ const sharedData: DataType[] = [
     id: '3',
     newOrOld: '新',
     forage: 2080,
+    key: '3',
     loss: 0,
   },
   {
     id: '3',
     newOrOld: '老',
     forage: 640,
+    key: '4',
     loss: 0,
   },
   {
     id: '4',
     newOrOld: '新',
     forage: 1420,
+    key: '5',
     loss: 0,
   },
   {
     id: '4',
     newOrOld: '老',
     forage: 220,
+    key: '6',
     loss: 0,
   },
   {
@@ -58,46 +66,54 @@ const sharedData: DataType[] = [
     newOrOld: '新',
     forage: 1290,
     loss: 2,
+    key: '7',
   },
   {
     id: '5',
     newOrOld: '老',
     forage: 220,
+    key: '8',
     loss: 14,
   },
   {
     id: '6',
     newOrOld: '新',
     forage: 1290,
+    key: '9',
     loss: 2,
   },
   {
     id: '6',
     newOrOld: '老',
     forage: 220,
+    key: '10',
     loss: 14,
   },
   {
     id: '8',
     newOrOld: '新',
     forage: 1290,
+    key: '11',
     loss: 2,
   },
   {
     id: '8',
     newOrOld: '老',
     forage: 220,
+    key: '12',
     loss: 14,
   },
   {
     id: '9',
     newOrOld: '新',
     forage: 1860,
+    key: '13',
     loss: 1,
   },
   {
     id: '9',
     newOrOld: '老',
+    key: '14',
     forage: 235,
     loss: 3,
   },
@@ -117,12 +133,7 @@ const SearchBar: React.FC = () => {
 
   return (
     <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
-      <Form.Item name="poolId" label="场号">
-        <Input style={{ width: 100 }} />
-      </Form.Item>
-      <Form.Item name="poolId" label="塘号">
-        <Input style={{ width: 100 }} />
-      </Form.Item>
+      <SitePoolSelector />
       <Form.Item name="dateRange" label="日期">
         <RangePicker />
       </Form.Item>
@@ -321,6 +332,7 @@ const TableContainer = (props: IProps) => {
         scroll={{ x: 3000 }}
         columns={columns}
         id="feedlog-table"
+        rowKey={'key'}
       />
     </div>
   );
@@ -500,6 +512,7 @@ const SummaryTable = (props: IProps) => {
         scroll={{ x: 3000 }}
         columns={columns}
         id="feedlog-table"
+        rowKey={'key'}
       />
     </div>
   );
