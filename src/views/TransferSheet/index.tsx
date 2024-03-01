@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Form, Table, DatePicker, Switch } from 'antd';
+import { Button, Form, Table, DatePicker } from 'antd';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { Dayjs } from 'dayjs';
 import SitePoolSelector from '@/components/SitePoolSelector';
@@ -30,9 +30,6 @@ const SearchBar: React.FC = () => {
       <SitePoolSelector />
       <Form.Item name="dateRange" label="日期">
         <RangePicker />
-      </Form.Item>
-      <Form.Item name="isA" label="是/否为A鳗">
-        <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={false} />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -79,7 +76,7 @@ const TableContainer = (props: IProps) => {
   );
 };
 
-const SaleSheet: React.FC = () => {
+const TransferSheet: React.FC = () => {
   return (
     <>
       <SearchBar />
@@ -87,4 +84,4 @@ const SaleSheet: React.FC = () => {
     </>
   );
 };
-export default SaleSheet;
+export default TransferSheet;

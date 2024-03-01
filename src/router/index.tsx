@@ -7,7 +7,7 @@ import Login from '@/views/Login';
 import Forbid from '@/views/Forbid';
 import FeedManage from '@/views/FeedManage';
 import FeedSheet from '@/views/FeedSheet';
-import FishSheet from '@/views/FishSheet';
+import TransferSheet from '@/views/TransferSheet';
 import LossSheet from '@/views/LossSheet';
 import SaleSheet from '@/views/SaleSheet';
 import StockSheet from '@/views/StockSheet';
@@ -53,8 +53,8 @@ const routes = [
             element: <FeedSheet />,
           },
           {
-            path: '/sheet/fish',
-            element: <FishSheet />,
+            path: '/sheet/transfer',
+            element: <TransferSheet />,
           },
           {
             path: '/sheet/sale',

@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Form, Table, DatePicker } from 'antd';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { Dayjs } from 'dayjs';
 import SitePoolSelector from '@/components/SitePoolSelector';
-import { FeedSheetDataType, getFeedSheetColumn, getFeedSheetData } from '@/request/mock';
+import { FeedSheetDataType, getFeedSheetData, getFeedSheetColumn } from '@/request/mock/feedSheet';
 
 const { RangePicker } = DatePicker;
 interface IProps {
@@ -50,9 +50,14 @@ const SearchBar: React.FC = () => {
 const TableContainer = (props: IProps) => {
   const columns = getFeedSheetColumn();
   const { data } = props;
+  const [showLoading, setShowLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setShowLoading(false);
+    }, 2e3);
+  }, []);
   return (
     <div className="content-box">
-      <div className="table-result-text">总共匹配到：{15}条数据</div>
       <Table
         dataSource={data}
         bordered
@@ -62,6 +67,10 @@ const TableContainer = (props: IProps) => {
         columns={columns}
         id="feedlog-table"
         rowKey={'key'}
+        title={() => {
+          return `总共匹配到：${15}条数据`;
+        }}
+        loading={showLoading}
       />
     </div>
   );

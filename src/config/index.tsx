@@ -33,7 +33,7 @@ export default {
           label: '投料及损耗',
         },
         {
-          key: '/sheet/fish',
+          key: '/sheet/transfer',
           label: '分塘',
         },
         {
