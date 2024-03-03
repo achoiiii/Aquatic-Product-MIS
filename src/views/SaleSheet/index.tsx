@@ -42,7 +42,7 @@ const SearchBar: React.FC = () => {
       <Button
         type="primary"
         style={{ backgroundColor: '#18bc69' }}
-        onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+        onClick={() => exportTableToExcel('sale-table', 'sale-table')}
       >
         导出
       </Button>
@@ -68,7 +68,7 @@ const TableContainer = (props: IProps) => {
         size="small"
         scroll={{ x: 3000 }}
         columns={columns}
-        id="feedlog-table"
+        id="sale-table"
         rowKey={'key'}
         title={() => {
           return `总共匹配到：${15}条数据`;
