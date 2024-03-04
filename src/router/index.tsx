@@ -14,6 +14,7 @@ import StockSheet from '@/views/StockSheet';
 import SummarySheet from '@/views/SummarySheet';
 import SitePoolManage from '@/views/SitePoolManage';
 import CoefficientManage from '@/views/CoefficientManage';
+import PoolSummarySheet from '@/views/PoolSummarySheet';
 
 /**
  * 路由表
@@ -67,6 +68,10 @@ const routes = [
           {
             path: '/sheet/stock',
             element: <StockSheet />,
+          },
+          {
+            path: '/sheet/poolSummary',
+            element: <PoolSummarySheet />,
           },
           {
             path: '/sheet/summary',

@@ -1,9 +1,9 @@
 import { store } from '@/store';
 import { ColumnsType } from 'antd/es/table';
 
-export interface SummaryDataType {
+export interface PoolSummaryDataType {
   // 场号
-  siteNo: string;
+  poolNo: string;
   // 面积
   area?: number;
   // 类别
@@ -91,19 +91,18 @@ export interface SummaryDataType {
     weight: number;
   };
 }
-export function getSummaryColumn() {
-  const columnList: ColumnsType<SummaryDataType> = [
+export function getPoolSummaryColumn() {
+  const columnList: ColumnsType<PoolSummaryDataType> = [
     {
-      title: '场号',
-      dataIndex: 'siteNo',
-      key: 'siteNo',
+      title: '塘号',
+      dataIndex: 'poolNo',
+      key: 'poolNo',
       align: 'center',
       fixed: 'left',
       // 合计行合并
       // TODO: 15其实是数据数组的length
       onCell: (_, index: number) => ({
         colSpan: index >= 18 ? 3 : 1,
-        rowSpan: index >= 18 ? 1 : index % 2 === 0 ? 2 : 0,
       }),
       className: 'first-column',
       width: '50px',
@@ -116,7 +115,6 @@ export function getSummaryColumn() {
       fixed: 'left',
       onCell: (_, index: number) => ({
         colSpan: index >= 18 ? 0 : 1,
-        rowSpan: index >= 18 ? 1 : index % 2 === 0 ? 2 : 0,
       }),
       width: '100px',
     },
@@ -288,10 +286,10 @@ export function getSummaryColumn() {
   return columnList;
 }
 
-export function getSummaryData() {
+export function getPoolSummaryData() {
   const { oldCoefficient, newCoefficient } = store.getState().app;
-  const sheetData: SummaryDataType[] = [];
-  let siteNo = 1;
+  const sheetData: PoolSummaryDataType[] = [];
+  let poolNo = 1101;
   // 期初数的合计数量/重量
   let totalBeginningAmount = 0;
   let totalBeginningWeight = 0;
@@ -359,8 +357,9 @@ export function getSummaryData() {
    * 随机生成新老
    * @returns '新' | '老'
    */
-  function getType(index) {
-    if (index % 2 === 0) return '新';
+  function getType() {
+    const flag = Math.random();
+    if (flag > 0.5) return '新';
     return '老';
   }
   /**
@@ -377,7 +376,7 @@ export function getSummaryData() {
   for (let i = 0; i < 18; i++) {
     // 生成假数据
     // TODO：真数据替换
-    const type = getType(i);
+    const type = getType();
     const beginningAmount = getRandom(600000);
     const beginningWeight = getRandom(100000);
     const beginningSize = Number((beginningAmount / beginningWeight).toFixed(1));
@@ -404,15 +403,15 @@ export function getSummaryData() {
     const endingWeight = getRandom(200000);
     const endingSize = Number((endingAmount / endingWeight).toFixed(1));
 
-    const data: SummaryDataType = {
-      siteNo: siteNo + '',
+    const data: PoolSummaryDataType = {
+      poolNo: poolNo + '',
       type,
       beginning: {
         amount: beginningAmount,
         size: beginningWeight,
         weight: beginningSize,
       },
-      key: siteNo + '' + type,
+      key: poolNo + '' + type,
       feedGainWeight: {
         feed: feedGainWeightFeed,
         coefficient: feedGainWeightCoefficient,
@@ -513,12 +512,12 @@ export function getSummaryData() {
       oldCleanLossWeight += cleanLossWeight;
       oldEndingAmount += endingAmount;
       oldEndingWeight += endingWeight;
-      siteNo++;
     }
+    poolNo++;
   }
 
   sheetData.push({
-    siteNo: '合计',
+    poolNo: '合计',
     key: '合计',
     beginning: {
       amount: totalBeginningAmount,
@@ -567,7 +566,7 @@ export function getSummaryData() {
   });
 
   sheetData.push({
-    siteNo: '本期新鳗',
+    poolNo: '本期新鳗',
     key: '本期新鳗',
     beginning: {
       amount: newBeginningAmount,
@@ -616,7 +615,7 @@ export function getSummaryData() {
   });
 
   sheetData.push({
-    siteNo: '本期老鳗',
+    poolNo: '本期老鳗',
     key: '本期老鳗',
     beginning: {
       amount: oldBeginningAmount,

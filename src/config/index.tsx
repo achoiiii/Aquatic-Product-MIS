@@ -49,8 +49,12 @@ export default {
           label: '存塘统计',
         },
         {
+          key: '/sheet/poolSummary',
+          label: '塘池汇总表',
+        },
+        {
           key: '/sheet/summary',
-          label: '汇总报表',
+          label: '场地汇总表',
         },
       ],
     },
