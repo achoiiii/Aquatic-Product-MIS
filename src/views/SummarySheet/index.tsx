@@ -1,4 +1,5 @@
 import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
+import { getSummaryColumn, getSummaryData } from '@/request/mock/totalSummary';
 import { getTransferSummaryColumn, getTransferSummaryData } from '@/request/mock/transferSummary';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { Button, DatePicker, Form, Select, Table } from 'antd';
@@ -76,7 +77,7 @@ const SummarySheet = () => {
       xs: getTransferSummaryData,
       'xs-a': getTransferSummaryData,
       qt: getTransferSummaryData,
-      total: getTransferSummaryData,
+      total: getSummaryData,
     };
     const getColumnFuncMap = {
       sh: getFeedSummaryColumn,
@@ -84,7 +85,7 @@ const SummarySheet = () => {
       xs: getTransferSummaryColumn,
       'xs-a': getTransferSummaryColumn,
       qt: getTransferSummaryColumn,
-      total: getTransferSummaryColumn,
+      total: getSummaryColumn,
     };
     // TODO: 当查询时更换type，然后重新拉取数据
     useEffect(() => {

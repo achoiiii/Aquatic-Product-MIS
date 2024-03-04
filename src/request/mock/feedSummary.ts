@@ -22,7 +22,7 @@ export interface FeedSummaryDataType {
 export function getFeedSummaryColumn(): ColumnsType<FeedSummaryDataType> {
   const columnList: ColumnsType<FeedSummaryDataType> = [
     {
-      title: '塘号',
+      title: '场号',
       dataIndex: 'siteNo',
       key: 'siteNo',
       align: 'center',

@@ -20,7 +20,7 @@ export interface TransferSummaryDataType {
 export function getTransferSummaryColumn(): ColumnsType<TransferSummaryDataType> {
   const columnList: ColumnsType<TransferSummaryDataType> = [
     {
-      title: '塘号',
+      title: '场号',
       dataIndex: 'siteNo',
       key: 'siteNo',
       align: 'center',
