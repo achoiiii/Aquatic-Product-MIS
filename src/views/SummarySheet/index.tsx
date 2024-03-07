@@ -49,7 +49,7 @@ const SummarySheet = () => {
             { type: 'array', warningOnly: true },
           ]}
         >
-          <RangePicker disabled={disabled} />
+          <RangePicker placeholder={['开始时间','结束时间']} disabled={disabled} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -104,7 +104,7 @@ const SummarySheet = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000 }}
+          scroll={{ x: 3000,y: 600 }}
           columns={columns}
           id="summary-table"
           rowKey={'key'}

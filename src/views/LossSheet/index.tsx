@@ -29,7 +29,7 @@ const SearchBar: React.FC = () => {
     <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
       <SitePoolSelector />
       <Form.Item name="dateRange" label="日期">
-        <RangePicker />
+        <RangePicker placeholder={['开始时间','结束时间']} />
       </Form.Item>
       <Form.Item>
         <Button type="primary" htmlType="submit">
@@ -63,7 +63,7 @@ const TableContainer = (props: IProps) => {
         bordered
         pagination={{ pageSize: 100 }}
         size="small"
-        scroll={{ x: 3000 }}
+        scroll={{ x: 3000,y: 600 }}
         columns={columns}
         id="loss-table"
         rowKey={'key'}

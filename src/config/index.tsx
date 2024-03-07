@@ -50,11 +50,11 @@ export default {
         },
         {
           key: '/sheet/poolSummary',
-          label: '塘池汇总表',
+          label: '塘汇总表',
         },
         {
           key: '/sheet/summary',
-          label: '场地汇总表',
+          label: '场汇总表',
         },
       ],
     },
