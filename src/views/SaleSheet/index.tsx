@@ -14,7 +14,7 @@ const sheetData: TransferSheetDataType[] = getTransferSheetData();
 
 const SearchBar: React.FC = () => {
   interface searchParams {
-    poolId: string;
+    poolNo: string;
     dateRange: Dayjs[];
   }
   const onFinish = (values: searchParams) => {
@@ -29,7 +29,7 @@ const SearchBar: React.FC = () => {
     <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
       <SitePoolSelector />
       <Form.Item name="dateRange" label="日期">
-        <RangePicker placeholder={['开始时间','结束时间']} />
+        <RangePicker placeholder={['开始时间', '结束时间']} />
       </Form.Item>
       <Form.Item name="isA" label="是/否为A鳗">
         <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={false} />
@@ -66,7 +66,7 @@ const TableContainer = (props: IProps) => {
         bordered
         pagination={{ pageSize: 100 }}
         size="small"
-        scroll={{ x: 3000,y: 600 }}
+        scroll={{ x: 3000, y: 600 }}
         columns={columns}
         id="sale-table"
         rowKey={'key'}

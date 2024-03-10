@@ -6,8 +6,6 @@ export interface FeedSheetDataType {
   poolNo: string;
   // 面积
   area?: number;
-  // 塘类型
-  type?: string;
   // 数据key = 塘号
   key: string;
   // 每一天的数据
@@ -30,8 +28,9 @@ export function getFeedSheetColumn(): ColumnsType<FeedSheetDataType> {
       fixed: 'left',
       // 合计行合并
       // TODO: 15其实是数据数组的length
-      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 3 : 1 }),
+      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 2 : 1 }),
       className: 'first-column',
+      width: 100,
     },
     {
       title: '面积（亩）',
@@ -39,14 +38,7 @@ export function getFeedSheetColumn(): ColumnsType<FeedSheetDataType> {
       key: 'area',
       align: 'center',
       fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 0 : 1 }),
-    },
-    {
-      title: '新/老',
-      dataIndex: 'type',
-      key: 'type',
-      align: 'center',
-      fixed: 'left',
+      width: 100,
       onCell: (_, index: number) => ({ colSpan: index >= 15 ? 0 : 1 }),
     },
   ];
@@ -59,9 +51,29 @@ export function getFeedSheetColumn(): ColumnsType<FeedSheetDataType> {
       title: dateStr,
       key: dateStr,
       align: 'center',
+      width: 300,
       children: [
-        { title: '饲料（kg）', dataIndex: ['dataList', i, `${'feed' + i}`], key: `${'feed' + i}`, align: 'center' },
-        { title: '损耗（尾）', dataIndex: ['dataList', i, `${'loss' + i}`], key: `${'loss' + i}`, align: 'center' },
+        {
+          title: '当日新/老',
+          dataIndex: ['dataList', i, `${'type' + i}`],
+          key: `${'type' + i}`,
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '饲料（kg）',
+          dataIndex: ['dataList', i, `${'feed' + i}`],
+          key: `${'feed' + i}`,
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '损耗（尾）',
+          dataIndex: ['dataList', i, `${'loss' + i}`],
+          key: `${'loss' + i}`,
+          align: 'center',
+          width: 100,
+        },
       ],
     });
   }
@@ -70,10 +82,11 @@ export function getFeedSheetColumn(): ColumnsType<FeedSheetDataType> {
     title: '半月合计',
     key: 'total',
     align: 'center',
+    width: 300,
     children: [
-      { title: '饲料（kg）', dataIndex: 'totalFeed', key: 'totalFeed', align: 'center' },
-      { title: '损耗（尾）', dataIndex: 'totalLoss', key: 'totalLoss', align: 'center' },
-      { title: '损耗重量（kg）', dataIndex: 'totalLossWeight', key: 'totalLossWeight', align: 'center' },
+      { title: '饲料（kg）', dataIndex: 'totalFeed', key: 'totalFeed', align: 'center', width: 100 },
+      { title: '损耗（尾）', dataIndex: 'totalLoss', key: 'totalLoss', align: 'center', width: 100 },
+      { title: '损耗重量（kg）', dataIndex: 'totalLossWeight', key: 'totalLossWeight', align: 'center', width: 100 },
     ],
   });
   return columnList;
@@ -113,30 +126,30 @@ export function getFeedSheetData() {
       const dataList: any = [];
       let totalFeed = 0;
       let totalLoss = 0;
-      const type = getType();
       for (let j = 0; j < 15; j++) {
         const obj = {};
+        const type = getType();
         const feed = poolNo + j * 100 + 1;
         const loss = poolNo + j * 10 + 2;
+        obj[`${'type' + j}`] = type;
         obj[`${'feed' + j}`] = feed;
         obj[`${'loss' + j}`] = loss;
         dataList.push(obj);
         totalFeed += feed;
         totalLoss += loss;
+        if (type === '新') {
+          newTotalFeed += totalFeed;
+          newTotalLoss += totalLoss;
+        } else {
+          oldTotalFeed += totalFeed;
+          oldTotalLoss += totalLoss;
+        }
       }
       allTotalFeed += totalFeed;
       allTotalLoss += totalLoss;
-      if (type === '新') {
-        newTotalFeed += totalFeed;
-        newTotalLoss += totalLoss;
-      } else {
-        oldTotalFeed += totalFeed;
-        oldTotalLoss += totalLoss;
-      }
       dateDetailData.push({
         key: poolNo + '',
         poolNo: poolNo + '',
-        type,
         dataList,
         totalFeed,
         totalLoss,

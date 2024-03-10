@@ -6,8 +6,6 @@ export interface TransferSheetDataType {
   poolNo: string;
   // 面积
   area?: number;
-  // 塘类型
-  type?: string;
   // 数据key = 塘号
   key: string;
   // 每一天的数据
@@ -28,8 +26,9 @@ export function getTransferSheetColumn(): ColumnsType<TransferSheetDataType> {
       fixed: 'left',
       // 合计行合并
       // TODO: 15其实是数据数组的length
-      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 3 : 1 }),
+      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 2 : 1 }),
       className: 'first-column',
+      width: 100,
     },
     {
       title: '面积（亩）',
@@ -38,14 +37,7 @@ export function getTransferSheetColumn(): ColumnsType<TransferSheetDataType> {
       align: 'center',
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= 15 ? 0 : 1 }),
-    },
-    {
-      title: '新/老',
-      dataIndex: 'type',
-      key: 'type',
-      align: 'center',
-      fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= 15 ? 0 : 1 }),
+      width: 100,
     },
   ];
   let date = Date.now();
@@ -53,16 +45,34 @@ export function getTransferSheetColumn(): ColumnsType<TransferSheetDataType> {
   // Todo：真实数据
   for (let i = 0; i < 15; i++) {
     const dateStr = formatDate(date + 86400000 * i);
-    console.log(`${'amount' + i}`, `${'weight' + i}`);
-
     columnList.push({
       title: dateStr,
       key: dateStr,
       align: 'center',
       children: [
-        { title: '数量（尾）', dataIndex: ['dataList', i, `${'amount' + i}`], key: `${'amount' + i}`, align: 'center' },
-        { title: '重量（kg）', dataIndex: ['dataList', i, `${'weight' + i}`], key: `${'weight' + i}`, align: 'center' },
+        {
+          title: '当日新/老',
+          dataIndex: ['dataList', i, `${'type' + i}`],
+          key: `${'type' + i}`,
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '数量（尾）',
+          dataIndex: ['dataList', i, `${'amount' + i}`],
+          key: `${'amount' + i}`,
+          align: 'center',
+          width: 100,
+        },
+        {
+          title: '重量（kg）',
+          dataIndex: ['dataList', i, `${'weight' + i}`],
+          key: `${'weight' + i}`,
+          align: 'center',
+          width: 100,
+        },
       ],
+      width: 300,
     });
   }
   // 生成合计行
@@ -70,9 +80,10 @@ export function getTransferSheetColumn(): ColumnsType<TransferSheetDataType> {
     title: '半月合计',
     key: 'total',
     align: 'center',
+    width: 200,
     children: [
-      { title: '数量（尾）', dataIndex: 'totalAmount', key: 'totalAmount', align: 'center' },
-      { title: '重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', align: 'center' },
+      { title: '数量（尾）', dataIndex: 'totalAmount', key: 'totalAmount', align: 'center', width: 100 },
+      { title: '重量（kg）', dataIndex: 'totalWeight', key: 'totalWeight', align: 'center', width: 100 },
     ],
   });
   return columnList;
@@ -109,30 +120,30 @@ export function getTransferSheetData() {
       const dataList: any = [];
       let totalAmount = 0;
       let totalWeight = 0;
-      const type = getType();
       for (let j = 0; j < 15; j++) {
+        const type = getType();
         const obj = {};
         const amount = poolNo + j * 100 + 1;
         const weight = poolNo + j * 10 + 2;
+        obj[`${'type' + j}`] = type;
         obj[`${'amount' + j}`] = amount;
         obj[`${'weight' + j}`] = weight;
         dataList.push(obj);
         totalAmount += amount;
         totalWeight += weight;
+        if (type === '新') {
+          newTotalAmount += totalAmount;
+          newTotalWeight += totalWeight;
+        } else {
+          oldTotalAmount += totalAmount;
+          oldTotalWeight += totalWeight;
+        }
       }
       allTotalAmount += totalAmount;
       allTotalWeight += totalWeight;
-      if (type === '新') {
-        newTotalAmount += totalAmount;
-        newTotalWeight += totalWeight;
-      } else {
-        oldTotalAmount += totalAmount;
-        oldTotalWeight += totalWeight;
-      }
       dateDetailData.push({
         key: poolNo + '',
         poolNo: poolNo + '',
-        type,
         dataList,
         totalAmount,
         totalWeight,

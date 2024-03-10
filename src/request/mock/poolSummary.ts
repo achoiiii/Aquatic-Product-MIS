@@ -7,7 +7,9 @@ export interface PoolSummaryDataType {
   // 面积
   area?: number;
   // 类别
-  type?: '新' | '老';
+  beginType?: '新' | '老';
+  // 类别
+  endType?: '新' | '老';
   // key
   key: string;
   // 期初数
@@ -102,7 +104,7 @@ export function getPoolSummaryColumn() {
       // 合计行合并
       // TODO: 15其实是数据数组的length
       onCell: (_, index: number) => ({
-        colSpan: index >= 18 ? 3 : 1,
+        colSpan: index >= 18 ? 4 : 1,
       }),
       className: 'first-column',
       width: '50px',
@@ -119,9 +121,18 @@ export function getPoolSummaryColumn() {
       width: '100px',
     },
     {
-      title: '新/老',
-      dataIndex: 'type',
-      key: 'type',
+      title: '期初新/老',
+      dataIndex: 'beginType',
+      key: 'beginType',
+      align: 'center',
+      fixed: 'left',
+      onCell: (_, index: number) => ({ colSpan: index >= 18 ? 0 : 1 }),
+      width: '50px',
+    },
+    {
+      title: '期末新/老',
+      dataIndex: 'endType',
+      key: 'beginType',
       align: 'center',
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= 18 ? 0 : 1 }),
@@ -376,12 +387,13 @@ export function getPoolSummaryData() {
   for (let i = 0; i < 18; i++) {
     // 生成假数据
     // TODO：真数据替换
-    const type = getType();
+    const beginType = getType();
+    const endType = getType();
     const beginningAmount = getRandom(600000);
     const beginningWeight = getRandom(100000);
     const beginningSize = Number((beginningAmount / beginningWeight).toFixed(1));
     const feedGainWeightFeed = getRandom(40000);
-    const feedGainWeightCoefficient = type === '新' ? oldCoefficient : newCoefficient;
+    const feedGainWeightCoefficient = beginType === '新' ? oldCoefficient : newCoefficient;
     const feedGainWeightGainWeight = Math.ceil(feedGainWeightFeed * feedGainWeightCoefficient);
     const newSeedlingsAmount = 0;
     const newSeedlingsWeight = 0;
@@ -405,13 +417,14 @@ export function getPoolSummaryData() {
 
     const data: PoolSummaryDataType = {
       poolNo: poolNo + '',
-      type,
+      beginType,
+      endType,
       beginning: {
         amount: beginningAmount,
-        size: beginningWeight,
-        weight: beginningSize,
+        size: beginningSize,
+        weight: beginningWeight,
       },
-      key: poolNo + '' + type,
+      key: poolNo + '' + beginType,
       feedGainWeight: {
         feed: feedGainWeightFeed,
         coefficient: feedGainWeightCoefficient,
@@ -474,7 +487,7 @@ export function getPoolSummaryData() {
     totalEndingAmount += endingAmount;
     totalEndingWeight += endingWeight;
 
-    if (type === '新') {
+    if (beginType === '新') {
       newBeginningAmount += beginningAmount;
       newBeginningWeight += beginningWeight;
       newFeed += feedGainWeightFeed;

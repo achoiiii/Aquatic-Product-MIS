@@ -30,7 +30,7 @@ const onChange = (value: string[][]) => {
 const SitePoolSelector = () => {
   return (
     <Space wrap>
-      <Form.Item label="场/塘号" name="sitePoolId">
+      <Form.Item label="场/塘号" name="sitepoolNo" rules={[{ required: true, message: '该项必填' }]}>
         <Cascader
           style={{ width: '200px' }}
           options={sitePoolOption}

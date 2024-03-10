@@ -10,11 +10,12 @@ import FeedSheet from '@/views/FeedSheet';
 import TransferSheet from '@/views/TransferSheet';
 import LossSheet from '@/views/LossSheet';
 import SaleSheet from '@/views/SaleSheet';
-import StockSheet from '@/views/StockSheet';
+import StockSheet from '@/views/PoolStockSheet';
 import SummarySheet from '@/views/SummarySheet';
 import SitePoolManage from '@/views/SitePoolManage';
 import CoefficientManage from '@/views/CoefficientManage';
 import PoolSummarySheet from '@/views/PoolSummarySheet';
+import SiteStockSheet from '@/views/SiteStockSheet';
 
 /**
  * 路由表
@@ -47,34 +48,43 @@ const routes = [
         element: <About />,
       },
       {
-        path: '/sheet',
+        path: '/poolSheet',
         children: [
           {
-            path: '/sheet/feed',
+            path: '/poolSheet/feed',
             element: <FeedSheet />,
           },
           {
-            path: '/sheet/transfer',
+            path: '/poolSheet/transfer',
             element: <TransferSheet />,
           },
           {
-            path: '/sheet/sale',
+            path: '/poolSheet/sale',
             element: <SaleSheet />,
           },
           {
-            path: '/sheet/loss',
+            path: '/poolSheet/loss',
             element: <LossSheet />,
           },
           {
-            path: '/sheet/stock',
+            path: '/poolSheet/stock',
             element: <StockSheet />,
           },
           {
-            path: '/sheet/poolSummary',
+            path: '/poolSheet/summary',
             element: <PoolSummarySheet />,
           },
+        ],
+      },
+      {
+        path: '/siteSheet',
+        children: [
           {
-            path: '/sheet/summary',
+            path: '/siteSheet/stock',
+            element: <SiteStockSheet />,
+          },
+          {
+            path: '/siteSheet/summary',
             element: <SummarySheet />,
           },
         ],

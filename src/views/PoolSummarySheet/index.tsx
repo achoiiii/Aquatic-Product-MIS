@@ -12,7 +12,7 @@ const { RangePicker } = DatePicker;
 const PoolSummarySheet = () => {
   const SearchBar: React.FC = () => {
     interface searchParams {
-      poolId: string;
+      poolNo: string;
       dateRange: Dayjs[];
     }
     const onFinish = (values: searchParams) => {
@@ -27,7 +27,7 @@ const PoolSummarySheet = () => {
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
         <SitePoolSelector />
         <Form.Item name="dateRange" label="日期">
-          <RangePicker placeholder={['开始时间','结束时间']} />
+          <RangePicker placeholder={['开始时间', '结束时间']} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -62,7 +62,7 @@ const PoolSummarySheet = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000,y: 600 }}
+          scroll={{ x: 3000, y: 600 }}
           columns={columns}
           id="summary-table"
           rowKey={'key'}

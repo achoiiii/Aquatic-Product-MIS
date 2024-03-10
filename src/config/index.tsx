@@ -24,37 +24,48 @@ export default {
       label: '主页',
     },
     {
-      key: '/sheet',
+      key: '/poolSheet',
       icon: <FileTextOutlined />,
-      label: '报表管理',
+      label: '塘报表管理',
       children: [
         {
-          key: '/sheet/feed',
+          key: '/poolSheet/feed',
           label: '投料及损耗',
         },
         {
-          key: '/sheet/transfer',
+          key: '/poolSheet/transfer',
           label: '分塘',
         },
         {
-          key: '/sheet/sale',
+          key: '/poolSheet/sale',
           label: '销售报表',
         },
         {
-          key: '/sheet/loss',
+          key: '/poolSheet/loss',
           label: '清塘损耗',
         },
         {
-          key: '/sheet/stock',
+          key: '/poolSheet/stock',
           label: '存塘统计',
         },
         {
-          key: '/sheet/poolSummary',
-          label: '塘汇总表',
+          key: '/poolSheet/summary',
+          label: '汇总表',
+        },
+      ],
+    },
+    {
+      key: '/siteSheet',
+      icon: <FileTextOutlined />,
+      label: '场报表管理',
+      children: [
+        {
+          key: '/siteSheet/stock',
+          label: '存塘统计',
         },
         {
-          key: '/sheet/summary',
-          label: '场汇总表',
+          key: '/siteSheet/summary',
+          label: '汇总表',
         },
       ],
     },
