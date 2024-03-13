@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import { Dropdown, Modal, Space } from 'antd';
+import { Dropdown, Form, Input, Modal, Space } from 'antd';
 import { store, useSelector } from '@/store';
 
 const DropdownBar: React.FC = () => {
@@ -38,9 +38,22 @@ const DropdownBar: React.FC = () => {
 
   return (
     <div id="drow-down-bar">
-      <Modal title="Title" open={open} onOk={handleModify} confirmLoading={confirmLoading}>
-        {' '}
-        <p>修改密码</p>
+      <Modal
+        title="修改密码"
+        open={open}
+        onOk={handleModify}
+        confirmLoading={confirmLoading}
+        cancelText="取消"
+        okText="确认修改"
+      >
+        <Form name="modifyPwd" style={{ padding: '20px' }}>
+          <Form.Item label="旧密码" name="oldPassword" rules={[{ required: true, message: '旧密码为空' }]}>
+            <Input placeholder="请输入旧密码" allowClear={true} />
+          </Form.Item>
+          <Form.Item label="新密码" name="newPassword" rules={[{ required: true, message: '新密码为空' }]}>
+            <Input placeholder="请输入新密码" allowClear={true} />
+          </Form.Item>
+        </Form>
       </Modal>
       <Dropdown menu={{ items }}>
         <Space>
