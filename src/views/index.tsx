@@ -8,7 +8,7 @@ import config from '@/config';
 import { getPath } from '@/utils/url';
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 import DropdownBar from '@/components/DropdownBar';
-import { useSelector } from '@/store';
+import { dispatch, useSelector } from '@/store';
 
 const { Header, Content, Sider } = Layout;
 
@@ -27,6 +27,10 @@ const View: React.FC = () => {
     if (!isLogin) return;
     if (location.pathname === '/forbid') return setBreadcrumbItems([{ title: '权限限制' }]);
     generateBreadcrumb(menuItems, getPath());
+  }, []);
+
+  useEffect(() => {
+    dispatch.app.getInitialData();
   }, []);
 
   // 生成面包屑

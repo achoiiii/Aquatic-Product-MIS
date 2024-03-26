@@ -10,7 +10,7 @@ export default {
   isMock: true,
   // 接口域名
   serviceUrl: {
-    baseURL: 'http://localhost:3000',
+    baseURL: import.meta.env.VITE_BASEURL,
     member: 'http://localhost:3000',
     dog: 'https://dog.ceo',
   },

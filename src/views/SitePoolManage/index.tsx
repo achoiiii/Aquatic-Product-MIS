@@ -176,6 +176,7 @@ const TableContainer: React.FC = () => {
     1: '老',
   };
   const siteData: SiteItem[] = useSelector((state) => state.app.sites);
+
   const expandedRowRender = (props: SiteItem) => {
     const { pools } = props;
     const poolsWithType = pools.map((pool) => {
@@ -209,9 +210,9 @@ const TableContainer: React.FC = () => {
   };
 
   const columns: TableColumnsType<SiteItem> = [
-    { title: '场名', dataIndex: 'name', key: 'name' },
+    { title: '场名', dataIndex: 'siteName', key: 'siteName' },
     { title: '场号', dataIndex: 'siteNo', key: 'siteNo' },
-    { title: '负责人', dataIndex: 'custodian', key: 'custodian' },
+    { title: '负责人', dataIndex: 'name', key: 'name' },
     {
       title: '操作',
       key: 'operation',

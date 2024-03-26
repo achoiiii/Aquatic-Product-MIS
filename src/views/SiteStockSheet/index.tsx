@@ -1,4 +1,5 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
+import { ISiteStockData } from '@/request/basic/typing';
 import { useSelector } from '@/store';
 import { SiteItem } from '@/store/models/app/typings';
 import exportTableToExcel from '@/utils/exportXlsx';
@@ -7,15 +8,6 @@ import { Button, DatePicker, Form } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
-
-interface ISiteStockData {
-  siteNo: string;
-  area: number;
-  newQuantity: number;
-  newWeight: number;
-  oldQuantity: number;
-  oldWeight: number;
-}
 
 function getData(sites: SiteItem[]) {
   const dataList: ISiteStockData[] = [];

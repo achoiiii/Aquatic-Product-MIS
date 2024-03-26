@@ -1,4 +1,4 @@
-import instance from '..';
+import instance from '../instance';
 import config from '@/config';
 const dogUrl = config.serviceUrl.dog;
 export function getUserInfo() {

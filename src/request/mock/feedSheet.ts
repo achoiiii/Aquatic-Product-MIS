@@ -1,22 +1,6 @@
 import { formatDate } from '@/utils/formatDate';
 import { ColumnsType } from 'antd/es/table';
-
-export interface FeedSheetDataType {
-  // 塘号
-  poolNo: string;
-  // 面积
-  area?: number;
-  // 数据key = 塘号
-  key: string;
-  // 每一天的数据
-  dataList?: Array<any>;
-  // 总投料
-  totalFeed: number;
-  // 总消耗
-  totalLoss: number;
-  // 总消耗重量
-  totalLossWeight?: number;
-}
+import { FeedSheetDataType } from '../sheet/typing';
 
 export function getFeedSheetColumn(): ColumnsType<FeedSheetDataType> {
   const columnList: ColumnsType<FeedSheetDataType> = [

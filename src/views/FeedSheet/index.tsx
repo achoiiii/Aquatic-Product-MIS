@@ -3,7 +3,8 @@ import { Button, Form, Table, DatePicker } from 'antd';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { Dayjs } from 'dayjs';
 import SitePoolSelector from '@/components/SitePoolSelector';
-import { FeedSheetDataType, getFeedSheetData, getFeedSheetColumn } from '@/request/mock/feedSheet';
+import { getFeedSheetData, getFeedSheetColumn } from '@/request/mock/feedSheet';
+import { FeedSheetDataType } from '@/request/sheet/typing';
 
 const { RangePicker } = DatePicker;
 interface IProps {
