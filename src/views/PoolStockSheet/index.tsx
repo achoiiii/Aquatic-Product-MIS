@@ -1,14 +1,17 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
-import { useSelector } from '@/store';
+import request from '@/request';
+import { IBasicSearchParams } from '@/request/sheet/typing';
+import { store, useSelector } from '@/store';
 import { SiteItem } from '@/store/models/app/typings';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { formatDate } from '@/utils/formatDate';
 import { Button, DatePicker, Form } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 
 interface IPoolStockData {
+  key: string;
   poolNo: string;
   type: '新' | '老';
   area: number;
@@ -21,6 +24,7 @@ function getData(sites: SiteItem[]) {
   sites.forEach((site) => {
     site.pools.forEach((pool) => {
       dataList.push({
+        key: pool.poolNo + '',
         poolNo: pool.poolNo + '',
         type: pool.type === 0 ? '新' : '老',
         area: pool.area,
@@ -33,9 +37,11 @@ function getData(sites: SiteItem[]) {
 }
 
 const PoolStockSheet = () => {
+  const [showLoading, setShowLoading] = useState(false);
   const [date, setDate] = useState(formatDate(Date.now()));
+  const sites = useSelector((state) => state.app.sites);
+  const [dataSource, setDataSource] = useState(getData(sites));
   const TableContainer = () => {
-    const sites = useSelector((state) => state.app.sites);
     const columns: ColumnsType<IPoolStockData> = [
       {
         title: '塘号',
@@ -68,13 +74,6 @@ const PoolStockSheet = () => {
         align: 'center',
       },
     ];
-    const dataSource = getData(sites);
-    const [showLoading, setShowLoading] = useState(true);
-    useEffect(() => {
-      setTimeout(() => {
-        setShowLoading(false);
-      }, 2e3);
-    }, []);
     return (
       <div className="content-box">
         <Table
@@ -94,19 +93,53 @@ const PoolStockSheet = () => {
     );
   };
   const SearchBar: React.FC = () => {
-    interface searchParams {
-      poolNo: string;
-      date: Dayjs;
-    }
-    const onFinish = (values: searchParams) => {
-      console.log('Received values from form: ', values);
-      setDate(formatDate(Number(values.date)));
+    const { sites } = store.getState().app;
+    const onFinish = (values: { date: string; sitePool: string[][] }) => {
+      setShowLoading(true);
+      const { sitePool } = values;
+      const poolNos: string[] = [];
+      sitePool.forEach((option) => {
+        if (option.length === 2) poolNos.push(option[1]);
+        else if (option.length === 1) {
+          const site = sites.find((site) => site.siteNo === option[0]);
+          site?.pools.forEach((pool) => poolNos.push(pool.poolNo));
+        }
+      });
+      request.sheet.stock
+        .getPoolStock({ poolNos, date: values.date })
+        .then((res) => {
+          const dataSource = res.data.map((item) => {
+            return {
+              ...item,
+              key: item.poolNo,
+              type: item.type === 0 ? '新' : '老',
+            };
+          });
+          setDataSource(dataSource);
+          setDate(values.date);
+        })
+        .catch((err) => {})
+        .finally(() => {
+          setShowLoading(false);
+        });
     };
 
     return (
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
-        <SitePoolSelector />
-        <Form.Item name="date" label="日期" rules={[{ required: true, message: '请选择日期' }]}>
+        <SitePoolSelector type="pool" />
+        <Form.Item
+          name="date"
+          label="日期"
+          rules={[{ required: true, message: '请选择日期' }]}
+          getValueProps={(value) => {
+            return {
+              value: value ? dayjs(value) : null,
+            };
+          }}
+          getValueFromEvent={(value) => {
+            return value ? value.format('YYYY-MM-DD') : '';
+          }}
+        >
           <DatePicker placeholder="请选择日期" />
         </Form.Item>
         <Form.Item>

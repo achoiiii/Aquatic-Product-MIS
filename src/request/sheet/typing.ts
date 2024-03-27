@@ -20,3 +20,12 @@ export interface IFeedSheetDataListItem {
   date: string;
   type: 1 | 0;
 }
+
+export interface IBasicSearchParams {
+  poolNos: string[];
+  date: string;
+}
+export interface IBasicRangeSearchParams {
+  poolNos: string[];
+  date: string[];
+}

@@ -12,8 +12,6 @@ export default createModel<IAppStoreModels>()({
   state: defaultState, // initial state
   reducers: {
     update(state: IInitialData, payload: Partial<IInitialData>): IInitialData {
-      console.log(state, payload, 'payload');
-
       return {
         ...state,
         ...payload,

@@ -1,7 +1,7 @@
 export type PoolItem = {
   id: number;
   year: string;
-  poolNo: number;
+  poolNo: string;
   area: number;
   date: string;
   type: 0 | 1 | string;

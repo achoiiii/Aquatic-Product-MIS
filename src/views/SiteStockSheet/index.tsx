@@ -1,40 +1,43 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import { ISiteStockData } from '@/request/basic/typing';
+import { IBasicSearchParams } from '@/request/sheet/typing';
 import { useSelector } from '@/store';
 import { SiteItem } from '@/store/models/app/typings';
 import exportTableToExcel from '@/utils/exportXlsx';
 import { formatDate } from '@/utils/formatDate';
 import { Button, DatePicker, Form } from 'antd';
+import dayjs from 'dayjs';
 import Table, { ColumnsType } from 'antd/es/table';
-import { Dayjs } from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import request from '@/request';
 
 function getData(sites: SiteItem[]) {
   const dataList: ISiteStockData[] = [];
   sites.forEach((site) => {
-    let newQuantity = 0;
-    let oldQuantity = 0;
+    let totalNewQuantity = 0;
+    let totalOldQuantity = 0;
     let area = 0;
-    let newWeight = 0;
-    let oldWeight = 0;
+    let totalNewWeight = 0;
+    let totalOldWeight = 0;
     const pools = site.pools;
     pools.forEach((pool) => {
       if (pool.type === 0) {
-        newQuantity += pool.quantity;
-        newWeight += pool.weight;
+        totalNewQuantity += pool.quantity;
+        totalNewWeight += pool.weight;
       } else {
-        oldQuantity += pool.quantity;
-        oldWeight += pool.weight;
+        totalOldQuantity += pool.quantity;
+        totalOldWeight += pool.weight;
       }
       area += pool.area;
     });
     dataList.push({
+      key: site.siteNo + '',
       siteNo: site.siteNo + '',
       area,
-      newQuantity,
-      newWeight,
-      oldQuantity,
-      oldWeight,
+      totalNewQuantity,
+      totalNewWeight,
+      totalOldQuantity,
+      totalOldWeight,
     });
   });
   return dataList;
@@ -42,8 +45,10 @@ function getData(sites: SiteItem[]) {
 
 const SiteStockSheet = () => {
   const [date, setDate] = useState(formatDate(Date.now()));
+  const sites = useSelector((state) => state.app.sites);
+  const [showLoading, setShowLoading] = useState(false);
+  const [dataSource, setDataSource] = useState(getData(sites));
   const TableContainer = () => {
-    const sites = useSelector((state) => state.app.sites);
     const columns: ColumnsType<ISiteStockData> = [
       {
         title: '场号',
@@ -59,36 +64,29 @@ const SiteStockSheet = () => {
       },
       {
         title: '新鳗存量数量（尾）',
-        dataIndex: 'newQuantity',
-        key: 'newQuantity',
+        dataIndex: 'totalNewQuantity',
+        key: 'totalNewQuantity',
         align: 'center',
       },
       {
         title: '新鳗存塘重量（kg）',
-        dataIndex: 'newWeight',
-        key: 'newWeight',
+        dataIndex: 'totalNewWeight',
+        key: 'totalNewWeight',
         align: 'center',
       },
       {
         title: '老鳗存量数量（尾）',
-        dataIndex: 'oldQuantity',
-        key: 'oldQuantity',
+        dataIndex: 'totalOldQuantity',
+        key: 'totalOldQuantity',
         align: 'center',
       },
       {
         title: '老鳗存塘重量（kg）',
-        dataIndex: 'oldWeight',
-        key: 'oldWeight',
+        dataIndex: 'totalOldWeight',
+        key: 'totalOldWeight',
         align: 'center',
       },
     ];
-    const dataSource = getData(sites);
-    const [showLoading, setShowLoading] = useState(true);
-    useEffect(() => {
-      setTimeout(() => {
-        setShowLoading(false);
-      }, 2e3);
-    }, []);
     return (
       <div className="content-box">
         <Table
@@ -108,19 +106,37 @@ const SiteStockSheet = () => {
     );
   };
   const SearchBar: React.FC = () => {
-    interface searchParams {
-      siteNo: string;
-      date: number;
-    }
-    const onFinish = (values: searchParams) => {
-      console.log('Received values from form: ', values);
-      setDate(formatDate(values.date));
+    const onFinish = (values: IBasicSearchParams) => {
+      setShowLoading(true);
+      request.sheet.stock
+        .getSiteStock({ ...values, poolNos: ['1'] })
+        .then((res) => {
+          const dataSource = res.data.map((item) => (item['key'] = item.siteNo));
+          setDataSource(dataSource);
+          setDate(values.date);
+        })
+        .catch((err) => {})
+        .finally(() => {
+          setShowLoading(false);
+        });
     };
 
     return (
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
-        <SitePoolSelector />
-        <Form.Item name="date" label="日期" rules={[{ required: true, message: '请选择日期' }]}>
+        <SitePoolSelector type="site" />
+        <Form.Item
+          name="date"
+          label="日期"
+          rules={[{ required: true, message: '请选择日期' }]}
+          getValueProps={(value) => {
+            return {
+              value: value ? dayjs(value) : null,
+            };
+          }}
+          getValueFromEvent={(value) => {
+            return value ? value.format('YYYY-MM-DD') : '';
+          }}
+        >
           <DatePicker placeholder="请选择日期" />
         </Form.Item>
         <Form.Item>
