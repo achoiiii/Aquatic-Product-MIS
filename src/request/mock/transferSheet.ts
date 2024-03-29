@@ -1,20 +1,6 @@
-import { formatDate } from '@/utils/formatDate';
+import { formatDate } from '@/utils/format';
 import { ColumnsType } from 'antd/es/table';
-
-export interface TransferSheetDataType {
-  // 塘号
-  poolNo: string;
-  // 面积
-  area?: number;
-  // 数据key = 塘号
-  key: string;
-  // 每一天的数据
-  dataList?: Array<any>;
-  // 总数量
-  totalAmount: number;
-  // 总重量
-  totalWeight: number;
-}
+import { TransferSheetDataType } from '../sheet/typing';
 
 export function getTransferSheetColumn(): ColumnsType<TransferSheetDataType> {
   const columnList: ColumnsType<TransferSheetDataType> = [

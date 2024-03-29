@@ -1,10 +1,10 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import { ISiteStockData } from '@/request/basic/typing';
-import { IBasicSearchParams } from '@/request/sheet/typing';
+import { ISiteBasicSearchParams } from '@/request/sheet/typing';
 import { useSelector } from '@/store';
 import { SiteItem } from '@/store/models/app/typings';
 import exportTableToExcel from '@/utils/exportXlsx';
-import { formatDate } from '@/utils/formatDate';
+import { formatDate } from '@/utils/format';
 import { Button, DatePicker, Form } from 'antd';
 import dayjs from 'dayjs';
 import Table, { ColumnsType } from 'antd/es/table';
@@ -106,12 +106,17 @@ const SiteStockSheet = () => {
     );
   };
   const SearchBar: React.FC = () => {
-    const onFinish = (values: IBasicSearchParams) => {
+    const onFinish = (values: ISiteBasicSearchParams) => {
       setShowLoading(true);
       request.sheet.stock
-        .getSiteStock({ ...values, poolNos: ['1'] })
+        .getSiteStock({ ...values })
         .then((res) => {
-          const dataSource = res.data.map((item) => (item['key'] = item.siteNo));
+          const dataSource = res.data.map((item) => {
+            return {
+              ...item,
+              key: item.siteNo,
+            };
+          });
           setDataSource(dataSource);
           setDate(values.date);
         })

@@ -1,3 +1,5 @@
+import { Dayjs } from 'dayjs';
+
 export interface FeedSheetDataType {
   // 塘号
   poolNo: string;
@@ -6,7 +8,7 @@ export interface FeedSheetDataType {
   // 数据key = 塘号
   key: string;
   // 每一天的数据
-  dataList?: Array<IFeedSheetDataListItem>;
+  dataMap?: any;
   // 总投料
   totalFeed: number;
   // 总消耗
@@ -14,18 +16,35 @@ export interface FeedSheetDataType {
   // 总消耗重量
   totalLossWeight?: number;
 }
-export interface IFeedSheetDataListItem {
-  feed: number;
-  loss: number;
-  date: string;
-  type: 1 | 0;
+
+export interface TransferSheetDataType {
+  // 塘号
+  poolNo: string;
+  // 面积
+  area?: number;
+  // 数据key = 塘号
+  key: string;
+  // 每一天的数据
+  dataMap?: any;
+  // 总数量
+  totalAmount: number;
+  // 总重量
+  totalWeight: number;
 }
 
-export interface IBasicSearchParams {
-  poolNos: string[];
+export interface IPoolBasicSearchParams {
   date: string;
+  sitePool: string[][];
 }
-export interface IBasicRangeSearchParams {
-  poolNos: string[];
-  date: string[];
+export interface IPoolBasicRangeSearchParams {
+  dateRange: Dayjs[];
+  sitePool: string[][];
+}
+export interface ISiteBasicSearchParams {
+  date: string;
+  siteNos: string[][];
+}
+export interface ISiteBasicRangeSearchParams {
+  dateRange: Dayjs[];
+  siteNos: string[][];
 }

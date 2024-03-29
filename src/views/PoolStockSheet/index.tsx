@@ -1,10 +1,9 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import request from '@/request';
-import { IBasicSearchParams } from '@/request/sheet/typing';
 import { store, useSelector } from '@/store';
 import { SiteItem } from '@/store/models/app/typings';
 import exportTableToExcel from '@/utils/exportXlsx';
-import { formatDate } from '@/utils/formatDate';
+import { formatDate, formatPoolNos } from '@/utils/format';
 import { Button, DatePicker, Form } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
@@ -93,18 +92,10 @@ const PoolStockSheet = () => {
     );
   };
   const SearchBar: React.FC = () => {
-    const { sites } = store.getState().app;
     const onFinish = (values: { date: string; sitePool: string[][] }) => {
       setShowLoading(true);
       const { sitePool } = values;
-      const poolNos: string[] = [];
-      sitePool.forEach((option) => {
-        if (option.length === 2) poolNos.push(option[1]);
-        else if (option.length === 1) {
-          const site = sites.find((site) => site.siteNo === option[0]);
-          site?.pools.forEach((pool) => poolNos.push(pool.poolNo));
-        }
-      });
+      const poolNos = formatPoolNos(sitePool);
       request.sheet.stock
         .getPoolStock({ poolNos, date: values.date })
         .then((res) => {

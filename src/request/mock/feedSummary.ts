@@ -1,4 +1,4 @@
-import { formatDate } from '@/utils/formatDate';
+import { formatDate } from '@/utils/format';
 import { ColumnsType } from 'antd/es/table';
 
 export interface FeedSummaryDataType {
