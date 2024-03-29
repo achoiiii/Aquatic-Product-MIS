@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Table, DatePicker } from 'antd';
-import exportTableToExcel from '@/utils/exportXlsx';
+import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import dayjs, { Dayjs } from 'dayjs';
 import SitePoolSelector from '@/components/SitePoolSelector';
-import { getFeedSheetData, getFeedSheetColumn, getRealFeedSheetData } from '@/request/mock/feedSheet';
+import { getFeedSheetColumn, getFeedSheetData } from '@/utils/sheet/feedSheet';
 import { FeedSheetDataType, IPoolBasicRangeSearchParams } from '@/request/sheet/typing';
 import request from '@/request';
 import { formatPoolNos } from '@/utils/format';
@@ -22,6 +22,7 @@ const FeedSheet: React.FC = () => {
   ]);
   const [showLoading, setShowLoading] = useState(false);
   const [columns, setColumns]: [ColumnsType<FeedSheetDataType>, any] = useState([]);
+
   useEffect(() => {
     setShowLoading(true);
     request.sheet.feedLoss
@@ -29,11 +30,12 @@ const FeedSheet: React.FC = () => {
         date: dateRange,
       })
       .then((res) => {
-        const sheetData: FeedSheetDataType[] = getRealFeedSheetData(res.data, dateRange);
+        const sheetData: FeedSheetDataType[] = getFeedSheetData(res.data, dateRange);
         setSheetData(sheetData);
       })
       .finally(() => setShowLoading(false));
   }, []);
+
   useEffect(() => {
     setColumns(getFeedSheetColumn(dateRange, sheetData.length));
   }, [sheetData]);
@@ -52,7 +54,7 @@ const FeedSheet: React.FC = () => {
         })
         .then((res) => {
           setDateRange(dateArr);
-          const sheetData: FeedSheetDataType[] = getRealFeedSheetData(res.data, dateRange);
+          const sheetData: FeedSheetDataType[] = getFeedSheetData(res.data, dateRange);
           setSheetData(sheetData);
         })
         .finally(() => setShowLoading(false));
@@ -94,7 +96,7 @@ const FeedSheet: React.FC = () => {
           id="feedlog-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${15}条数据`;
+            return `总共匹配到：${sheetData.length > 3 ? sheetData.length - 3 : sheetData.length}条数据`;
           }}
           loading={showLoading}
         />

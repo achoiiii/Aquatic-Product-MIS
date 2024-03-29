@@ -1,82 +1,110 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Form, Table, DatePicker } from 'antd';
-import exportTableToExcel from '@/utils/exportXlsx';
-import { Dayjs } from 'dayjs';
+import exportTableToExcel from '@/utils/sheet/exportXlsx';
+import dayjs, { Dayjs } from 'dayjs';
 import SitePoolSelector from '@/components/SitePoolSelector';
-import { TransferSheetDataType, getTransferSheetColumn, getTransferSheetData } from '@/request/mock/transferSheet';
+import { getBasicSheetColumn, getBasicSheetData } from '@/utils/sheet/basicSheet';
+import { BasicSheetDataType, IPoolBasicRangeSearchParams } from '@/request/sheet/typing';
+import { ColumnsType } from 'antd/es/table';
+import request from '@/request';
+import { formatPoolNos } from '@/utils/format';
 
 const { RangePicker } = DatePicker;
 interface IProps {
-  data?: TransferSheetDataType[];
+  data?: BasicSheetDataType[];
 }
+const TransferSheet: React.FC = () => {
+  const [sheetData, setSheetData]: [BasicSheetDataType[], any] = useState([]);
+  const [dateRange, setDateRange]: [string[], any] = useState([
+    // 默认当天前十五天数据
+    dayjs().subtract(14, 'day').format('YYYY-MM-DD'),
+    dayjs().format('YYYY-MM-DD'),
+  ]);
+  const [showLoading, setShowLoading] = useState(false);
+  const [columns, setColumns]: [ColumnsType<BasicSheetDataType>, any] = useState([]);
 
-const sheetData: TransferSheetDataType[] = getTransferSheetData();
+  useEffect(() => {
+    setShowLoading(true);
+    request.sheet.transfer
+      .getPoolDivideSheetData({
+        date: dateRange,
+      })
+      .then((res) => {
+        const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
+        setSheetData(sheetData);
+        console.log(sheetData);
+      })
+      .finally(() => setShowLoading(false));
+  }, []);
 
-const SearchBar: React.FC = () => {
-  interface searchParams {
-    poolNo: string;
-    dateRange: Dayjs[];
-  }
-  const onFinish = (values: searchParams) => {
-    const timestampArr = values.dateRange.map((value) => {
-      return value.valueOf();
-    });
-    values['timestampArr'] = timestampArr;
-    console.log('Received values from form: ', values);
+  useEffect(() => {
+    setColumns(getBasicSheetColumn(dateRange, sheetData.length));
+  }, [sheetData]);
+
+  const SearchBar: React.FC = () => {
+    const onFinish = (values: IPoolBasicRangeSearchParams) => {
+      setShowLoading(true);
+      const dateArr = values.dateRange.map((value) => {
+        return value.format('YYYY-MM-DD');
+      });
+      const poolNos = formatPoolNos(values.sitePool);
+      request.sheet.transfer
+        .getPoolDivideSheetData({
+          date: dateArr,
+          poolNos,
+        })
+        .then((res) => {
+          setDateRange(dateArr);
+          const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
+          setSheetData(sheetData);
+        })
+        .finally(() => setShowLoading(false));
+    };
+
+    return (
+      <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
+        <SitePoolSelector type="pool" />
+        <Form.Item name="dateRange" label="日期">
+          <RangePicker placeholder={['开始时间', '结束时间']} />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit">
+            查询
+          </Button>
+        </Form.Item>
+        <Button
+          type="primary"
+          style={{ backgroundColor: '#18bc69' }}
+          onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+        >
+          导出
+        </Button>
+      </Form>
+    );
   };
 
-  return (
-    <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
-      <SitePoolSelector />
-      <Form.Item name="dateRange" label="日期">
-        <RangePicker placeholder={['开始时间', '结束时间']} />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit">
-          查询
-        </Button>
-      </Form.Item>
-      <Button
-        type="primary"
-        style={{ backgroundColor: '#18bc69' }}
-        onClick={() => exportTableToExcel('transfer-table', 'transfer-table')}
-      >
-        导出
-      </Button>
-    </Form>
-  );
-};
+  const TableContainer = (props: IProps) => {
+    const { data } = props;
+    return (
+      <div className="content-box">
+        <Table
+          dataSource={data}
+          bordered
+          pagination={{ pageSize: 100 }}
+          size="small"
+          scroll={{ x: 3000, y: 600 }}
+          columns={columns}
+          id="transfer-table"
+          rowKey={'key'}
+          title={() => {
+            return `总共匹配到：${sheetData.length > 3 ? sheetData.length - 3 : sheetData.length}条数据`;
+          }}
+          loading={showLoading}
+        />
+      </div>
+    );
+  };
 
-const TableContainer = (props: IProps) => {
-  const columns = getTransferSheetColumn();
-  const { data } = props;
-  const [showLoading, setShowLoading] = useState(true);
-  useEffect(() => {
-    setTimeout(() => {
-      setShowLoading(false);
-    }, 2e3);
-  }, []);
-  return (
-    <div className="content-box">
-      <Table
-        dataSource={data}
-        bordered
-        pagination={{ pageSize: 100 }}
-        size="small"
-        scroll={{ x: 3000, y: 600 }}
-        columns={columns}
-        id="transfer-table"
-        rowKey={'key'}
-        title={() => {
-          return `总共匹配到：${15}条数据`;
-        }}
-        loading={showLoading}
-      />
-    </div>
-  );
-};
-
-const TransferSheet: React.FC = () => {
   return (
     <>
       <SearchBar />

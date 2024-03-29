@@ -1,6 +1,6 @@
 import { formatDate } from '@/utils/format';
 import { ColumnsType } from 'antd/es/table';
-import { FeedSheetDataType } from '../sheet/typing';
+import { FeedSheetDataType } from '../../request/sheet/typing';
 import dayjs from 'dayjs';
 
 export function getFeedSheetColumn(dateRange: string[], dataLength: number): ColumnsType<FeedSheetDataType> {
@@ -65,7 +65,7 @@ export function getFeedSheetColumn(dateRange: string[], dataLength: number): Col
   }
   // 生成合计行
   columnList.push({
-    title: '半月合计',
+    title: '合计',
     key: 'total',
     align: 'center',
     width: 300,
@@ -77,109 +77,12 @@ export function getFeedSheetColumn(dateRange: string[], dataLength: number): Col
   });
   return columnList;
 }
-export function getFeedSheetData() {
-  let poolNo = 1101;
-  const sheetData: FeedSheetDataType[] = [];
-  // 合计的投料量/损耗/损耗重量
-  let allTotalFeed = 0;
-  let allTotalLoss = 0;
-  let allTotalLossWeight = 0;
-  // 新鳗的投料量/损耗/损耗重量
-  let newTotalFeed = 0;
-  let newTotalLoss = 0;
-  let newTotalLossWeight = 0;
-  // 老鳗的投料量/损耗/损耗重量
-  let oldTotalFeed = 0;
-  let oldTotalLoss = 0;
-  let oldTotalLossWeight = 0;
-  /**
-   * 随机生成新老
-   * @returns '新' | '老'
-   */
-  function getType() {
-    const flag = Math.random();
-    if (flag > 0.5) return '新';
-    return '老';
-  }
-  /**
-   * 生成具体数据
-   * Todo:真实数据
-   * @returns DataType[]
-   * */
-  function getDateDetailData() {
-    const dateDetailData: FeedSheetDataType[] = [];
-    for (let i = 0; i < 15; i++) {
-      const dataMap: any = [];
-      let totalFeed = 0;
-      let totalLoss = 0;
-      for (let j = 0; j < 15; j++) {
-        const obj = {};
-        const type = getType();
-        const feed = poolNo + j * 100 + 1;
-        const loss = poolNo + j * 10 + 2;
-        obj[`${'type' + j}`] = type;
-        obj[`${'feed' + j}`] = feed;
-        obj[`${'loss' + j}`] = loss;
-        dataMap.push(obj);
-        totalFeed += feed;
-        totalLoss += loss;
-        if (type === '新') {
-          newTotalFeed += totalFeed;
-          newTotalLoss += totalLoss;
-        } else {
-          oldTotalFeed += totalFeed;
-          oldTotalLoss += totalLoss;
-        }
-      }
-      allTotalFeed += totalFeed;
-      allTotalLoss += totalLoss;
-      dateDetailData.push({
-        key: poolNo + '',
-        poolNo: poolNo + '',
-        dataMap,
-        totalFeed,
-        totalLoss,
-      });
-      poolNo++;
-    }
-    return dateDetailData;
-  }
-  sheetData.push(...getDateDetailData());
-  // 生成合计数据
-  sheetData.push({
-    key: '合计',
-    poolNo: '合计',
-    dataMap: [],
-    totalFeed: allTotalFeed,
-    totalLoss: allTotalLoss,
-    totalLossWeight: allTotalLossWeight,
-  });
-  // 生成本期新鳗数据
-  sheetData.push({
-    key: '本期新鳗',
-    poolNo: '本期新鳗',
-    dataMap: [],
-    totalFeed: newTotalFeed,
-    totalLoss: newTotalLoss,
-    totalLossWeight: newTotalLossWeight,
-  });
-  // 生成本期老鳗数据
-  sheetData.push({
-    key: '本期老鳗',
-    poolNo: '本期老鳗',
-    dataMap: [],
-    totalFeed: oldTotalFeed,
-    totalLoss: oldTotalLoss,
-    totalLossWeight: oldTotalLossWeight,
-  });
-  return sheetData;
-}
 /**
  * 通过后端返回的数据计算合计数据
  * @param resData
  * @returns
  */
-export function getRealFeedSheetData(resData: FeedSheetDataType[], dateRange: string[]) {
+export function getFeedSheetData(resData: FeedSheetDataType[], dateRange: string[]) {
   const sheetData: FeedSheetDataType[] = resData;
   let date: any = new Date(dateRange[0]);
   const endDate: any = new Date(dateRange[1]);

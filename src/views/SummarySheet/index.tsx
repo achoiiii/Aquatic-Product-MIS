@@ -1,7 +1,7 @@
 import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
 import { getSummaryColumn, getSummaryData } from '@/request/mock/totalSummary';
 import { getTransferSummaryColumn, getTransferSummaryData } from '@/request/mock/transferSummary';
-import exportTableToExcel from '@/utils/exportXlsx';
+import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Select, Table } from 'antd';
 import { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
@@ -49,7 +49,7 @@ const SummarySheet = () => {
             { type: 'array', warningOnly: true },
           ]}
         >
-          <RangePicker placeholder={['开始时间','结束时间']} disabled={disabled} />
+          <RangePicker placeholder={['开始时间', '结束时间']} disabled={disabled} />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
@@ -104,7 +104,7 @@ const SummarySheet = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000,y: 600 }}
+          scroll={{ x: 3000, y: 600 }}
           columns={columns}
           id="summary-table"
           rowKey={'key'}

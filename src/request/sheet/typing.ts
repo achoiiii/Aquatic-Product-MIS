@@ -17,7 +17,7 @@ export interface FeedSheetDataType {
   totalLossWeight?: number;
 }
 
-export interface TransferSheetDataType {
+export interface BasicSheetDataType {
   // 塘号
   poolNo: string;
   // 面积
@@ -27,7 +27,7 @@ export interface TransferSheetDataType {
   // 每一天的数据
   dataMap?: any;
   // 总数量
-  totalAmount: number;
+  totalQuantity: number;
   // 总重量
   totalWeight: number;
 }
