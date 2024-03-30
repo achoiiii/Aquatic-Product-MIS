@@ -5,7 +5,7 @@ import About from '../views/About';
 import View from '../views/index';
 import Login from '@/views/Login';
 import Forbid from '@/views/Forbid';
-import FeedManage from '@/views/FeedManage';
+import FeedRecord from '@/views/FeedRecord';
 import FeedSheet from '@/views/FeedSheet';
 import TransferSheet from '@/views/TransferSheet';
 import LossSheet from '@/views/LossSheet';
@@ -16,6 +16,10 @@ import SitePoolManage from '@/views/SitePoolManage';
 import CoefficientManage from '@/views/CoefficientManage';
 import PoolSummarySheet from '@/views/PoolSummarySheet';
 import SiteStockSheet from '@/views/SiteStockSheet';
+import DivideRecord from '@/views/DivideRecord';
+import ClearLossRecord from '@/views/ClearLossRecord';
+import PutRecord from '@/views/PutRecord';
+import SaleRecord from '@/views/SaleRecord';
 
 /**
  * 路由表
@@ -93,8 +97,24 @@ const routes = [
         path: '/log',
         children: [
           {
-            path: '/log/feed',
-            element: <FeedManage />,
+            path: '/log/feedLoss',
+            element: <FeedRecord />,
+          },
+          {
+            path: '/log/divide',
+            element: <DivideRecord />,
+          },
+          {
+            path: '/log/sale',
+            element: <SaleRecord />,
+          },
+          {
+            path: '/log/clearLoss',
+            element: <ClearLossRecord />,
+          },
+          {
+            path: '/log/put',
+            element: <PutRecord />,
           },
         ],
       },

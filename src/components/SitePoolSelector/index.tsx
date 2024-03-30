@@ -27,7 +27,7 @@ const SitePoolSelector = (props: { type: 'site' | 'pool' }) => {
     });
     return (
       <Space wrap>
-        <Form.Item label="场/塘号" name="sitePool" rules={[{ required: true, message: '该项必填' }]}>
+        <Form.Item label="塘号" name="sitePool">
           <Cascader style={{ width: '200px' }} options={sitePoolOption} multiple maxTagCount="responsive" />
         </Form.Item>
       </Space>
@@ -41,7 +41,7 @@ const SitePoolSelector = (props: { type: 'site' | 'pool' }) => {
     });
     return (
       <Space wrap>
-        <Form.Item label="场/塘号" name="siteNos" rules={[{ required: true, message: '该项必填' }]}>
+        <Form.Item label="场/塘号" name="siteNos">
           <Select style={{ width: '200px' }} options={sitePoolOption} mode="multiple" maxTagCount="responsive" />
         </Form.Item>
       </Space>

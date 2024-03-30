@@ -1,5 +1,5 @@
-import { store } from '@/store';
 import { ColumnsType } from 'antd/es/table';
+import { store } from '@/store';
 
 export interface PoolSummaryDataType {
   // 场号
@@ -7,9 +7,9 @@ export interface PoolSummaryDataType {
   // 面积
   area?: number;
   // 类别
-  beginType?: '新' | '老';
+  beginType?: 0 | 1;
   // 类别
-  endType?: '新' | '老';
+  endType?: 0 | 1;
   // key
   key: string;
   // 期初数
@@ -31,7 +31,7 @@ export interface PoolSummaryDataType {
     gainWeight: number;
   };
   // 新苗投塘
-  newSeedlings: {
+  newSeedLings: {
     // 规格
     size: number | '';
     // 数量
@@ -93,7 +93,7 @@ export interface PoolSummaryDataType {
     weight: number;
   };
 }
-export function getPoolSummaryColumn() {
+export function getPoolSummaryColumn(resDataLength) {
   const columnList: ColumnsType<PoolSummaryDataType> = [
     {
       title: '塘号',
@@ -104,7 +104,7 @@ export function getPoolSummaryColumn() {
       // 合计行合并
       // TODO: 15其实是数据数组的length
       onCell: (_, index: number) => ({
-        colSpan: index >= 18 ? 4 : 1,
+        colSpan: index >= resDataLength - 3 ? 4 : 1,
       }),
       className: 'first-column',
       width: '50px',
@@ -116,7 +116,7 @@ export function getPoolSummaryColumn() {
       align: 'center',
       fixed: 'left',
       onCell: (_, index: number) => ({
-        colSpan: index >= 18 ? 0 : 1,
+        colSpan: index >= resDataLength - 3 ? 0 : 1,
       }),
       width: '100px',
     },
@@ -126,7 +126,7 @@ export function getPoolSummaryColumn() {
       key: 'beginType',
       align: 'center',
       fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= 18 ? 0 : 1 }),
+      onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
     },
     {
@@ -135,7 +135,7 @@ export function getPoolSummaryColumn() {
       key: 'beginType',
       align: 'center',
       fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= 18 ? 0 : 1 }),
+      onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
     },
     {
@@ -178,9 +178,9 @@ export function getPoolSummaryColumn() {
       key: '新苗投塘',
       align: 'center',
       children: [
-        { title: '规格', dataIndex: ['newSeedlings', 'size'], key: 'newSeedlingsSize', align: 'center' },
-        { title: '数量（尾）', dataIndex: ['newSeedlings', 'amount'], key: 'newSeedlingsAmount', align: 'center' },
-        { title: '重量（kg）', dataIndex: ['newSeedlings', 'weight'], key: 'newSeedlingsWeight', align: 'center' },
+        { title: '规格', dataIndex: ['newSeedLings', 'size'], key: 'newSeedLingsSize', align: 'center' },
+        { title: '数量（尾）', dataIndex: ['newSeedLings', 'amount'], key: 'newSeedLingsAmount', align: 'center' },
+        { title: '重量（kg）', dataIndex: ['newSeedLings', 'weight'], key: 'newSeedLingsWeight', align: 'center' },
       ],
     },
     {
@@ -297,10 +297,9 @@ export function getPoolSummaryColumn() {
   return columnList;
 }
 
-export function getPoolSummaryData() {
-  const { oldCoefficient, newCoefficient } = store.getState().app;
-  const sheetData: PoolSummaryDataType[] = [];
-  let poolNo = 1101;
+export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
+  const { newCoefficient, oldCoefficient } = store.getState().app;
+  const sheetData: PoolSummaryDataType[] = resData;
   // 期初数的合计数量/重量
   let totalBeginningAmount = 0;
   let totalBeginningWeight = 0;
@@ -364,169 +363,68 @@ export function getPoolSummaryData() {
   let oldEndingAmount = 0;
   let newEndingWeight = 0;
   let oldEndingWeight = 0;
-  /**
-   * 随机生成新老
-   * @returns '新' | '老'
-   */
-  function getType() {
-    const flag = Math.random();
-    if (flag > 0.5) return '新';
-    return '老';
-  }
-  /**
-   * 生成随机数
-   * @returns number
-   */
-  function getRandom(min, max?) {
-    if (!max) max = 0;
-    if (min > max) {
-      [min, max] = [max, min];
+  if (resData) {
+    for (let i = 0; i < resData.length; i++) {
+      const item = resData[i];
+      totalBeginningAmount += item.beginning.amount;
+      totalBeginningWeight += item.beginning.weight;
+      totalFeed += item.feedGainWeight.feed;
+      totalGainWeight += item.feedGainWeight.gainWeight;
+      totalNewSeedlingsAmount += item.newSeedLings.amount;
+      totalNewSeedlingsWeight += item.newSeedLings.weight;
+      totalTransferAmount += item.happenedInPeriod.transfer.amount;
+      totalTransferWeight += item.happenedInPeriod.transfer.weight;
+      totalSaleAmount += item.happenedInPeriod.sale?.amount;
+      totalSaleWeight += item.happenedInPeriod.sale?.weight;
+      totalSaleAAmount += item.happenedInPeriod.saleA.amount;
+      totalSaleAWeight += item.happenedInPeriod.saleA.weight;
+      totalDailyLossAmount += item.dailyLoss.amount;
+      totalDailyLossWeight += item.dailyLoss.weight;
+      totalCleanLossAmount += item.cleanLoss.amount;
+      totalCleanLossWeight += item.cleanLoss.weight;
+      totalEndingAmount += item.ending.amount;
+      totalEndingWeight += item.ending.weight;
+
+      if (item.beginType === 0) {
+        newBeginningAmount += item.beginning.amount;
+        newBeginningWeight += item.beginning.weight;
+        newFeed += item.feedGainWeight.feed;
+        newGainWeight += item.feedGainWeight.gainWeight;
+        newNewSeedlingsAmount += item.newSeedLings.amount;
+        newNewSeedlingsWeight += item.newSeedLings.weight;
+        newTransferAmount += item.happenedInPeriod.transfer.amount;
+        newTransferWeight += item.happenedInPeriod.transfer.weight;
+        newSaleAmount += item.happenedInPeriod.sale?.amount;
+        newSaleWeight += item.happenedInPeriod.sale?.weight;
+        newSaleAAmount += item.happenedInPeriod.saleA.amount;
+        newSaleAWeight += item.happenedInPeriod.saleA.weight;
+        newDailyLossAmount += item.dailyLoss.amount;
+        newDailyLossWeight += item.dailyLoss.weight;
+        newCleanLossAmount += item.cleanLoss.amount;
+        newCleanLossWeight += item.cleanLoss.weight;
+        newEndingAmount += item.ending.amount;
+        newEndingWeight += item.ending.weight;
+      } else {
+        oldBeginningAmount += item.beginning.amount;
+        oldBeginningWeight += item.beginning.weight;
+        oldFeed += item.feedGainWeight.feed;
+        oldGainWeight += item.feedGainWeight.gainWeight;
+        oldNewSeedlingsAmount += item.newSeedLings.amount;
+        oldNewSeedlingsWeight += item.newSeedLings.weight;
+        oldTransferAmount += item.happenedInPeriod.transfer.amount;
+        oldTransferWeight += item.happenedInPeriod.transfer.weight;
+        oldSaleAmount += item.happenedInPeriod.sale?.amount;
+        oldSaleWeight += item.happenedInPeriod.sale?.weight;
+        oldSaleAAmount += item.happenedInPeriod.saleA.amount;
+        oldSaleAWeight += item.happenedInPeriod.saleA.weight;
+        oldDailyLossAmount += item.dailyLoss.amount;
+        oldDailyLossWeight += item.dailyLoss.weight;
+        oldCleanLossAmount += item.cleanLoss.amount;
+        oldCleanLossWeight += item.cleanLoss.weight;
+        oldEndingAmount += item.ending.amount;
+        oldEndingWeight += item.ending.weight;
+      }
     }
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  for (let i = 0; i < 18; i++) {
-    // 生成假数据
-    // TODO：真数据替换
-    const beginType = getType();
-    const endType = getType();
-    const beginningAmount = getRandom(600000);
-    const beginningWeight = getRandom(100000);
-    const beginningSize = Number((beginningAmount / beginningWeight).toFixed(1));
-    const feedGainWeightFeed = getRandom(40000);
-    const feedGainWeightCoefficient = beginType === '新' ? oldCoefficient : newCoefficient;
-    const feedGainWeightGainWeight = Math.ceil(feedGainWeightFeed * feedGainWeightCoefficient);
-    const newSeedlingsAmount = 0;
-    const newSeedlingsWeight = 0;
-    const newSeedlingsSize = 0;
-    const happenedInPeriodTransferOutOrIn = '';
-    const happenedInPeriodTransferComeFrom = '';
-    const happenedInPeriodTransferAmount = getRandom(-80000, 80000);
-    const happenedInPeriodTransferWeight = getRandom(6000);
-    const happenedInPeriodSaleAmount = getRandom(110000);
-    const happenedInPeriodSaleWeight = getRandom(50000);
-    const happenedInPeriodSaleSize = Number((happenedInPeriodSaleAmount / happenedInPeriodSaleWeight).toFixed(1));
-    const happenedInPeriodSaleAAmount = getRandom(2000);
-    const happenedInPeriodSaleAWeight = getRandom(300);
-    const dailyLossAmount = getRandom(600);
-    const dailyLossWeight = getRandom(500);
-    const cleanLossAmount = getRandom(30000);
-    const cleanLossWeight = getRandom(20000);
-    const endingAmount = getRandom(700000);
-    const endingWeight = getRandom(200000);
-    const endingSize = Number((endingAmount / endingWeight).toFixed(1));
-
-    const data: PoolSummaryDataType = {
-      poolNo: poolNo + '',
-      beginType,
-      endType,
-      beginning: {
-        amount: beginningAmount,
-        size: beginningSize,
-        weight: beginningWeight,
-      },
-      key: poolNo + '' + beginType,
-      feedGainWeight: {
-        feed: feedGainWeightFeed,
-        coefficient: feedGainWeightCoefficient,
-        gainWeight: feedGainWeightGainWeight,
-      },
-      newSeedlings: {
-        size: newSeedlingsSize,
-        amount: newSeedlingsAmount,
-        weight: newSeedlingsWeight,
-      },
-      happenedInPeriod: {
-        transfer: {
-          outOrIn: happenedInPeriodTransferOutOrIn,
-          comeFrom: happenedInPeriodTransferComeFrom,
-          amount: happenedInPeriodTransferAmount,
-          weight: happenedInPeriodTransferWeight,
-        },
-        sale: {
-          size: happenedInPeriodSaleSize,
-          amount: happenedInPeriodSaleAmount,
-          weight: happenedInPeriodSaleWeight,
-        },
-        saleA: {
-          amount: happenedInPeriodSaleAAmount,
-          weight: happenedInPeriodSaleAWeight,
-        },
-      },
-      dailyLoss: {
-        amount: dailyLossAmount,
-        weight: dailyLossWeight,
-      },
-      cleanLoss: {
-        amount: cleanLossAmount,
-        weight: cleanLossWeight,
-      },
-      ending: {
-        size: endingSize,
-        amount: endingAmount,
-        weight: endingWeight,
-      },
-    };
-    sheetData.push(data);
-
-    totalBeginningAmount += beginningAmount;
-    totalBeginningWeight += beginningWeight;
-    totalFeed += feedGainWeightFeed;
-    totalGainWeight += feedGainWeightGainWeight;
-    totalNewSeedlingsAmount += newSeedlingsAmount;
-    totalNewSeedlingsWeight += newSeedlingsWeight;
-    totalTransferAmount += happenedInPeriodTransferAmount;
-    totalTransferWeight += happenedInPeriodTransferWeight;
-    totalSaleAmount += happenedInPeriodSaleAmount;
-    totalSaleWeight += happenedInPeriodSaleWeight;
-    totalSaleAAmount += happenedInPeriodSaleAAmount;
-    totalSaleAWeight += happenedInPeriodSaleAWeight;
-    totalDailyLossAmount += dailyLossAmount;
-    totalDailyLossWeight += dailyLossWeight;
-    totalCleanLossAmount += cleanLossAmount;
-    totalCleanLossWeight += cleanLossWeight;
-    totalEndingAmount += endingAmount;
-    totalEndingWeight += endingWeight;
-
-    if (beginType === '新') {
-      newBeginningAmount += beginningAmount;
-      newBeginningWeight += beginningWeight;
-      newFeed += feedGainWeightFeed;
-      newGainWeight += feedGainWeightGainWeight;
-      newNewSeedlingsAmount += newSeedlingsAmount;
-      newNewSeedlingsWeight += newSeedlingsWeight;
-      newTransferAmount += happenedInPeriodTransferAmount;
-      newTransferWeight += happenedInPeriodTransferWeight;
-      newSaleAmount += happenedInPeriodSaleAmount;
-      newSaleWeight += happenedInPeriodSaleWeight;
-      newSaleAAmount += happenedInPeriodSaleAAmount;
-      newSaleAWeight += happenedInPeriodSaleAWeight;
-      newDailyLossAmount += dailyLossAmount;
-      newDailyLossWeight += dailyLossWeight;
-      newCleanLossAmount += cleanLossAmount;
-      newCleanLossWeight += cleanLossWeight;
-      newEndingAmount += endingAmount;
-      newEndingWeight += endingWeight;
-    } else {
-      oldBeginningAmount += beginningAmount;
-      oldBeginningWeight += beginningWeight;
-      oldFeed += feedGainWeightFeed;
-      oldGainWeight += feedGainWeightGainWeight;
-      oldNewSeedlingsAmount += newSeedlingsAmount;
-      oldNewSeedlingsWeight += newSeedlingsWeight;
-      oldTransferAmount += happenedInPeriodTransferAmount;
-      oldTransferWeight += happenedInPeriodTransferWeight;
-      oldSaleAmount += happenedInPeriodSaleAmount;
-      oldSaleWeight += happenedInPeriodSaleWeight;
-      oldSaleAAmount += happenedInPeriodSaleAAmount;
-      oldSaleAWeight += happenedInPeriodSaleAWeight;
-      oldDailyLossAmount += dailyLossAmount;
-      oldDailyLossWeight += dailyLossWeight;
-      oldCleanLossAmount += cleanLossAmount;
-      oldCleanLossWeight += cleanLossWeight;
-      oldEndingAmount += endingAmount;
-      oldEndingWeight += endingWeight;
-    }
-    poolNo++;
   }
 
   sheetData.push({
@@ -541,7 +439,7 @@ export function getPoolSummaryData() {
       coefficient: '',
       gainWeight: totalGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: totalNewSeedlingsAmount,
       weight: totalNewSeedlingsWeight,
@@ -587,10 +485,10 @@ export function getPoolSummaryData() {
     },
     feedGainWeight: {
       feed: newFeed,
-      coefficient: '',
+      coefficient: newCoefficient,
       gainWeight: newGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: newNewSeedlingsAmount,
       weight: newNewSeedlingsWeight,
@@ -636,10 +534,10 @@ export function getPoolSummaryData() {
     },
     feedGainWeight: {
       feed: oldFeed,
-      coefficient: '',
+      coefficient: oldCoefficient,
       gainWeight: oldGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: oldNewSeedlingsAmount,
       weight: oldNewSeedlingsWeight,
@@ -675,5 +573,7 @@ export function getPoolSummaryData() {
       weight: oldEndingWeight,
     },
   });
+  console.log(sheetData);
+
   return sheetData;
 }

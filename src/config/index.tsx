@@ -75,8 +75,24 @@ export default {
       label: '操作记录',
       children: [
         {
-          key: '/log/feed',
-          label: '投料记录',
+          key: '/log/feedLoss',
+          label: '食耗记录',
+        },
+        {
+          key: '/log/divide',
+          label: '分塘记录',
+        },
+        {
+          key: '/log/sale',
+          label: '销售记录',
+        },
+        {
+          key: '/log/clearLoss',
+          label: '清塘损耗记录',
+        },
+        {
+          key: '/log/put',
+          label: '投塘记录',
         },
       ],
     },

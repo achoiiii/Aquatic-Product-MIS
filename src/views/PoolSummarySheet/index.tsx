@@ -1,15 +1,27 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
+import request from '@/request';
 import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
-import { getPoolSummaryColumn, getPoolSummaryData } from '@/request/mock/poolSummary';
+import { PoolSummaryDataType, getPoolSummaryColumn, getPoolSummaryData } from '@/request/mock/poolSummary';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Select, Table } from 'antd';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
 interface IProps {
   data?: FeedSummaryDataType[];
 }
 const { RangePicker } = DatePicker;
 const PoolSummarySheet = () => {
+  const [dateRange, setDateRange]: [string[], any] = useState([
+    // 默认当天前十五天数据
+    dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
+    dayjs().format('YYYY-MM-DD'),
+  ]);
+  const [sheetData, setSheetData]: [PoolSummaryDataType[], any] = useState([]);
+  useEffect(() => {
+    request.sheet.summary.getPoolSummarySheetData({ date: dateRange }).then((res) => {
+      setSheetData(getPoolSummaryData(res.data));
+    });
+  }, []);
   const SearchBar: React.FC = () => {
     interface searchParams {
       poolNo: string;
@@ -25,7 +37,7 @@ const PoolSummarySheet = () => {
 
     return (
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
-        <SitePoolSelector />
+        <SitePoolSelector type="pool" />
         <Form.Item name="dateRange" label="日期">
           <RangePicker placeholder={['开始时间', '结束时间']} />
         </Form.Item>
@@ -47,8 +59,8 @@ const PoolSummarySheet = () => {
 
   const SummaryTabelContainer = (props: IProps) => {
     const [showLoading, setShowLoading] = useState(true);
-    const columns = getPoolSummaryColumn();
-    const sheetData = getPoolSummaryData();
+    const columns = getPoolSummaryColumn(sheetData.length);
+
     // TODO: 当查询时更换type，然后重新拉取数据
     useEffect(() => {
       setTimeout(() => {
