@@ -53,7 +53,7 @@ export interface PoolSummaryDataType {
       weight: number;
     };
     // 活鳗出售
-    sale: {
+    summarySale: {
       // 规格
       size: number | '';
       // 数量
@@ -226,19 +226,19 @@ export function getPoolSummaryColumn(resDataLength) {
           children: [
             {
               title: '规格',
-              dataIndex: ['happenedInPeriod', 'sale', 'size'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'size'],
               key: 'happenedInPeriodSaleSize',
               align: 'center',
             },
             {
               title: '数量',
-              dataIndex: ['happenedInPeriod', 'sale', 'amount'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'amount'],
               key: 'happenedInPeriodSaleAmount',
               align: 'center',
             },
             {
               title: '重量（kg）',
-              dataIndex: ['happenedInPeriod', 'sale', 'weight'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'weight'],
               key: 'happenedInPeriodSaleWeight',
               align: 'center',
             },
@@ -374,8 +374,8 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
       totalNewSeedlingsWeight += item.newSeedLings.weight;
       totalTransferAmount += item.happenedInPeriod.transfer.amount;
       totalTransferWeight += item.happenedInPeriod.transfer.weight;
-      totalSaleAmount += item.happenedInPeriod.sale?.amount;
-      totalSaleWeight += item.happenedInPeriod.sale?.weight;
+      totalSaleAmount += item.happenedInPeriod.summarySale?.amount;
+      totalSaleWeight += item.happenedInPeriod.summarySale?.weight;
       totalSaleAAmount += item.happenedInPeriod.saleA.amount;
       totalSaleAWeight += item.happenedInPeriod.saleA.weight;
       totalDailyLossAmount += item.dailyLoss.amount;
@@ -394,8 +394,8 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         newNewSeedlingsWeight += item.newSeedLings.weight;
         newTransferAmount += item.happenedInPeriod.transfer.amount;
         newTransferWeight += item.happenedInPeriod.transfer.weight;
-        newSaleAmount += item.happenedInPeriod.sale?.amount;
-        newSaleWeight += item.happenedInPeriod.sale?.weight;
+        newSaleAmount += item.happenedInPeriod.summarySale?.amount;
+        newSaleWeight += item.happenedInPeriod.summarySale?.weight;
         newSaleAAmount += item.happenedInPeriod.saleA.amount;
         newSaleAWeight += item.happenedInPeriod.saleA.weight;
         newDailyLossAmount += item.dailyLoss.amount;
@@ -413,8 +413,8 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         oldNewSeedlingsWeight += item.newSeedLings.weight;
         oldTransferAmount += item.happenedInPeriod.transfer.amount;
         oldTransferWeight += item.happenedInPeriod.transfer.weight;
-        oldSaleAmount += item.happenedInPeriod.sale?.amount;
-        oldSaleWeight += item.happenedInPeriod.sale?.weight;
+        oldSaleAmount += item.happenedInPeriod.summarySale?.amount;
+        oldSaleWeight += item.happenedInPeriod.summarySale?.weight;
         oldSaleAAmount += item.happenedInPeriod.saleA.amount;
         oldSaleAWeight += item.happenedInPeriod.saleA.weight;
         oldDailyLossAmount += item.dailyLoss.amount;
@@ -451,7 +451,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         amount: totalTransferAmount,
         weight: totalTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: totalSaleAmount,
         weight: totalSaleWeight,
@@ -500,7 +500,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         amount: newTransferAmount,
         weight: newTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: newSaleAmount,
         weight: newSaleWeight,
@@ -549,7 +549,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         amount: oldTransferAmount,
         weight: oldTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: oldSaleAmount,
         weight: oldSaleWeight,

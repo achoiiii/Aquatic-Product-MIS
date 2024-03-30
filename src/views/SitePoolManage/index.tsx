@@ -5,6 +5,8 @@ import './index.scss';
 import { PoolItem, SiteItem } from '@/store/models/app/typings';
 import { dispatch, useSelector } from '@/store';
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
+import { IAddSiteData } from '@/request/basic';
+import request from '@/request';
 
 const { confirm } = Modal;
 
@@ -16,14 +18,30 @@ const SearchBar = () => {
     function handleOk() {
       form
         .validateFields()
-        .then((res) => {
-          console.log(res);
-          setOpen(false);
-          setConfirmLoading(false);
+        .then((res: IAddSiteData) => {
+          const addPoolRequests: any[] = [];
+          for (const pool of res.pools) {
+            addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: res.siteNo }));
+          }
+          Promise.all([
+            request.basic.addSite({
+              area: res.area,
+              siteNo: res.siteNo,
+              siteName: res.siteName,
+              location: res.location,
+              custodianId: res.custodianId,
+            }),
+            ...addPoolRequests,
+          ]).then((res) => {
+            dispatch.app.getInitialData();
+          });
         })
         .catch((err) => {
-          setConfirmLoading(false);
           console.log(err);
+        })
+        .finally(() => {
+          setConfirmLoading(false);
+          setOpen(false);
         });
     }
 
@@ -61,18 +79,14 @@ const SearchBar = () => {
             <Input placeholder="请填写场名" allowClear={true} />
           </Form.Item>
           <Form.Item
-            label="负责人名称"
-            name="custodianName"
-            rules={[{ required: true, message: '负责人名称为空或不规范' }]}
-          >
-            <Input placeholder="请填写负责人名称" allowClear={true} />
-          </Form.Item>
-          <Form.Item
             label="负责人手机号"
-            name="custodianPhone"
-            rules={[{ required: true, message: '负责人手机号为空或不规范', len: 3 }]}
+            name="custodianId"
+            rules={[{ required: true, message: '负责人手机号为空或不规范', len: 11 }]}
           >
             <Input placeholder="请填写负责人手机号" allowClear={true} />
+          </Form.Item>
+          <Form.Item label="面积" name="area" rules={[{ required: true, message: '面积为空或不规范' }]}>
+            <Input placeholder="面积" allowClear={true} />
           </Form.Item>
           <Form.Item label="场址" name="location">
             <Input placeholder="请填写场址，该项选填" allowClear={true} />
@@ -107,7 +121,7 @@ const SearchBar = () => {
                     >
                       <InputNumber placeholder="请填写塘池面积" style={{ width: '100%' }} />
                     </Form.Item>
-                    <Form.Item
+                    {/* <Form.Item
                       label="类型"
                       name={[field.name, 'type']}
                       rules={[{ required: true, message: '类型为空或不规范', type: 'number' }]}
@@ -132,7 +146,7 @@ const SearchBar = () => {
                       rules={[{ required: true, message: '重量为空或不规范', type: 'number' }]}
                     >
                       <InputNumber type="number" placeholder="请填写重量" style={{ width: '100%' }} />
-                    </Form.Item>
+                    </Form.Item> */}
                   </Card>
                 ))}
 
@@ -156,13 +170,26 @@ const SearchBar = () => {
   );
 };
 
-const handleDelete = (item: SiteItem | PoolItem) => {
+const handleDeleteSite = (item: SiteItem) => {
   confirm({
     title: '确认删除该数据项吗',
     icon: <ExclamationCircleFilled />,
     content: '删除后数据将无法恢复',
     onOk() {
+      request.basic.deleteSite(item.siteNo);
+    },
+    onCancel() {
       console.log(item);
+    },
+  });
+};
+const handleDeletePool = (item: PoolItem) => {
+  confirm({
+    title: '确认删除该数据项吗',
+    icon: <ExclamationCircleFilled />,
+    content: '删除后数据将无法恢复',
+    onOk() {
+      request.basic.deletePool(item.poolNo);
     },
     onCancel() {
       console.log(item);
@@ -199,7 +226,7 @@ const TableContainer: React.FC = () => {
         render: (_, record: PoolItem) => (
           <Space className="operation">
             <a className="operation-item">编辑</a>
-            <a className="operation-item delete" onClick={() => handleDelete(record)}>
+            <a className="operation-item delete" onClick={() => handleDeletePool(record)}>
               删除
             </a>
           </Space>
@@ -219,7 +246,7 @@ const TableContainer: React.FC = () => {
       render: (_, record: SiteItem) => (
         <Space className="operation">
           <a className="operation-item">编辑</a>
-          <a className="operation-item delete" onClick={() => handleDelete(record)}>
+          <a className="operation-item delete" onClick={() => handleDeleteSite(record)}>
             删除
           </a>
         </Space>
