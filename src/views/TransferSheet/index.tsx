@@ -32,7 +32,6 @@ const TransferSheet: React.FC = () => {
       .then((res) => {
         const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
         setSheetData(sheetData);
-        console.log(sheetData);
       })
       .finally(() => setShowLoading(false));
   }, []);
@@ -47,7 +46,7 @@ const TransferSheet: React.FC = () => {
       const dateArr = values.dateRange.map((value) => {
         return value.format('YYYY-MM-DD');
       });
-      const poolNos = formatPoolNos(values.sitePool);
+      const poolNos = formatPoolNos(values.sitePool || []);
       request.sheet.transfer
         .getPoolDivideSheetData({
           date: dateArr,
@@ -92,7 +91,7 @@ const TransferSheet: React.FC = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000, y: 600 }}
+          scroll={{ x: 'max-content', y: 600 }}
           columns={columns}
           id="transfer-table"
           rowKey={'key'}

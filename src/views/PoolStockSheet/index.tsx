@@ -95,7 +95,7 @@ const PoolStockSheet = () => {
     const onFinish = (values: { date: string; sitePool: string[][] }) => {
       setShowLoading(true);
       const { sitePool } = values;
-      const poolNos = formatPoolNos(sitePool);
+      const poolNos = formatPoolNos(sitePool || []);
       request.sheet.stock
         .getPoolStock({ poolNos, date: values.date })
         .then((res) => {

@@ -1,6 +1,7 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import request from '@/request';
 import { IPoolBasicRangeSearchParams } from '@/request/sheet/typing';
+import { formatPoolNos } from '@/utils/format';
 import { flatRecordRes } from '@/utils/record';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Switch, Table } from 'antd';
@@ -46,6 +47,9 @@ const SaleRecord = () => {
           item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date;
           sheetData.push(item);
         }
+        sheetData.sort((a, b) => {
+          return dayjs(b.date).valueOf() - dayjs(a.date).valueOf(); // 降序排序
+        });
         setSheetData(sheetData);
       })
       .finally(() => setShowLoading(false));
@@ -57,8 +61,8 @@ const SaleRecord = () => {
       const dateArr = values.dateRange.map((value) => {
         return value.format('YYYY-MM-DD');
       });
-      let poolNos = [];
-      if (values.sitePool) values.sitePool;
+      let poolNos: string[] = [];
+      if (values.sitePool) poolNos = formatPoolNos(values.sitePool);
       request.record
         .getSaleRecordData({ poolNos, date: dateArr, saleType: values.isA ? 1 : 0 })
         .then((res) => {
@@ -68,6 +72,9 @@ const SaleRecord = () => {
             item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date;
             sheetData.push(item);
           }
+          sheetData.sort((a, b) => {
+            return dayjs(b.date).valueOf() - dayjs(a.date).valueOf(); // 降序排序
+          });
           setSheetData(sheetData);
           setDateRange(dateArr);
         })

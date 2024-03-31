@@ -47,7 +47,7 @@ const SaleSheet: React.FC = () => {
       const dateArr = values.dateRange.map((value) => {
         return value.format('YYYY-MM-DD');
       });
-      const poolNos = formatPoolNos(values.sitePool);
+      const poolNos = formatPoolNos(values.sitePool || []);
       request.sheet.sale
         .getPoolSaleSheetData({
           date: dateArr,
@@ -101,12 +101,12 @@ const SaleSheet: React.FC = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000, y: 600 }}
+          scroll={{ x: 'max-content', y: 600 }}
           columns={columns}
           id="sale-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${15}条数据`;
+            return `总共匹配到：${sheetData.length}条数据`;
           }}
           loading={showLoading}
         />

@@ -145,7 +145,7 @@ export function getBasicSheetData(resData: BasicSheetDataType[], dateRange: stri
   sheetData.push({
     key: '合计',
     poolNo: '合计',
-    dataMap: [],
+    dataMap: allTotalDataMap,
     totalQuantity: allTotalQuantity,
     totalWeight: allTotalWeight,
   });
@@ -153,7 +153,7 @@ export function getBasicSheetData(resData: BasicSheetDataType[], dateRange: stri
   sheetData.push({
     key: '本期新鳗',
     poolNo: '本期新鳗',
-    dataMap: [],
+    dataMap: newTotalDataMap,
     totalQuantity: newTotalQuantity,
     totalWeight: newTotalWeight,
   });
@@ -161,7 +161,7 @@ export function getBasicSheetData(resData: BasicSheetDataType[], dateRange: stri
   sheetData.push({
     key: '本期老鳗',
     poolNo: '本期老鳗',
-    dataMap: [],
+    dataMap: oldTotalDataMap,
     totalQuantity: oldTotalQuantity,
     totalWeight: oldTotalWeight,
   });

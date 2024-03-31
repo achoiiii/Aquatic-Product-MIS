@@ -104,12 +104,12 @@ const SummarySheet = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000, y: 600 }}
+          scroll={{ x: 'max-content', y: 600 }}
           columns={columns}
           id="summary-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${15}条数据，现在是${sheetType}表`;
+            return `总共匹配到：${sheetData.length}条数据，现在是${sheetType}表`;
           }}
           loading={showLoading}
         />

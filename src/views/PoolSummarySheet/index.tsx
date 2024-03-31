@@ -1,16 +1,15 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import request from '@/request';
-import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
 import { PoolSummaryDataType, getPoolSummaryColumn, getPoolSummaryData } from '@/request/mock/poolSummary';
+import { IPoolBasicRangeSearchParams } from '@/request/sheet/typing';
+import { formatPoolNos } from '@/utils/format';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
-import { Button, DatePicker, Form, Select, Table } from 'antd';
-import dayjs, { Dayjs } from 'dayjs';
+import { Button, DatePicker, Form, Table } from 'antd';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-interface IProps {
-  data?: FeedSummaryDataType[];
-}
 const { RangePicker } = DatePicker;
 const PoolSummarySheet = () => {
+  const [showLoading, setShowLoading] = useState(false);
   const [dateRange, setDateRange]: [string[], any] = useState([
     // 默认当天前十五天数据
     dayjs().subtract(3, 'day').format('YYYY-MM-DD'),
@@ -23,16 +22,19 @@ const PoolSummarySheet = () => {
     });
   }, []);
   const SearchBar: React.FC = () => {
-    interface searchParams {
-      poolNo: string;
-      dateRange: Dayjs[];
-    }
-    const onFinish = (values: searchParams) => {
-      const timestampArr = values.dateRange.map((value) => {
-        return value.valueOf();
+    const onFinish = (values: IPoolBasicRangeSearchParams) => {
+      setShowLoading(true);
+      const dateArr = values.dateRange.map((value) => {
+        return value.format('YYYY-MM-DD');
       });
-      values['timestampArr'] = timestampArr;
-      console.log('Received values from form: ', values);
+      const poolNos = formatPoolNos(values.sitePool || []);
+      request.sheet.summary
+        .getPoolSummarySheetData({ date: dateArr, poolNos })
+        .then((res) => {
+          setSheetData(getPoolSummaryData(res.data));
+          setDateRange(dateArr);
+        })
+        .finally(() => setShowLoading(false));
     };
 
     return (
@@ -57,11 +59,8 @@ const PoolSummarySheet = () => {
     );
   };
 
-  const SummaryTabelContainer = (props: IProps) => {
-    const [showLoading, setShowLoading] = useState(true);
+  const SummaryTabelContainer = () => {
     const columns = getPoolSummaryColumn(sheetData.length);
-
-    // TODO: 当查询时更换type，然后重新拉取数据
     useEffect(() => {
       setTimeout(() => {
         setShowLoading(false);
@@ -79,7 +78,7 @@ const PoolSummarySheet = () => {
           id="summary-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${15}条数据`;
+            return `总共匹配到：${sheetData.length}条数据，期初时间是：${dateRange[0]}，期末时间是：${dateRange[1]}`;
           }}
           loading={showLoading}
         />

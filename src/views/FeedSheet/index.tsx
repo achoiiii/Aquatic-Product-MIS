@@ -46,7 +46,7 @@ const FeedSheet: React.FC = () => {
       const dateArr = values.dateRange.map((value) => {
         return value.format('YYYY-MM-DD');
       });
-      const poolNos = formatPoolNos(values.sitePool);
+      const poolNos = formatPoolNos(values.sitePool || []);
       request.sheet.feedLoss
         .getPoolFeedSheetData({
           date: dateArr,
@@ -91,7 +91,7 @@ const FeedSheet: React.FC = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 3000, y: 600 }}
+          scroll={{ x: 'max-content', y: 600 }}
           columns={columns}
           id="feedlog-table"
           rowKey={'key'}

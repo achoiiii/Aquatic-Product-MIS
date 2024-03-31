@@ -128,6 +128,7 @@ export function getPoolSummaryColumn(resDataLength) {
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
+      render: (value) => (value === 0 ? '新' : '老'),
     },
     {
       title: '期末新/老',
@@ -137,6 +138,7 @@ export function getPoolSummaryColumn(resDataLength) {
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
+      render: (value) => (value === 0 ? '新' : '老'),
     },
     {
       title: '期初数',
@@ -148,6 +150,10 @@ export function getPoolSummaryColumn(resDataLength) {
           dataIndex: ['beginning', 'size'],
           key: 'beginningSize',
           align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
         },
         { title: '数量（尾）', dataIndex: ['beginning', 'amount'], key: 'beginningAmount', align: 'center' },
         { title: '重量（kg）', dataIndex: ['beginning', 'weight'], key: 'beginningWeight', align: 'center' },
@@ -178,7 +184,16 @@ export function getPoolSummaryColumn(resDataLength) {
       key: '新苗投塘',
       align: 'center',
       children: [
-        { title: '规格', dataIndex: ['newSeedLings', 'size'], key: 'newSeedLingsSize', align: 'center' },
+        {
+          title: '规格',
+          dataIndex: ['newSeedLings', 'size'],
+          key: 'newSeedLingsSize',
+          align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
+        },
         { title: '数量（尾）', dataIndex: ['newSeedLings', 'amount'], key: 'newSeedLingsAmount', align: 'center' },
         { title: '重量（kg）', dataIndex: ['newSeedLings', 'weight'], key: 'newSeedLingsWeight', align: 'center' },
       ],
@@ -229,6 +244,10 @@ export function getPoolSummaryColumn(resDataLength) {
               dataIndex: ['happenedInPeriod', 'summarySale', 'size'],
               key: 'happenedInPeriodSaleSize',
               align: 'center',
+              render: (value) => {
+                if (typeof value === 'number') return value.toFixed(1);
+                return value;
+              },
             },
             {
               title: '数量',
@@ -288,7 +307,16 @@ export function getPoolSummaryColumn(resDataLength) {
       key: '期末存储',
       align: 'center',
       children: [
-        { title: '规格', dataIndex: ['ending', 'size'], key: 'endingSize', align: 'center' },
+        {
+          title: '规格',
+          dataIndex: ['ending', 'size'],
+          key: 'endingSize',
+          align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
+        },
         { title: '数量（尾）', dataIndex: ['ending', 'amount'], key: 'endingAmount', align: 'center' },
         { title: '重量（kg）', dataIndex: ['ending', 'weight'], key: 'endingWeight', align: 'center' },
       ],
@@ -573,7 +601,6 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
       weight: oldEndingWeight,
     },
   });
-  console.log(sheetData);
 
   return sheetData;
 }
