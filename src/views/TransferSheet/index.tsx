@@ -64,7 +64,12 @@ const TransferSheet: React.FC = () => {
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
         <SitePoolSelector type="pool" />
         <Form.Item name="dateRange" label="日期">
-          <RangePicker placeholder={['开始时间', '结束时间']} />
+          <RangePicker
+            disabledDate={(date) => {
+              return date && date > dayjs().endOf('day');
+            }}
+            placeholder={['开始时间', '结束时间']}
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

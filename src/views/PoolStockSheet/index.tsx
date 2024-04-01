@@ -131,7 +131,12 @@ const PoolStockSheet = () => {
             return value ? value.format('YYYY-MM-DD') : '';
           }}
         >
-          <DatePicker placeholder="请选择日期" />
+          <DatePicker
+            placeholder="请选择日期"
+            disabledDate={(date) => {
+              return date && date > dayjs().endOf('day');
+            }}
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
