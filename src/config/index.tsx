@@ -92,7 +92,7 @@ export default {
         },
         {
           key: '/log/put',
-          label: '投塘记录',
+          label: '投苗记录',
         },
       ],
     },

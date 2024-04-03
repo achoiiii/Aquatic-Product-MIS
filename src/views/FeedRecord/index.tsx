@@ -44,7 +44,7 @@ const FeedRecord = () => {
         const sheetData: ISheetData[] = [];
         for (let i = 0; i < res.data.length; i++) {
           const item = flatRecordRes(res.data[i]);
-          item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date;
+          item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date + i;
           sheetData.push(item);
         }
         sheetData.sort((a, b) => {
@@ -69,7 +69,7 @@ const FeedRecord = () => {
           const sheetData: ISheetData[] = [];
           for (let i = 0; i < res.data.length; i++) {
             const item = flatRecordRes(res.data[i]);
-            item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date;
+            item['key'] = res.data[i].reportBasic.poolNo + '/' + res.data[i].reportBasic.date + i;
             sheetData.push(item);
           }
           sheetData.sort((a, b) => {
