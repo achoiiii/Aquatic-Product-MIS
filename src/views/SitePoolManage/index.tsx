@@ -205,8 +205,9 @@ const SitePoolManage: React.FC = () => {
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [operationSite, setOperationSite]: [string, any] = useState('');
     const typeMap = {
-      0: '新',
-      1: '老',
+      0: '空塘',
+      1: '新',
+      2: '老',
     };
     const siteData: SiteItem[] = useSelector((state) => state.app.sites);
 

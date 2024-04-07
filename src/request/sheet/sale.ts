@@ -1,5 +1,6 @@
 import instance from '../instance';
-function getPoolSaleSheetData(data: { poolNos?: string[]; date: string[]; saleType: 0 | 1 }) {
+import { IPoolBasicRequestRangeData } from './typing';
+function getPoolSaleSheetData(data: IPoolBasicRequestRangeData & { saleType: 0 | 1 }) {
   return instance.post('/sale', data);
 }
 export default { getPoolSaleSheetData };

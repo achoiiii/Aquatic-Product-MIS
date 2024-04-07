@@ -1,5 +1,6 @@
 import instance from '../instance';
-function getPoolFeedSheetData(data: { poolNos?: string[]; date: string[] }) {
+import { IPoolBasicRequestRangeData } from './typing';
+function getPoolFeedSheetData(data: IPoolBasicRequestRangeData) {
   return instance.post('/feedLoss', data);
 }
 export default { getPoolFeedSheetData };

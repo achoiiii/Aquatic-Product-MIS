@@ -7,9 +7,9 @@ export interface PoolSummaryDataType {
   // 面积
   area?: number;
   // 类别
-  beginType?: 0 | 1;
+  beginType?: 0 | 1 | 2;
   // 类别
-  endType?: 0 | 1;
+  endType?: 0 | 1 | 2;
   // key
   key: string;
   // 期初数
@@ -128,7 +128,7 @@ export function getPoolSummaryColumn(resDataLength) {
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
-      render: (value) => (value === 0 ? '新' : '老'),
+      render: (value) => (value === 0 ? '空塘' : value === 1 ? '新' : '老'),
     },
     {
       title: '期末新/老',
@@ -138,7 +138,7 @@ export function getPoolSummaryColumn(resDataLength) {
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
-      render: (value) => (value === 0 ? '新' : '老'),
+      render: (value) => (value === 0 ? '空塘' : value === 1 ? '新' : '老'),
     },
     {
       title: '期初数',
@@ -413,7 +413,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
       totalEndingAmount += item.ending.amount;
       totalEndingWeight += item.ending.weight;
 
-      if (item.beginType === 0) {
+      if (item.beginType === 1) {
         newBeginningAmount += item.beginning.amount;
         newBeginningWeight += item.beginning.weight;
         newFeed += item.feedGainWeight.feed;
@@ -432,7 +432,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         newCleanLossWeight += item.cleanLoss.weight;
         newEndingAmount += item.ending.amount;
         newEndingWeight += item.ending.weight;
-      } else {
+      } else if (item.beginType === 2) {
         oldBeginningAmount += item.beginning.amount;
         oldBeginningWeight += item.beginning.weight;
         oldFeed += item.feedGainWeight.feed;

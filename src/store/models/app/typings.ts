@@ -4,7 +4,7 @@ export type PoolItem = {
   poolNo: string;
   area: number;
   date: string;
-  type: 0 | 1 | string;
+  type: 0 | 1 | 2;
   weight: number;
   quantity: number;
   siteNo: string;

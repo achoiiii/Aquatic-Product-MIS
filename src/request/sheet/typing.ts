@@ -42,9 +42,25 @@ export interface IPoolBasicRangeSearchParams {
 }
 export interface ISiteBasicSearchParams {
   date: string;
-  siteNos: string[][];
+  siteNos: string[];
 }
 export interface ISiteBasicRangeSearchParams {
   dateRange: Dayjs[];
   siteNos: string[][];
+}
+export interface IPoolBasicRequestRangeData {
+  date: string[];
+  poolNos: string[];
+}
+export interface ISiteBasicRequestRangeData {
+  date: string[];
+  siteNos: string[];
+}
+export interface IPoolBasicRequestData {
+  date: string;
+  poolNos: string[];
+}
+export interface ISiteBasicRequestData {
+  date: string;
+  siteNos: string[];
 }

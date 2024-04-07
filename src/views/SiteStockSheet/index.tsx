@@ -21,10 +21,10 @@ function getData(sites: SiteItem[]) {
     let totalOldWeight = 0;
     const pools = site.pools;
     pools.forEach((pool) => {
-      if (pool.type === 0) {
+      if (pool.type === 1) {
         totalNewQuantity += pool.quantity;
         totalNewWeight += pool.weight;
-      } else {
+      } else if (pool.type === 2) {
         totalOldQuantity += pool.quantity;
         totalOldWeight += pool.weight;
       }

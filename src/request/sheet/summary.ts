@@ -1,5 +1,6 @@
 import instance from '../instance';
-function getPoolSummarySheetData(data: { poolNos?: string[]; date: string[] }) {
+import { IPoolBasicRequestRangeData } from './typing';
+function getPoolSummarySheetData(data: IPoolBasicRequestRangeData) {
   return instance.post('/summary/pool', data);
 }
 export default { getPoolSummarySheetData };

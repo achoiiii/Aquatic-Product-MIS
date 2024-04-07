@@ -1,5 +1,6 @@
 import instance from '../instance';
-function getPoolDivideSheetData(data: { poolNos?: string[]; date: string[] }) {
+import { IPoolBasicRequestRangeData } from './typing';
+function getPoolDivideSheetData(data: IPoolBasicRequestRangeData) {
   return instance.post('/divide', data);
 }
 export default { getPoolDivideSheetData };

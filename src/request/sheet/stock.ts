@@ -1,10 +1,10 @@
 import instance from '../instance';
-import { IBasicSearchParams } from './typing';
+import { IPoolBasicRequestData, ISiteBasicRequestData } from './typing';
 
-function getSiteStock(data?: IBasicSearchParams) {
+function getSiteStock(data?: ISiteBasicRequestData) {
   return instance.post('/site/stats', data);
 }
-function getPoolStock(data?: IBasicSearchParams) {
+function getPoolStock(data?: IPoolBasicRequestData) {
   return instance.post('/pool/stats', data);
 }
 export default { getSiteStock, getPoolStock };

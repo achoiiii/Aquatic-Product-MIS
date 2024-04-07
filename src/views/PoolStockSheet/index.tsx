@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 interface IPoolStockData {
   key: string;
   poolNo: string;
-  type: '新' | '老';
+  type: '新' | '老' | '空塘';
   area: number;
   quantity: number;
   weight: number;
@@ -25,7 +25,7 @@ function getData(sites: SiteItem[]) {
       dataList.push({
         key: pool.poolNo + '',
         poolNo: pool.poolNo + '',
-        type: pool.type === 0 ? '新' : '老',
+        type: pool.type === 0 ? '空塘' : pool.type === 1 ? '新' : '老',
         area: pool.area,
         quantity: pool.quantity,
         weight: pool.weight,
