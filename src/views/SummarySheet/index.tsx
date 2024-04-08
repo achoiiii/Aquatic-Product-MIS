@@ -90,7 +90,7 @@ const SummarySheet = () => {
       })
         .then((res) => {
           setDateRange(dateArr);
-          const sheetData = getSheetDataFuncMap[sheetType](res.data, dateRange);
+          const sheetData = getSheetDataFuncMap[sheetType](res.data, dateArr);
           setSheetData(sheetData);
           setSheetType(sheetType);
         })
@@ -110,7 +110,13 @@ const SummarySheet = () => {
             { type: 'array', warningOnly: true },
           ]}
         >
-          <RangePicker placeholder={['开始时间', '结束时间']} disabled={disabled} />
+          <RangePicker
+            disabledDate={(date) => {
+              return date && date > dayjs().endOf('day');
+            }}
+            placeholder={['开始时间', '结束时间']}
+            disabled={disabled}
+          />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">
