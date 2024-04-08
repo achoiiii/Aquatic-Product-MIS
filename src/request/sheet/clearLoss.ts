@@ -1,6 +1,9 @@
 import instance from '../instance';
-import { IPoolBasicRequestRangeData } from './typing';
+import { IPoolBasicRequestRangeData, ISiteBasicRequestRangeData } from './typing';
 function getPoolLossSheetData(data: IPoolBasicRequestRangeData) {
   return instance.post('/clearLoss', data);
 }
-export default { getPoolLossSheetData };
+function getSiteLossSheetData(data: ISiteBasicRequestRangeData) {
+  return instance.post('/clearLoss/site', data);
+}
+export default { getPoolLossSheetData, getSiteLossSheetData };

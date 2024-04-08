@@ -107,7 +107,7 @@ export function getPoolSummaryColumn(resDataLength) {
         colSpan: index >= resDataLength - 3 ? 4 : 1,
       }),
       className: 'first-column',
-      width: '50px',
+      width: '70px',
     },
     {
       title: '面积（亩）',

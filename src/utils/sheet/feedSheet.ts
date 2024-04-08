@@ -44,7 +44,7 @@ export function getFeedSheetColumn(dateRange: string[], dataLength: number): Col
           key: `${'type' + i}`,
           align: 'center',
           width: 100,
-          render: (type) => (type === 0 ? '新' : type === 1 ? '老' : undefined),
+          render: (type) => (type === 0 ? '空塘' : type === 1 ? '新' : type === 2 ? '老' : undefined),
         },
         {
           title: '饲料（kg）',

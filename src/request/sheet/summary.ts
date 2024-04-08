@@ -1,6 +1,9 @@
 import instance from '../instance';
-import { IPoolBasicRequestRangeData } from './typing';
+import { IPoolBasicRequestRangeData, ISiteBasicRequestRangeData } from './typing';
 function getPoolSummarySheetData(data: IPoolBasicRequestRangeData) {
   return instance.post('/summary/pool', data);
 }
-export default { getPoolSummarySheetData };
+function getSiteSummarySheetData(data: ISiteBasicRequestRangeData) {
+  return instance.post('/summary/site', data);
+}
+export default { getPoolSummarySheetData, getSiteSummarySheetData };

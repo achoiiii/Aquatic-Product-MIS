@@ -1,43 +1,104 @@
+import request from '@/request';
 import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
-import { getSummaryColumn, getSummaryData } from '@/request/mock/totalSummary';
-import { getTransferSummaryColumn, getTransferSummaryData } from '@/request/mock/transferSummary';
+import { getSummaryColumn } from '@/request/mock/totalSummary';
+import { getBasicSummaryColumn, getBasicSummaryData } from '@/request/mock/basicSummary';
+import { ISiteBasicRangeSearchParams, SiteFeedSheetDataType } from '@/request/sheet/typing';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Select, Table } from 'antd';
-import { Dayjs } from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import SitePoolSelector from '@/components/SitePoolSelector';
 interface IProps {
   data?: FeedSummaryDataType[];
 }
-interface searchParams {
-  type: 'sh' | 'ft' | 'xs' | 'xs-a' | 'qt' | 'total';
-  dateRange: Dayjs[];
-}
+const options = [
+  { label: '投料损耗表', value: 'sh' },
+  { label: '分塘表', value: 'ft' },
+  { label: '销售表', value: 'xs' },
+  { label: 'A鳗销售表', value: 'xs-a' },
+  { label: '清塘损耗表', value: 'qt' },
+  { label: '汇总表', value: 'total' },
+];
+const getDataFuncMap = {
+  sh: request.sheet.feedLoss.getSiteFeedSheetData,
+  ft: request.sheet.transfer.getSiteDivideSheetData,
+  xs: request.sheet.sale.getSiteSaleSheetData,
+  'xs-a': request.sheet.sale.getSiteSaleSheetData,
+  qt: request.sheet.clearLoss.getSiteLossSheetData,
+  total: request.sheet.summary.getSiteSummarySheetData,
+};
+const getColumnFuncMap = {
+  sh: getFeedSummaryColumn,
+  ft: getBasicSummaryColumn,
+  xs: getBasicSummaryColumn,
+  'xs-a': getBasicSummaryColumn,
+  qt: getBasicSummaryColumn,
+  total: getSummaryColumn,
+};
+const getSheetDataFuncMap = {
+  sh: getFeedSummaryData,
+  ft: getBasicSummaryData,
+  xs: getBasicSummaryData,
+  'xs-a': getBasicSummaryData,
+  qt: getBasicSummaryData,
+  total: getSummaryColumn,
+};
 const { RangePicker } = DatePicker;
 const SummarySheet = () => {
+  const [showLoading, setShowLoading] = useState(false);
+  const [sheetData, setSheetData]: [FeedSummaryDataType[], any] = useState([]);
+  const [columns, setColumns] = useState([]);
   const [sheetType, setSheetType] = useState('sh');
+  const [dateRange, setDateRange]: [string[], any] = useState([
+    // 默认当天前十五天数据
+    dayjs().subtract(14, 'day').format('YYYY-MM-DD'),
+    dayjs().format('YYYY-MM-DD'),
+  ]);
+
+  useEffect(() => {
+    setShowLoading(true);
+    getDataFuncMap[sheetType]({
+      date: dateRange,
+    })
+      .then((res) => {
+        const sheetData = getSheetDataFuncMap[sheetType](res.data, dateRange);
+        setSheetData(sheetData);
+      })
+      .finally(() => setShowLoading(false));
+  }, []);
+
+  useEffect(() => {
+    const columns = getColumnFuncMap[sheetType](dateRange, sheetData.length);
+    setColumns(columns);
+  }, [sheetData]);
+
   const SearchBar = () => {
     const [disabled, setDisabled] = useState(true);
-    const options = [
-      { label: '投料损耗表', value: 'sh' },
-      { label: '分塘表', value: 'ft' },
-      { label: '销售表', value: 'xs' },
-      { label: 'A鳗销售表', value: 'xs-a' },
-      { label: '清塘损耗表', value: 'qt' },
-      { label: '汇总表', value: 'total' },
-    ];
-    const onSelectChange = (value: searchParams['type']) => {
+    const onSelectChange = (value) => {
       setDisabled(false);
     };
-    const onFinish = (values: searchParams) => {
-      const timestampArr = values.dateRange.map((value) => {
-        return value.valueOf();
+    const onFinish = (values: ISiteBasicRangeSearchParams & { type: 'sh' | 'ft' | 'xs' | 'xs-a' | 'qt' | 'total' }) => {
+      setShowLoading(true);
+      const dateArr = values.dateRange.map((value) => {
+        return value.format('YYYY-MM-DD');
       });
-      values['timestampArr'] = timestampArr;
-      setSheetType(values.type);
-      console.log('Received values from form: ', values);
+      const sheetType = values.type;
+      const siteNos = values.siteNos;
+      getDataFuncMap[sheetType]({
+        date: dateArr,
+        siteNos,
+      })
+        .then((res) => {
+          setDateRange(dateArr);
+          const sheetData = getSheetDataFuncMap[sheetType](res.data, dateRange);
+          setSheetData(sheetData);
+          setSheetType(sheetType);
+        })
+        .finally(() => setShowLoading(false));
     };
     return (
       <Form name="customized_form_controls" layout="inline" onFinish={onFinish} className="content-box search-bar">
+        <SitePoolSelector type="site" />
         <Form.Item name="type" label="查看表格类型">
           <Select style={{ width: '200px' }} options={options} onChange={onSelectChange} />
         </Form.Item>
@@ -68,35 +129,7 @@ const SummarySheet = () => {
   };
 
   const SummaryTabelContainer = (props: IProps) => {
-    const [showLoading, setShowLoading] = useState(true);
-    const [sheetData, setSheetData]: [FeedSummaryDataType[], any] = useState([]);
-    const [columns, setColumns] = useState([]);
-    const getDataFuncMap = {
-      sh: getFeedSummaryData,
-      ft: getTransferSummaryData,
-      xs: getTransferSummaryData,
-      'xs-a': getTransferSummaryData,
-      qt: getTransferSummaryData,
-      total: getSummaryData,
-    };
-    const getColumnFuncMap = {
-      sh: getFeedSummaryColumn,
-      ft: getTransferSummaryColumn,
-      xs: getTransferSummaryColumn,
-      'xs-a': getTransferSummaryColumn,
-      qt: getTransferSummaryColumn,
-      total: getSummaryColumn,
-    };
-    // TODO: 当查询时更换type，然后重新拉取数据
-    useEffect(() => {
-      setTimeout(() => {
-        setShowLoading(false);
-      }, 2e3);
-      const columns = getColumnFuncMap[sheetType]();
-      const data = getDataFuncMap[sheetType]();
-      setColumns(columns);
-      setSheetData(data);
-    }, [sheetType]);
+    useEffect(() => {}, [sheetType]);
     return (
       <div className="content-box">
         <Table
@@ -104,12 +137,13 @@ const SummarySheet = () => {
           bordered
           pagination={{ pageSize: 100 }}
           size="small"
-          scroll={{ x: 'max-content', y: 600 }}
+          scroll={{ x: 'max-content' }}
           columns={columns}
           id="summary-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${sheetData.length}条数据，现在是${sheetType}表`;
+            return `总共匹配到：${sheetData.length}条数据，现在是${options.find((item) => item.value === sheetType)
+              ?.label}`;
           }}
           loading={showLoading}
         />
