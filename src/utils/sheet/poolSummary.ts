@@ -1,13 +1,15 @@
-import { store } from '@/store';
 import { ColumnsType } from 'antd/es/table';
+import { store } from '@/store';
 
-export interface SummaryDataType {
+export interface PoolSummaryDataType {
   // 场号
-  siteNo: string;
+  poolNo: string;
   // 面积
   area?: number;
   // 类别
-  type?: '新' | '老';
+  beginType?: 0 | 1 | 2;
+  // 类别
+  endType?: 0 | 1 | 2;
   // key
   key: string;
   // 期初数
@@ -29,7 +31,7 @@ export interface SummaryDataType {
     gainWeight: number;
   };
   // 新苗投塘
-  newSeedlings: {
+  newSeedLings: {
     // 规格
     size: number | '';
     // 数量
@@ -51,7 +53,7 @@ export interface SummaryDataType {
       weight: number;
     };
     // 活鳗出售
-    sale: {
+    summarySale: {
       // 规格
       size: number | '';
       // 数量
@@ -91,22 +93,20 @@ export interface SummaryDataType {
     weight: number;
   };
 }
-export function getSummaryColumn() {
-  const columnList: ColumnsType<SummaryDataType> = [
+export function getPoolSummaryColumn(resDataLength) {
+  const columnList: ColumnsType<PoolSummaryDataType> = [
     {
-      title: '场号',
-      dataIndex: 'siteNo',
-      key: 'siteNo',
+      title: '塘号',
+      dataIndex: 'poolNo',
+      key: 'poolNo',
       align: 'center',
       fixed: 'left',
       // 合计行合并
-      // TODO: 15其实是数据数组的length
       onCell: (_, index: number) => ({
-        colSpan: index >= 18 ? 3 : 1,
-        rowSpan: index >= 18 ? 1 : index % 2 === 0 ? 2 : 0,
+        colSpan: index >= resDataLength - 3 ? 4 : 1,
       }),
       className: 'first-column',
-      width: '50px',
+      width: '70px',
     },
     {
       title: '面积（亩）',
@@ -115,19 +115,29 @@ export function getSummaryColumn() {
       align: 'center',
       fixed: 'left',
       onCell: (_, index: number) => ({
-        colSpan: index >= 18 ? 0 : 1,
-        rowSpan: index >= 18 ? 1 : index % 2 === 0 ? 2 : 0,
+        colSpan: index >= resDataLength - 3 ? 0 : 1,
       }),
       width: '100px',
     },
     {
-      title: '新/老',
-      dataIndex: 'type',
-      key: 'type',
+      title: '期初新/老',
+      dataIndex: 'beginType',
+      key: 'beginType',
       align: 'center',
       fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= 18 ? 0 : 1 }),
+      onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
       width: '50px',
+      render: (value) => (value === 0 ? '空塘' : value === 1 ? '新' : '老'),
+    },
+    {
+      title: '期末新/老',
+      dataIndex: 'endType',
+      key: 'beginType',
+      align: 'center',
+      fixed: 'left',
+      onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
+      width: '50px',
+      render: (value) => (value === 0 ? '空塘' : value === 1 ? '新' : '老'),
     },
     {
       title: '期初数',
@@ -139,6 +149,10 @@ export function getSummaryColumn() {
           dataIndex: ['beginning', 'size'],
           key: 'beginningSize',
           align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
         },
         { title: '数量（尾）', dataIndex: ['beginning', 'amount'], key: 'beginningAmount', align: 'center' },
         { title: '重量（kg）', dataIndex: ['beginning', 'weight'], key: 'beginningWeight', align: 'center' },
@@ -169,9 +183,18 @@ export function getSummaryColumn() {
       key: '新苗投塘',
       align: 'center',
       children: [
-        { title: '规格', dataIndex: ['newSeedlings', 'size'], key: 'newSeedlingsSize', align: 'center' },
-        { title: '数量（尾）', dataIndex: ['newSeedlings', 'amount'], key: 'newSeedlingsAmount', align: 'center' },
-        { title: '重量（kg）', dataIndex: ['newSeedlings', 'weight'], key: 'newSeedlingsWeight', align: 'center' },
+        {
+          title: '规格',
+          dataIndex: ['newSeedLings', 'size'],
+          key: 'newSeedLingsSize',
+          align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
+        },
+        { title: '数量（尾）', dataIndex: ['newSeedLings', 'amount'], key: 'newSeedLingsAmount', align: 'center' },
+        { title: '重量（kg）', dataIndex: ['newSeedLings', 'weight'], key: 'newSeedLingsWeight', align: 'center' },
       ],
     },
     {
@@ -217,19 +240,23 @@ export function getSummaryColumn() {
           children: [
             {
               title: '规格',
-              dataIndex: ['happenedInPeriod', 'sale', 'size'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'size'],
               key: 'happenedInPeriodSaleSize',
               align: 'center',
+              render: (value) => {
+                if (typeof value === 'number') return value.toFixed(1);
+                return value;
+              },
             },
             {
               title: '数量',
-              dataIndex: ['happenedInPeriod', 'sale', 'amount'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'amount'],
               key: 'happenedInPeriodSaleAmount',
               align: 'center',
             },
             {
               title: '重量（kg）',
-              dataIndex: ['happenedInPeriod', 'sale', 'weight'],
+              dataIndex: ['happenedInPeriod', 'summarySale', 'weight'],
               key: 'happenedInPeriodSaleWeight',
               align: 'center',
             },
@@ -279,7 +306,16 @@ export function getSummaryColumn() {
       key: '期末存储',
       align: 'center',
       children: [
-        { title: '规格', dataIndex: ['ending', 'size'], key: 'endingSize', align: 'center' },
+        {
+          title: '规格',
+          dataIndex: ['ending', 'size'],
+          key: 'endingSize',
+          align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(1);
+            return value;
+          },
+        },
         { title: '数量（尾）', dataIndex: ['ending', 'amount'], key: 'endingAmount', align: 'center' },
         { title: '重量（kg）', dataIndex: ['ending', 'weight'], key: 'endingWeight', align: 'center' },
       ],
@@ -288,10 +324,9 @@ export function getSummaryColumn() {
   return columnList;
 }
 
-export function getSummaryData() {
-  const { oldCoefficient, newCoefficient } = store.getState().app;
-  const sheetData: SummaryDataType[] = [];
-  let siteNo = 1;
+export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
+  const { newCoefficient, oldCoefficient } = store.getState().app;
+  const sheetData: PoolSummaryDataType[] = resData;
   // 期初数的合计数量/重量
   let totalBeginningAmount = 0;
   let totalBeginningWeight = 0;
@@ -355,170 +390,72 @@ export function getSummaryData() {
   let oldEndingAmount = 0;
   let newEndingWeight = 0;
   let oldEndingWeight = 0;
-  /**
-   * 随机生成新老
-   * @returns '新' | '老'
-   */
-  function getType(index) {
-    if (index % 2 === 0) return '新';
-    return '老';
-  }
-  /**
-   * 生成随机数
-   * @returns number
-   */
-  function getRandom(min, max?) {
-    if (!max) max = 0;
-    if (min > max) {
-      [min, max] = [max, min];
-    }
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-  for (let i = 0; i < 18; i++) {
-    // 生成假数据
-    // TODO：真数据替换
-    const type = getType(i);
-    const beginningAmount = getRandom(600000);
-    const beginningWeight = getRandom(100000);
-    const beginningSize = Number((beginningAmount / beginningWeight).toFixed(1));
-    const feedGainWeightFeed = getRandom(40000);
-    const feedGainWeightCoefficient = type === '新' ? oldCoefficient : newCoefficient;
-    const feedGainWeightGainWeight = Math.ceil(feedGainWeightFeed * feedGainWeightCoefficient);
-    const newSeedlingsAmount = 0;
-    const newSeedlingsWeight = 0;
-    const newSeedlingsSize = 0;
-    const happenedInPeriodTransferOutOrIn = '';
-    const happenedInPeriodTransferComeFrom = '';
-    const happenedInPeriodTransferAmount = getRandom(-80000, 80000);
-    const happenedInPeriodTransferWeight = getRandom(6000);
-    const happenedInPeriodSaleAmount = getRandom(110000);
-    const happenedInPeriodSaleWeight = getRandom(50000);
-    const happenedInPeriodSaleSize = Number((happenedInPeriodSaleAmount / happenedInPeriodSaleWeight).toFixed(1));
-    const happenedInPeriodSaleAAmount = getRandom(2000);
-    const happenedInPeriodSaleAWeight = getRandom(300);
-    const dailyLossAmount = getRandom(600);
-    const dailyLossWeight = getRandom(500);
-    const cleanLossAmount = getRandom(30000);
-    const cleanLossWeight = getRandom(20000);
-    const endingAmount = getRandom(700000);
-    const endingWeight = getRandom(200000);
-    const endingSize = Number((endingAmount / endingWeight).toFixed(1));
+  if (resData) {
+    for (let i = 0; i < resData.length; i++) {
+      const item = resData[i];
+      totalBeginningAmount += item.beginning.amount;
+      totalBeginningWeight += item.beginning.weight;
+      totalFeed += item.feedGainWeight.feed;
+      totalGainWeight += item.feedGainWeight.gainWeight;
+      totalNewSeedlingsAmount += item.newSeedLings.amount;
+      totalNewSeedlingsWeight += item.newSeedLings.weight;
+      totalTransferAmount += item.happenedInPeriod.transfer.amount;
+      totalTransferWeight += item.happenedInPeriod.transfer.weight;
+      totalSaleAmount += item.happenedInPeriod.summarySale?.amount;
+      totalSaleWeight += item.happenedInPeriod.summarySale?.weight;
+      totalSaleAAmount += item.happenedInPeriod.saleA.amount;
+      totalSaleAWeight += item.happenedInPeriod.saleA.weight;
+      totalDailyLossAmount += item.dailyLoss.amount;
+      totalDailyLossWeight += item.dailyLoss.weight;
+      totalCleanLossAmount += item.cleanLoss.amount;
+      totalCleanLossWeight += item.cleanLoss.weight;
+      totalEndingAmount += item.ending.amount;
+      totalEndingWeight += item.ending.weight;
 
-    const data: SummaryDataType = {
-      siteNo: siteNo + '',
-      type,
-      beginning: {
-        amount: beginningAmount,
-        size: beginningWeight,
-        weight: beginningSize,
-      },
-      key: siteNo + '' + type,
-      feedGainWeight: {
-        feed: feedGainWeightFeed,
-        coefficient: feedGainWeightCoefficient,
-        gainWeight: feedGainWeightGainWeight,
-      },
-      newSeedlings: {
-        size: newSeedlingsSize,
-        amount: newSeedlingsAmount,
-        weight: newSeedlingsWeight,
-      },
-      happenedInPeriod: {
-        transfer: {
-          outOrIn: happenedInPeriodTransferOutOrIn,
-          comeFrom: happenedInPeriodTransferComeFrom,
-          amount: happenedInPeriodTransferAmount,
-          weight: happenedInPeriodTransferWeight,
-        },
-        sale: {
-          size: happenedInPeriodSaleSize,
-          amount: happenedInPeriodSaleAmount,
-          weight: happenedInPeriodSaleWeight,
-        },
-        saleA: {
-          amount: happenedInPeriodSaleAAmount,
-          weight: happenedInPeriodSaleAWeight,
-        },
-      },
-      dailyLoss: {
-        amount: dailyLossAmount,
-        weight: dailyLossWeight,
-      },
-      cleanLoss: {
-        amount: cleanLossAmount,
-        weight: cleanLossWeight,
-      },
-      ending: {
-        size: endingSize,
-        amount: endingAmount,
-        weight: endingWeight,
-      },
-    };
-    sheetData.push(data);
-
-    totalBeginningAmount += beginningAmount;
-    totalBeginningWeight += beginningWeight;
-    totalFeed += feedGainWeightFeed;
-    totalGainWeight += feedGainWeightGainWeight;
-    totalNewSeedlingsAmount += newSeedlingsAmount;
-    totalNewSeedlingsWeight += newSeedlingsWeight;
-    totalTransferAmount += happenedInPeriodTransferAmount;
-    totalTransferWeight += happenedInPeriodTransferWeight;
-    totalSaleAmount += happenedInPeriodSaleAmount;
-    totalSaleWeight += happenedInPeriodSaleWeight;
-    totalSaleAAmount += happenedInPeriodSaleAAmount;
-    totalSaleAWeight += happenedInPeriodSaleAWeight;
-    totalDailyLossAmount += dailyLossAmount;
-    totalDailyLossWeight += dailyLossWeight;
-    totalCleanLossAmount += cleanLossAmount;
-    totalCleanLossWeight += cleanLossWeight;
-    totalEndingAmount += endingAmount;
-    totalEndingWeight += endingWeight;
-
-    if (type === '新') {
-      newBeginningAmount += beginningAmount;
-      newBeginningWeight += beginningWeight;
-      newFeed += feedGainWeightFeed;
-      newGainWeight += feedGainWeightGainWeight;
-      newNewSeedlingsAmount += newSeedlingsAmount;
-      newNewSeedlingsWeight += newSeedlingsWeight;
-      newTransferAmount += happenedInPeriodTransferAmount;
-      newTransferWeight += happenedInPeriodTransferWeight;
-      newSaleAmount += happenedInPeriodSaleAmount;
-      newSaleWeight += happenedInPeriodSaleWeight;
-      newSaleAAmount += happenedInPeriodSaleAAmount;
-      newSaleAWeight += happenedInPeriodSaleAWeight;
-      newDailyLossAmount += dailyLossAmount;
-      newDailyLossWeight += dailyLossWeight;
-      newCleanLossAmount += cleanLossAmount;
-      newCleanLossWeight += cleanLossWeight;
-      newEndingAmount += endingAmount;
-      newEndingWeight += endingWeight;
-    } else {
-      oldBeginningAmount += beginningAmount;
-      oldBeginningWeight += beginningWeight;
-      oldFeed += feedGainWeightFeed;
-      oldGainWeight += feedGainWeightGainWeight;
-      oldNewSeedlingsAmount += newSeedlingsAmount;
-      oldNewSeedlingsWeight += newSeedlingsWeight;
-      oldTransferAmount += happenedInPeriodTransferAmount;
-      oldTransferWeight += happenedInPeriodTransferWeight;
-      oldSaleAmount += happenedInPeriodSaleAmount;
-      oldSaleWeight += happenedInPeriodSaleWeight;
-      oldSaleAAmount += happenedInPeriodSaleAAmount;
-      oldSaleAWeight += happenedInPeriodSaleAWeight;
-      oldDailyLossAmount += dailyLossAmount;
-      oldDailyLossWeight += dailyLossWeight;
-      oldCleanLossAmount += cleanLossAmount;
-      oldCleanLossWeight += cleanLossWeight;
-      oldEndingAmount += endingAmount;
-      oldEndingWeight += endingWeight;
-      siteNo++;
+      if (item.beginType === 1) {
+        newBeginningAmount += item.beginning.amount;
+        newBeginningWeight += item.beginning.weight;
+        newFeed += item.feedGainWeight.feed;
+        newGainWeight += item.feedGainWeight.gainWeight;
+        newNewSeedlingsAmount += item.newSeedLings.amount;
+        newNewSeedlingsWeight += item.newSeedLings.weight;
+        newTransferAmount += item.happenedInPeriod.transfer.amount;
+        newTransferWeight += item.happenedInPeriod.transfer.weight;
+        newSaleAmount += item.happenedInPeriod.summarySale?.amount;
+        newSaleWeight += item.happenedInPeriod.summarySale?.weight;
+        newSaleAAmount += item.happenedInPeriod.saleA.amount;
+        newSaleAWeight += item.happenedInPeriod.saleA.weight;
+        newDailyLossAmount += item.dailyLoss.amount;
+        newDailyLossWeight += item.dailyLoss.weight;
+        newCleanLossAmount += item.cleanLoss.amount;
+        newCleanLossWeight += item.cleanLoss.weight;
+        newEndingAmount += item.ending.amount;
+        newEndingWeight += item.ending.weight;
+      } else if (item.beginType === 2) {
+        oldBeginningAmount += item.beginning.amount;
+        oldBeginningWeight += item.beginning.weight;
+        oldFeed += item.feedGainWeight.feed;
+        oldGainWeight += item.feedGainWeight.gainWeight;
+        oldNewSeedlingsAmount += item.newSeedLings.amount;
+        oldNewSeedlingsWeight += item.newSeedLings.weight;
+        oldTransferAmount += item.happenedInPeriod.transfer.amount;
+        oldTransferWeight += item.happenedInPeriod.transfer.weight;
+        oldSaleAmount += item.happenedInPeriod.summarySale?.amount;
+        oldSaleWeight += item.happenedInPeriod.summarySale?.weight;
+        oldSaleAAmount += item.happenedInPeriod.saleA.amount;
+        oldSaleAWeight += item.happenedInPeriod.saleA.weight;
+        oldDailyLossAmount += item.dailyLoss.amount;
+        oldDailyLossWeight += item.dailyLoss.weight;
+        oldCleanLossAmount += item.cleanLoss.amount;
+        oldCleanLossWeight += item.cleanLoss.weight;
+        oldEndingAmount += item.ending.amount;
+        oldEndingWeight += item.ending.weight;
+      }
     }
   }
 
   sheetData.push({
-    siteNo: '合计',
+    poolNo: '合计',
     key: '合计',
     beginning: {
       amount: totalBeginningAmount,
@@ -529,7 +466,7 @@ export function getSummaryData() {
       coefficient: '',
       gainWeight: totalGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: totalNewSeedlingsAmount,
       weight: totalNewSeedlingsWeight,
@@ -541,7 +478,7 @@ export function getSummaryData() {
         amount: totalTransferAmount,
         weight: totalTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: totalSaleAmount,
         weight: totalSaleWeight,
@@ -567,7 +504,7 @@ export function getSummaryData() {
   });
 
   sheetData.push({
-    siteNo: '本期新鳗',
+    poolNo: '本期新鳗',
     key: '本期新鳗',
     beginning: {
       amount: newBeginningAmount,
@@ -575,10 +512,10 @@ export function getSummaryData() {
     },
     feedGainWeight: {
       feed: newFeed,
-      coefficient: '',
+      coefficient: newCoefficient,
       gainWeight: newGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: newNewSeedlingsAmount,
       weight: newNewSeedlingsWeight,
@@ -590,7 +527,7 @@ export function getSummaryData() {
         amount: newTransferAmount,
         weight: newTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: newSaleAmount,
         weight: newSaleWeight,
@@ -616,7 +553,7 @@ export function getSummaryData() {
   });
 
   sheetData.push({
-    siteNo: '本期老鳗',
+    poolNo: '本期老鳗',
     key: '本期老鳗',
     beginning: {
       amount: oldBeginningAmount,
@@ -624,10 +561,10 @@ export function getSummaryData() {
     },
     feedGainWeight: {
       feed: oldFeed,
-      coefficient: '',
+      coefficient: oldCoefficient,
       gainWeight: oldGainWeight,
     },
-    newSeedlings: {
+    newSeedLings: {
       size: '',
       amount: oldNewSeedlingsAmount,
       weight: oldNewSeedlingsWeight,
@@ -639,7 +576,7 @@ export function getSummaryData() {
         amount: oldTransferAmount,
         weight: oldTransferWeight,
       },
-      sale: {
+      summarySale: {
         size: '',
         amount: oldSaleAmount,
         weight: oldSaleWeight,
@@ -663,5 +600,6 @@ export function getSummaryData() {
       weight: oldEndingWeight,
     },
   });
+
   return sheetData;
 }

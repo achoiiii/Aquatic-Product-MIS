@@ -1,15 +1,13 @@
-import { ColumnsType } from 'antd/es/table';
 import { store } from '@/store';
+import { ColumnsType } from 'antd/es/table';
 
-export interface PoolSummaryDataType {
+export interface SummaryDataType {
   // 场号
-  poolNo: string;
+  siteNo: string;
   // 面积
   area?: number;
   // 类别
-  beginType?: 0 | 1 | 2;
-  // 类别
-  endType?: 0 | 1 | 2;
+  type?: string | 1 | 0 | 2;
   // key
   key: string;
   // 期初数
@@ -46,7 +44,7 @@ export interface PoolSummaryDataType {
       // 进出
       outOrIn: string;
       // 来源/去向
-      comeFrom: string;
+      comeFrom?: string;
       // 数量
       amount: number;
       // 重量
@@ -93,21 +91,21 @@ export interface PoolSummaryDataType {
     weight: number;
   };
 }
-export function getPoolSummaryColumn(resDataLength) {
-  const columnList: ColumnsType<PoolSummaryDataType> = [
+export function getSummaryColumn(dateRange, resDataLength) {
+  const columnList: ColumnsType<SummaryDataType> = [
     {
-      title: '塘号',
-      dataIndex: 'poolNo',
-      key: 'poolNo',
+      title: '场号',
+      dataIndex: 'siteNo',
+      key: 'siteNo',
       align: 'center',
       fixed: 'left',
       // 合计行合并
-      // TODO: 15其实是数据数组的length
       onCell: (_, index: number) => ({
-        colSpan: index >= resDataLength - 3 ? 4 : 1,
+        colSpan: index >= resDataLength - 3 ? 3 : 1,
+        rowSpan: index >= resDataLength - 3 ? 1 : index % 2 === 0 ? 2 : 0,
       }),
       className: 'first-column',
-      width: '70px',
+      width: '50px',
     },
     {
       title: '面积（亩）',
@@ -117,23 +115,14 @@ export function getPoolSummaryColumn(resDataLength) {
       fixed: 'left',
       onCell: (_, index: number) => ({
         colSpan: index >= resDataLength - 3 ? 0 : 1,
+        rowSpan: index >= resDataLength - 3 ? 1 : index % 2 === 0 ? 2 : 0,
       }),
       width: '100px',
     },
     {
-      title: '期初新/老',
-      dataIndex: 'beginType',
-      key: 'beginType',
-      align: 'center',
-      fixed: 'left',
-      onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
-      width: '50px',
-      render: (value) => (value === 0 ? '空塘' : value === 1 ? '新' : '老'),
-    },
-    {
-      title: '期末新/老',
-      dataIndex: 'endType',
-      key: 'beginType',
+      title: '新/老',
+      dataIndex: 'type',
+      key: 'type',
       align: 'center',
       fixed: 'left',
       onCell: (_, index: number) => ({ colSpan: index >= resDataLength - 3 ? 0 : 1 }),
@@ -151,8 +140,10 @@ export function getPoolSummaryColumn(resDataLength) {
           key: 'beginningSize',
           align: 'center',
           render: (value) => {
-            if (typeof value === 'number') return value.toFixed(1);
-            return value;
+            let resValue = value;
+            if (typeof value === 'number') resValue = value.toFixed(1);
+            if (resValue === '0.0') resValue = null;
+            return resValue;
           },
         },
         { title: '数量（尾）', dataIndex: ['beginning', 'amount'], key: 'beginningAmount', align: 'center' },
@@ -187,15 +178,17 @@ export function getPoolSummaryColumn(resDataLength) {
         {
           title: '规格',
           dataIndex: ['newSeedLings', 'size'],
-          key: 'newSeedLingsSize',
+          key: 'newSeedlingsSize',
           align: 'center',
           render: (value) => {
-            if (typeof value === 'number') return value.toFixed(1);
-            return value;
+            let resValue = value;
+            if (typeof value === 'number') resValue = value.toFixed(1);
+            if (resValue === '0.0') resValue = null;
+            return resValue;
           },
         },
-        { title: '数量（尾）', dataIndex: ['newSeedLings', 'amount'], key: 'newSeedLingsAmount', align: 'center' },
-        { title: '重量（kg）', dataIndex: ['newSeedLings', 'weight'], key: 'newSeedLingsWeight', align: 'center' },
+        { title: '数量（尾）', dataIndex: ['newSeedLings', 'amount'], key: 'newSeedlingsAmount', align: 'center' },
+        { title: '重量（kg）', dataIndex: ['newSeedLings', 'weight'], key: 'newSeedlingsWeight', align: 'center' },
       ],
     },
     {
@@ -245,8 +238,10 @@ export function getPoolSummaryColumn(resDataLength) {
               key: 'happenedInPeriodSaleSize',
               align: 'center',
               render: (value) => {
-                if (typeof value === 'number') return value.toFixed(1);
-                return value;
+                let resValue = value;
+                if (typeof value === 'number') resValue = value.toFixed(1);
+                if (resValue === '0.0') resValue = null;
+                return resValue;
               },
             },
             {
@@ -313,8 +308,10 @@ export function getPoolSummaryColumn(resDataLength) {
           key: 'endingSize',
           align: 'center',
           render: (value) => {
-            if (typeof value === 'number') return value.toFixed(1);
-            return value;
+            let resValue = value;
+            if (typeof value === 'number') resValue = value.toFixed(1);
+            if (resValue === '0.0') resValue = null;
+            return resValue;
           },
         },
         { title: '数量（尾）', dataIndex: ['ending', 'amount'], key: 'endingAmount', align: 'center' },
@@ -325,9 +322,9 @@ export function getPoolSummaryColumn(resDataLength) {
   return columnList;
 }
 
-export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
-  const { newCoefficient, oldCoefficient } = store.getState().app;
-  const sheetData: PoolSummaryDataType[] = resData;
+export function getSummaryData(resData: SummaryDataType[]) {
+  const { oldCoefficient, newCoefficient } = store.getState().app;
+  const sheetData: SummaryDataType[] = resData;
   // 期初数的合计数量/重量
   let totalBeginningAmount = 0;
   let totalBeginningWeight = 0;
@@ -413,7 +410,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
       totalEndingAmount += item.ending.amount;
       totalEndingWeight += item.ending.weight;
 
-      if (item.beginType === 1) {
+      if (item.type === 1) {
         newBeginningAmount += item.beginning.amount;
         newBeginningWeight += item.beginning.weight;
         newFeed += item.feedGainWeight.feed;
@@ -432,7 +429,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
         newCleanLossWeight += item.cleanLoss.weight;
         newEndingAmount += item.ending.amount;
         newEndingWeight += item.ending.weight;
-      } else if (item.beginType === 2) {
+      } else if (item.type === 2) {
         oldBeginningAmount += item.beginning.amount;
         oldBeginningWeight += item.beginning.weight;
         oldFeed += item.feedGainWeight.feed;
@@ -456,7 +453,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
   }
 
   sheetData.push({
-    poolNo: '合计',
+    siteNo: '合计',
     key: '合计',
     beginning: {
       amount: totalBeginningAmount,
@@ -505,7 +502,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
   });
 
   sheetData.push({
-    poolNo: '本期新鳗',
+    siteNo: '本期新鳗',
     key: '本期新鳗',
     beginning: {
       amount: newBeginningAmount,
@@ -554,7 +551,7 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
   });
 
   sheetData.push({
-    poolNo: '本期老鳗',
+    siteNo: '本期老鳗',
     key: '本期老鳗',
     beginning: {
       amount: oldBeginningAmount,
@@ -601,6 +598,5 @@ export function getPoolSummaryData(resData: PoolSummaryDataType[]) {
       weight: oldEndingWeight,
     },
   });
-
   return sheetData;
 }

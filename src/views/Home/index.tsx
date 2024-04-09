@@ -3,7 +3,7 @@ import './index.scss';
 import request from '@/request';
 const Home = () => {
   useEffect(() => {
-    request.sheet.feedLoss.getSiteFeedSheetData({ date: ['2024-03-29', '2024-04-07'] });
+    // request.sheet.feedLoss.getSiteFeedSheetData({ date: ['2024-03-29', '2024-04-07'] });
   });
   return (
     <div id="home-view">

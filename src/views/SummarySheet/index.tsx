@@ -1,7 +1,7 @@
 import request from '@/request';
-import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/request/mock/feedSummary';
-import { getSummaryColumn } from '@/request/mock/totalSummary';
-import { getBasicSummaryColumn, getBasicSummaryData } from '@/request/mock/basicSummary';
+import { FeedSummaryDataType, getFeedSummaryColumn, getFeedSummaryData } from '@/utils/sheet/feedSummary';
+import { getSummaryColumn, getSummaryData } from '@/utils/sheet/totalSummary';
+import { getBasicSummaryColumn, getBasicSummaryData } from '@/utils/sheet/basicSummary';
 import { ISiteBasicRangeSearchParams, SiteFeedSheetDataType } from '@/request/sheet/typing';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Select, Table } from 'antd';
@@ -41,7 +41,7 @@ const getSheetDataFuncMap = {
   xs: getBasicSummaryData,
   'xs-a': getBasicSummaryData,
   qt: getBasicSummaryData,
-  total: getSummaryColumn,
+  total: getSummaryData,
 };
 const { RangePicker } = DatePicker;
 const SummarySheet = () => {
