@@ -1,4 +1,6 @@
+import { AxiosResponse } from 'axios';
 import instance from '../instance';
+import { IUserState } from '@/store/models/user/typings';
 
 export interface IAddSiteData {
   siteNo: string;
@@ -30,4 +32,10 @@ function deleteSite(siteNo: string) {
 function deletePool(poolNo: string) {
   return instance.post(`/pool/delete?poolNo=${poolNo}`);
 }
-export default { getSite, addSite, addPool, deleteSite, deletePool };
+function login(userNo: string, password: string): Promise<AxiosResponse<Omit<IUserState, 'isLogin'>, any>> {
+  return instance.post('/user/login/0', { userNo, password });
+}
+function logout() {
+  return instance.post('/user/logout');
+}
+export default { getSite, addSite, addPool, deleteSite, deletePool, login, logout };

@@ -1,5 +1,5 @@
 import type { MenuProps } from 'antd';
-import { ClockCircleOutlined, FileOutlined, FileTextOutlined, HomeOutlined } from '@ant-design/icons';
+import { ClockCircleOutlined, FileOutlined, FileTextOutlined, HomeOutlined, UserOutlined } from '@ant-design/icons';
 import React from 'react';
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -108,6 +108,21 @@ export default {
         {
           key: '/data/coefficient',
           label: '系数管理',
+        },
+      ],
+    },
+    {
+      key: '/userManage',
+      icon: <UserOutlined />,
+      label: '用户管理',
+      children: [
+        {
+          key: '/userManage/custodian',
+          label: '场长管理',
+        },
+        {
+          key: '/userManage/manager',
+          label: '管理员管理',
         },
       ],
     },

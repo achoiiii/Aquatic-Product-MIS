@@ -20,6 +20,8 @@ import DivideRecord from '@/views/DivideRecord';
 import ClearLossRecord from '@/views/ClearLossRecord';
 import PutRecord from '@/views/PutRecord';
 import SaleRecord from '@/views/SaleRecord';
+import ManagerManage from '@/views/ManagerManage';
+import CustodianManage from '@/views/CustodianManage';
 
 /**
  * 路由表
@@ -128,6 +130,19 @@ const routes = [
           {
             path: '/data/coefficient',
             element: <CoefficientManage />,
+          },
+        ],
+      },
+      {
+        path: '/userManage',
+        children: [
+          {
+            path: '/userManage/custodian',
+            element: <CustodianManage />,
+          },
+          {
+            path: '/userManage/manager',
+            element: <ManagerManage />,
           },
         ],
       },

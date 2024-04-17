@@ -3,13 +3,16 @@ import { DownOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import { Dropdown, Form, Input, Modal, Space } from 'antd';
 import { store, useSelector } from '@/store';
+import { useNavigate } from 'react-router-dom';
 
 const DropdownBar: React.FC = () => {
-  const userName = useSelector((state) => state.user.nickname);
+  const userName = useSelector((state) => state.user.name);
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
+  const navigateTo = useNavigate();
   const handleLogout = () => {
     store.dispatch.user.logout();
+    navigateTo('/login');
   };
   const handleModify = () => {
     setConfirmLoading(true);
@@ -45,6 +48,7 @@ const DropdownBar: React.FC = () => {
         confirmLoading={confirmLoading}
         cancelText="取消"
         okText="确认修改"
+        onCancel={() => setOpen(false)}
       >
         <Form name="modifyPwd" style={{ padding: '20px' }}>
           <Form.Item label="旧密码" name="oldPassword" rules={[{ required: true, message: '旧密码为空' }]}>

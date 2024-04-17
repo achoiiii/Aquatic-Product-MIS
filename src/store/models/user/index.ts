@@ -1,11 +1,19 @@
 import { createModel } from '@rematch/core';
 import { IAppStoreModels } from '@/store';
 import { IUserState } from './typings';
+import { encrypt } from '@/utils/encrypt';
+import request from '@/request';
+import { message } from 'antd';
 
 const defaultState: IUserState = {
   isLogin: false,
-  nickname: 'Achoi',
-  identity: 'normal',
+  name: '',
+  authority: '',
+  id: -1,
+  userId: '',
+  phone: '',
+  password: '',
+  type: -1,
 };
 export default createModel<IAppStoreModels>()({
   state: defaultState,
@@ -22,10 +30,12 @@ export default createModel<IAppStoreModels>()({
     },
   },
   effects: (dispatch) => ({
-    async login() {
-      dispatch.user.update({ isLogin: true, nickname: 'Logined AChoi', identity: 'admin' });
+    async login(params) {
+      const res = await request.basic.login(params.username, encrypt(params.password).toString());
+      return res;
     },
     async logout() {
+      await request.basic.logout();
       dispatch.user.reset();
     },
   }),

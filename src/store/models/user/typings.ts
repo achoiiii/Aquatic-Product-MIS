@@ -1,7 +1,12 @@
 export interface IUserState {
+  id: number;
+  userId: string;
+  name: string;
+  phone: string;
+  authority: Identity | '';
+  password: string;
+  type: number;
   isLogin: boolean;
-  nickname: string;
-  identity: Identity;
 }
 
-export type Identity = 'admin' | 'normal' | 'top-admin';
+export type Identity = '超级管理员' | '管理员' | '场长';
