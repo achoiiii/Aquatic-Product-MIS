@@ -1,7 +1,7 @@
 import SitePoolSelector from '@/components/SitePoolSelector';
 import request from '@/request';
 import { IPoolBasicRangeSearchParams } from '@/request/sheet/typing';
-import { formatPoolNos } from '@/utils/format';
+import { formatDate, formatPoolNos } from '@/utils/format';
 import { flatRecordRes } from '@/utils/record';
 import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Table } from 'antd';
@@ -129,6 +129,7 @@ const FeedRecord = () => {
         dataIndex: 'date',
         key: 'date',
         align: 'center',
+        render: (value) => formatDate(value),
       },
       {
         title: '投料量（kg）',
@@ -153,6 +154,7 @@ const FeedRecord = () => {
         dataIndex: 'reportDate',
         key: 'reportDate',
         align: 'center',
+        render: (value) => formatDate(value),
       },
     ];
     return (
