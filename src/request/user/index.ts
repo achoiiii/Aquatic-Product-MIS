@@ -14,5 +14,7 @@ function deleteUser(userId: string) {
 function addUser(data: { phone: string; userId: string; name: string; type: 0 | 1 | 2 }) {
   return instance.post('/user/register', data);
 }
-function modifyPassword() {}
-export default { getCustodian, getManager, deleteUser, addUser };
+function modifyPassword(data: { userNo: string; oldPassword: string; password }) {
+  return instance.post('/user/updatePassword', data);
+}
+export default { getCustodian, getManager, deleteUser, addUser, modifyPassword };
