@@ -1,6 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import type { TableColumnsType } from 'antd';
-import { Space, Table, Modal, Button, Form, Input, Card, Typography, Radio, InputNumber, Popconfirm } from 'antd';
+import {
+  Space,
+  Table,
+  Modal,
+  Button,
+  Form,
+  Input,
+  Card,
+  Typography,
+  Radio,
+  InputNumber,
+  Popconfirm,
+  message,
+} from 'antd';
 import './index.scss';
 import { PoolItem, SiteItem } from '@/store/models/app/typings';
 import { dispatch, useSelector } from '@/store';
@@ -39,6 +52,7 @@ const SitePoolManage: React.FC = () => {
               ...addPoolRequests,
             ]).then((res) => {
               dispatch.app.getInitialData();
+              message.success('新增成功', 2);
             });
           })
           .catch((err) => {
@@ -238,7 +252,7 @@ const SitePoolManage: React.FC = () => {
           render: (_, record: PoolItem) => (
             <Space className="operation">
               <a className="operation-item">编辑</a>
-              <Popconfirm title="Sure to cancel?" onConfirm={() => handleDeletePool(record)}>
+              <Popconfirm title="确认删除?" onConfirm={() => handleDeletePool(record)}>
                 <a className="operation-item delete">删除</a>
               </Popconfirm>
             </Space>
@@ -349,7 +363,7 @@ const SitePoolManage: React.FC = () => {
               新增塘
             </a>
             <a className="operation-item edit">编辑</a>
-            <Popconfirm title="Sure to cancel?" onConfirm={() => handleDeleteSite(record)}>
+            <Popconfirm title="确认删除?" onConfirm={() => handleDeleteSite(record)}>
               <a className="operation-item delete">删除</a>
             </Popconfirm>
           </Space>

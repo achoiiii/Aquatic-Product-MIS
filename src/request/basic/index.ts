@@ -32,8 +32,12 @@ function deleteSite(siteNo: string) {
 function deletePool(poolNo: string) {
   return instance.post(`/pool/delete?poolNo=${poolNo}`);
 }
-function login(userNo: string, password: string): Promise<AxiosResponse<Omit<IUserState, 'isLogin'>, any>> {
-  return instance.post('/user/login/0', { userNo, password });
+function login(
+  userNo: string,
+  password: string,
+  token?: string,
+): Promise<AxiosResponse<Omit<IUserState, 'isLogin'>, any>> {
+  return instance.post('/user/login/0', { userNo, password, token });
 }
 function logout() {
   return instance.post('/user/logout');

@@ -3,7 +3,6 @@ import { IAppStoreModels } from '@/store';
 import { IUserState } from './typings';
 import { encrypt } from '@/utils/encrypt';
 import request from '@/request';
-import { message } from 'antd';
 
 const defaultState: IUserState = {
   isLogin: false,
@@ -31,7 +30,7 @@ export default createModel<IAppStoreModels>()({
   },
   effects: (dispatch) => ({
     async login(params) {
-      const res = await request.basic.login(params.username, encrypt(params.password).toString());
+      const res = await request.basic.login(params.username, encrypt(params.password).toString(), params.token);
       return res;
     },
     async logout() {
