@@ -123,12 +123,12 @@ export function getBasicSheetData(resData: BasicSheetDataType[], dateRange: stri
       const date = resDataMapKeys[j];
       const detailItem = resData[i].dataMap[date];
       if (detailItem) {
-        if (detailItem.type === 0) {
+        if (detailItem.type === 1) {
           newTotalQuantity += detailItem.quantity;
           newTotalWeight += detailItem.weight;
           newTotalDataMap[date].quantity += detailItem.quantity;
           newTotalDataMap[date].weight += detailItem.weight;
-        } else {
+        } else if (detailItem.type === 2) {
           oldTotalQuantity += detailItem.quantity;
           oldTotalWeight += detailItem.weight;
           oldTotalDataMap[date].quantity += detailItem.quantity;

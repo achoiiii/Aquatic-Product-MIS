@@ -47,6 +47,8 @@ const SaleSheet: React.FC = () => {
       const dateArr = values.dateRange.map((value) => {
         return value.format('YYYY-MM-DD');
       });
+      console.log(values);
+
       const poolNos = formatPoolNos(values.sitePool || []);
       request.sheet.sale
         .getPoolSaleSheetData({
@@ -56,7 +58,7 @@ const SaleSheet: React.FC = () => {
         })
         .then((res) => {
           setDateRange(dateArr);
-          const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
+          const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateArr);
           setSheetData(sheetData);
         })
         .finally(() => setShowLoading(false));
@@ -73,8 +75,8 @@ const SaleSheet: React.FC = () => {
             placeholder={['开始时间', '结束时间']}
           />
         </Form.Item>
-        <Form.Item name="isA" label="是/否为A鳗">
-          <Switch checkedChildren="是" unCheckedChildren="否" defaultChecked={false} />
+        <Form.Item name="isA" valuePropName="checked" label="是/否为A鳗">
+          <Switch checkedChildren="是" unCheckedChildren="否" />
         </Form.Item>
         <Form.Item>
           <Button type="primary" htmlType="submit">

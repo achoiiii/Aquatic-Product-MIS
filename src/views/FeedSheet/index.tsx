@@ -54,7 +54,7 @@ const FeedSheet: React.FC = () => {
         })
         .then((res) => {
           setDateRange(dateArr);
-          const sheetData: FeedSheetDataType[] = getFeedSheetData(res.data, dateRange);
+          const sheetData: FeedSheetDataType[] = getFeedSheetData(res.data, dateArr);
           setSheetData(sheetData);
         })
         .finally(() => setShowLoading(false));

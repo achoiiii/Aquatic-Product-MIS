@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import router from './router';
-import { useNavigate, useRoutes } from 'react-router-dom';
+import { useLocation, useNavigate, useRoutes } from 'react-router-dom';
 import { dispatch } from './store';
 import { message } from 'antd';
 
 function App() {
   const navigateTo = useNavigate();
+  const location = useLocation();
   // 检验登录状态
   useEffect(() => {
     const token = document.cookie
@@ -17,7 +18,7 @@ function App() {
         if (res.code === 200) {
           const userInfo = res.data;
           dispatch.user.update({ isLogin: true, ...userInfo });
-          navigateTo('/home');
+          navigateTo(location.pathname);
           message.success({
             duration: 2,
             content: '登录成功。',

@@ -41,19 +41,22 @@ const SitePoolManage: React.FC = () => {
               area += pool.area;
               addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: res.siteNo }));
             }
-            Promise.all([
-              request.basic.addSite({
+            request.basic
+              .addSite({
                 area: area,
                 siteNo: res.siteNo,
                 siteName: res.siteName,
                 location: res.location,
                 custodianId: res.custodianId,
-              }),
-              ...addPoolRequests,
-            ]).then((res) => {
-              dispatch.app.getInitialData();
-              message.success('新增成功', 2);
-            });
+              })
+              .then((res) => {
+                if (res.code === 200) {
+                  Promise.all([...addPoolRequests]).then((res) => {
+                    dispatch.app.getInitialData();
+                    message.success('新增成功', 2);
+                  });
+                }
+              });
           })
           .catch((err) => {
             console.log(err);
@@ -269,8 +272,6 @@ const SitePoolManage: React.FC = () => {
           .validateFields()
           .then((res: IAddSiteData) => {
             const addPoolRequests: any[] = [];
-            console.log(res);
-
             for (const pool of res.pools) {
               addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: operationSite }));
             }
@@ -278,9 +279,7 @@ const SitePoolManage: React.FC = () => {
               dispatch.app.getInitialData();
             });
           })
-          .catch((err) => {
-            console.log(err);
-          })
+          .catch((err) => {})
           .finally(() => {
             setConfirmLoading(false);
             setAddPoolModalOpen(false);

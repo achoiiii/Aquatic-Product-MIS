@@ -55,7 +55,7 @@ const ManagerManage = () => {
     return (
       <div className="content-box">
         <Button type="primary" onClick={() => setModalOpen(true)}>
-          新增场长
+          新增管理员
         </Button>
         <Button
           type="primary"
@@ -65,7 +65,7 @@ const ManagerManage = () => {
           导出
         </Button>
         <Modal
-          title="新增场长"
+          title="新增管理员"
           open={modalOpen}
           onOk={handleCreate}
           confirmLoading={confirmLoading}

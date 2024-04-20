@@ -54,7 +54,7 @@ const LossSheet: React.FC = () => {
         })
         .then((res) => {
           setDateRange(dateArr);
-          const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
+          const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateArr);
           setSheetData(sheetData);
         })
         .finally(() => setShowLoading(false));

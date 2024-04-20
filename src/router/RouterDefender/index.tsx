@@ -15,7 +15,6 @@ export default function RouterDefender(props: any) {
       console.log(isLogin, location.pathname, 'currentPathcurrentPath');
 
       return navigate(loginRoute);
-      // TODO: 权限控制路由守卫
     } else if (!publicRoute.includes(location.pathname) && userIdentity === 'normal') {
       return navigate(forbidRoute, { state: { prePathname: location.pathname } });
     }

@@ -149,7 +149,7 @@ const SummarySheet = () => {
           rowKey={'key'}
           title={() => {
             return `总共匹配到：${sheetData.length}条数据，现在是${options.find((item) => item.value === sheetType)
-              ?.label}`;
+              ?.label}，期初时间是：${dateRange[0]}，期末时间是：${dateRange[1]}`;
           }}
           loading={showLoading}
         />

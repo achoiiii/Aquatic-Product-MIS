@@ -126,13 +126,13 @@ export function getFeedSheetData(resData: FeedSheetDataType[], dateRange: string
       const date = resDataMapKeys[j];
       const detailItem = resData[i].dataMap[date];
       if (detailItem) {
-        if (detailItem.type === 0) {
+        if (detailItem.type === 1) {
           newTotalFeed += detailItem.feed;
           newTotalLoss += detailItem.loss;
           newTotalLossWeight += detailItem.lossWeight;
           newTotalDataMap[date].feed += detailItem.feed;
           newTotalDataMap[date].loss += detailItem.loss;
-        } else {
+        } else if (detailItem.type === 2) {
           oldTotalFeed += detailItem.feed;
           oldTotalLoss += detailItem.loss;
           oldTotalLossWeight += detailItem.lossWeight;

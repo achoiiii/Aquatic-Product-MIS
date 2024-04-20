@@ -139,7 +139,7 @@ const SaleRecord = () => {
         dataIndex: 'saleType',
         key: 'saleType',
         align: 'center',
-        render: (value) => (value === 0 ? '是' : '否'),
+        render: (value) => (value === 0 ? '否' : '是'),
       },
       {
         title: '销售重量（kg）',
@@ -172,7 +172,7 @@ const SaleRecord = () => {
           id="transfer-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${sheetData.length}条数据`;
+            return `总共匹配到：${sheetData.length}条数据，数据自${dateRange[0]}算起。`;
           }}
           loading={showLoading}
         />
