@@ -5,10 +5,13 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import config from '@/config';
 import { IMenuCompProps } from '../typing';
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
+import { useSelector } from '@/store';
 
 const { menuItems } = config;
 const path = getPath();
 const MenuComp = function (props: IMenuCompProps) {
+  menuItems.find((item) => item?.key === '/userManage')['disabled'] = useSelector((state) => state.user.type !== 0);
+  menuItems.find((item) => item?.key === '/data')['disabled'] = useSelector((state) => state.user.type !== 0);
   const navigateTo = useNavigate();
   const location = useLocation();
   const { onPathChange } = props;

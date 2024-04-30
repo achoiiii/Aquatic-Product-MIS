@@ -8,14 +8,15 @@ export default function RouterDefender(props: any) {
   const navigate = useNavigate();
   const { children } = props;
   const isLogin = useSelector((state) => state.user.isLogin);
-  const userIdentity = useSelector((state) => state.user.identity);
-  const publicRoute = ['/forbid', '/home', '/login'];
+  const userType = useSelector((state) => state.user.type);
+  const publicRoute = ['/forbid', '/home', '/login', '/poolSheet', '/siteSheet', '/log', '/about'];
   useEffect(() => {
+    const authRoute = publicRoute.find((item) => location.pathname.includes(item));
     if (!isLogin && location.pathname !== '/login') {
       console.log(isLogin, location.pathname, 'currentPathcurrentPath');
 
       return navigate(loginRoute);
-    } else if (!publicRoute.includes(location.pathname) && userIdentity === 'normal') {
+    } else if (!authRoute && userType !== 0) {
       return navigate(forbidRoute, { state: { prePathname: location.pathname } });
     }
   }, [location.pathname, isLogin]);

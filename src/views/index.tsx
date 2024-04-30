@@ -5,17 +5,17 @@ import { Outlet, useLocation } from 'react-router-dom';
 import MenuComp from '@/components/Menu';
 import TitleLogoBar from '@/components/TitleLogoBar';
 import config from '@/config';
-import { getPath } from '@/utils/url';
 import { ItemType, MenuItemType } from 'antd/es/menu/hooks/useItems';
 import DropdownBar from '@/components/DropdownBar';
 import { dispatch, useSelector } from '@/store';
+import { BreadcrumbItemType } from 'antd/es/breadcrumb/Breadcrumb';
 
 const { Header, Content, Sider } = Layout;
 
 const View: React.FC = () => {
   const { menuItems } = config;
   const [collapsed, setCollapsed] = useState(false);
-  const [breadcrumbItems, setBreadcrumbItems] = useState([]);
+  const [breadcrumbItems, setBreadcrumbItems]: [BreadcrumbItemType[], any] = useState([]);
   const location = useLocation();
   const { isLogin } = useSelector((state) => state.user);
 
@@ -26,8 +26,8 @@ const View: React.FC = () => {
   useEffect(() => {
     if (!isLogin) return;
     if (location.pathname === '/forbid') return setBreadcrumbItems([{ title: '权限限制' }]);
-    generateBreadcrumb(menuItems, getPath());
-  }, []);
+    generateBreadcrumb(menuItems, location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     dispatch.app.getInitialData();
@@ -35,6 +35,8 @@ const View: React.FC = () => {
 
   // 生成面包屑
   function generateBreadcrumb(menuItems: ItemType<MenuItemType>[], currentPath: string) {
+    console.log(menuItems, currentPath, 'menuItemsmenuItems');
+
     let breadcrumb: { title: string }[] | { title: any; href?: any }[] = [];
     function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
       for (let item of items) {
