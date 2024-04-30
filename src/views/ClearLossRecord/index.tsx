@@ -98,7 +98,7 @@ const ClearLossRecord = () => {
         <Button
           type="primary"
           style={{ backgroundColor: '#18bc69' }}
-          onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+          onClick={() => exportTableToExcel('clearloss-table', 'clearloss-table')}
         >
           导出
         </Button>
@@ -157,7 +157,7 @@ const ClearLossRecord = () => {
           pagination={{ pageSize: 100 }}
           size="small"
           columns={columns}
-          id="transfer-table"
+          id="clearloss-table"
           rowKey={'key'}
           title={() => {
             return `总共匹配到：${sheetData.length}条数据，数据自${dateRange[0]}算起。`;

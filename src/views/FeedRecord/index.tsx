@@ -100,7 +100,7 @@ const FeedRecord = () => {
         <Button
           type="primary"
           style={{ backgroundColor: '#18bc69' }}
-          onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+          onClick={() => exportTableToExcel('feed-record-table', 'feed-record-table')}
         >
           导出
         </Button>
@@ -165,7 +165,7 @@ const FeedRecord = () => {
           pagination={{ pageSize: 100 }}
           size="small"
           columns={columns}
-          id="transfer-table"
+          id="feed-record-table"
           rowKey={'key'}
           title={() => {
             return `总共匹配到：${sheetData.length}条数据，数据自${dateRange[0]}算起。`;

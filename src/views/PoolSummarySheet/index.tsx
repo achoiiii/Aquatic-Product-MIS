@@ -56,7 +56,7 @@ const PoolSummarySheet = () => {
         <Button
           type="primary"
           style={{ backgroundColor: '#18bc69' }}
-          onClick={() => exportTableToExcel('loss-table', 'loss-table')}
+          onClick={() => exportTableToExcel('summary-table', 'summary-table')}
         >
           导出
         </Button>

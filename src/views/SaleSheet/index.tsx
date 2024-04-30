@@ -86,7 +86,7 @@ const SaleSheet: React.FC = () => {
         <Button
           type="primary"
           style={{ backgroundColor: '#18bc69' }}
-          onClick={() => exportTableToExcel('feedlog-table', 'feedlog-table')}
+          onClick={() => exportTableToExcel('salelog-table', 'salelog-table')}
         >
           导出
         </Button>
@@ -110,7 +110,7 @@ const SaleSheet: React.FC = () => {
           size="small"
           scroll={{ x: 'max-content', y: 600 }}
           columns={columns}
-          id="sale-table"
+          id="salelog-table"
           rowKey={'key'}
           title={() => {
             return `总共匹配到：${sheetData.length}条数据`;

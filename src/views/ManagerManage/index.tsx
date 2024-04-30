@@ -60,7 +60,7 @@ const ManagerManage = () => {
         <Button
           type="primary"
           style={{ backgroundColor: '#18bc69', marginLeft: '40px' }}
-          onClick={() => exportTableToExcel('custodian-table', 'custodian-table')}
+          onClick={() => exportTableToExcel('manager-table', 'manager-table')}
         >
           导出
         </Button>
