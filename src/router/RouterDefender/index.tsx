@@ -13,8 +13,6 @@ export default function RouterDefender(props: any) {
   useEffect(() => {
     const authRoute = publicRoute.find((item) => location.pathname.includes(item));
     if (!isLogin && location.pathname !== '/login') {
-      console.log(isLogin, location.pathname, 'currentPathcurrentPath');
-
       return navigate(loginRoute);
     } else if (!authRoute && userType !== 0) {
       return navigate(forbidRoute, { state: { prePathname: location.pathname } });

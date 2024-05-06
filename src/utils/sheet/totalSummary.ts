@@ -167,6 +167,10 @@ export function getSummaryColumn(dateRange, resDataLength) {
           dataIndex: ['feedGainWeight', 'gainWeight'],
           key: 'feedGainWeightGainWeight',
           align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(2);
+            return value;
+          },
         },
       ],
     },
@@ -315,7 +319,16 @@ export function getSummaryColumn(dateRange, resDataLength) {
           },
         },
         { title: '数量（尾）', dataIndex: ['ending', 'amount'], key: 'endingAmount', align: 'center' },
-        { title: '重量（kg）', dataIndex: ['ending', 'weight'], key: 'endingWeight', align: 'center' },
+        {
+          title: '重量（kg）',
+          dataIndex: ['ending', 'weight'],
+          key: 'endingWeight',
+          align: 'center',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(2);
+            return value;
+          },
+        },
       ],
     },
   ];

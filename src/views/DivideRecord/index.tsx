@@ -168,7 +168,7 @@ const DivideRecord = () => {
           id="divide-record-table"
           rowKey={'key'}
           title={() => {
-            return `总共匹配到：${sheetData.length}条数据，数据自${dateRange[0]}算起。`;
+            return `总共匹配到：${sheetData.length}条数据，数据自${dateRange[0]}算起，到${dateRange[1]}。`;
           }}
           loading={showLoading}
         />

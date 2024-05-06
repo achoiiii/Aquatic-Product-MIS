@@ -10,7 +10,6 @@ export interface IAddSiteData {
   custodianId: String;
   pools: IAddPoolData[];
 }
-
 export interface IAddPoolData {
   poolNo: string;
   area: number;
@@ -32,6 +31,18 @@ function deleteSite(siteNo: string) {
 function deletePool(poolNo: string) {
   return instance.post(`/pool/delete?poolNo=${poolNo}`);
 }
+function updateNewCoefficient(value: string) {
+  return instance.post('/baseData/update', { name: 'coefficient1', value });
+}
+function updateOldCoefficient(value: string) {
+  return instance.post('/baseData/update', { name: 'coefficient2', value });
+}
+function selectBaseData() {
+  return instance.post('/baseData/select');
+}
+function updateCustodian(data: { siteNo: string; custodianId: string }) {
+  return instance.post('/site/updateCustodian', data);
+}
 function login(
   userNo: string,
   password: string,
@@ -42,4 +53,16 @@ function login(
 function logout() {
   return instance.post('/user/logout');
 }
-export default { getSite, addSite, addPool, deleteSite, deletePool, login, logout };
+export default {
+  getSite,
+  addSite,
+  addPool,
+  deleteSite,
+  deletePool,
+  login,
+  logout,
+  updateNewCoefficient,
+  updateOldCoefficient,
+  selectBaseData,
+  updateCustodian,
+};

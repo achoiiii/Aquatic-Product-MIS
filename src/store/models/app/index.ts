@@ -4,8 +4,8 @@ import { IInitialData } from './typings';
 import request from '@/request';
 const defaultState: IInitialData = {
   sites: [],
-  oldCoefficient: 2.0,
-  newCoefficient: 1.6,
+  oldCoefficient: 0,
+  newCoefficient: 0,
   isInitial: false,
 };
 export default createModel<IAppStoreModels>()({
@@ -29,6 +29,12 @@ export default createModel<IAppStoreModels>()({
     getInitialData() {
       request.basic.getSite().then((res) => {
         dispatch.app.update({ sites: res.data, isInitial: true });
+      });
+      request.basic.selectBaseData().then((res: any) => {
+        dispatch.app.update({
+          oldCoefficient: res.data.find((item: { name: string; value: string }) => item.name === 'coefficient2').value,
+          newCoefficient: res.data.find((item: { name: string; value: string }) => item.name === 'coefficient1').value,
+        });
       });
     },
   }),

@@ -35,8 +35,6 @@ const View: React.FC = () => {
 
   // 生成面包屑
   function generateBreadcrumb(menuItems: ItemType<MenuItemType>[], currentPath: string) {
-    console.log(menuItems, currentPath, 'menuItemsmenuItems');
-
     let breadcrumb: { title: string }[] | { title: any; href?: any }[] = [];
     function findMenuItem(items: ItemType<MenuItemType>[], path: string) {
       for (let item of items) {

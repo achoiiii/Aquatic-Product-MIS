@@ -1,30 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import type { TableColumnsType } from 'antd';
-import {
-  Space,
-  Table,
-  Modal,
-  Button,
-  Form,
-  Input,
-  Card,
-  Typography,
-  Radio,
-  InputNumber,
-  Popconfirm,
-  message,
-} from 'antd';
+import { Space, Table, Modal, Button, Form, Input, Card, InputNumber, Popconfirm, message, Select } from 'antd';
 import './index.scss';
 import { PoolItem, SiteItem } from '@/store/models/app/typings';
 import { dispatch, useSelector } from '@/store';
 import { CloseOutlined, ExclamationCircleFilled } from '@ant-design/icons';
 import { IAddSiteData } from '@/request/basic';
 import request from '@/request';
+import { IUser } from '@/request/user/typing';
 
 const { confirm } = Modal;
 
 const SitePoolManage: React.FC = () => {
   const [loading, setLoading] = useState(false);
+  const [custodianList, setCustodianList]: [IUser[], any] = useState([]);
+  useEffect(() => {
+    request.user.getCustodian().then((res) => {
+      setCustodianList(res.data);
+    });
+  }, []);
   const SearchBar = () => {
     const [open, setOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
@@ -51,6 +45,7 @@ const SitePoolManage: React.FC = () => {
               })
               .then((res) => {
                 if (res.code === 200) {
+                  // TODO：有可能新增之后塘号存在返回201
                   Promise.all([...addPoolRequests]).then((res) => {
                     dispatch.app.getInitialData();
                     message.success('新增成功', 2);
@@ -100,12 +95,15 @@ const SitePoolManage: React.FC = () => {
             >
               <Input placeholder="请填写场名" allowClear={true} />
             </Form.Item>
-            <Form.Item
-              label="负责人手机号"
-              name="custodianId"
-              rules={[{ required: true, message: '负责人手机号为空或不规范', len: 11 }]}
-            >
-              <Input placeholder="请填写负责人手机号" allowClear={true} />
+            <Form.Item label="负责人" name="custodianId" rules={[{ required: true, message: '负责人为空' }]}>
+              <Select
+                options={custodianList.map((value) => {
+                  return {
+                    value: value.userId,
+                    label: value.name,
+                  };
+                })}
+              />
             </Form.Item>
             <Form.Item label="场址" name="location">
               <Input placeholder="请填写场址，该项选填" allowClear={true} />
@@ -215,22 +213,50 @@ const SitePoolManage: React.FC = () => {
       onCancel() {},
     });
   };
-
   const TableContainer: React.FC = () => {
     const [form] = Form.useForm();
     const [addPoolModalOpen, setAddPoolModalOpen] = useState(false);
+    const [editSiteModalOpen, setEditSiteModalOpen] = useState(false);
     const [confirmLoading, setConfirmLoading] = useState(false);
     const [operationSite, setOperationSite]: [string, any] = useState('');
+    const [editingRecord, setEditingRecord]: [SiteItem, any] = useState({});
     const typeMap = {
       0: '空塘',
       1: '新',
       2: '老',
     };
     const siteData: SiteItem[] = useSelector((state) => state.app.sites);
+    const columns: TableColumnsType<SiteItem> = [
+      { title: '场名', dataIndex: 'siteName', key: 'siteName' },
+      { title: '场号', dataIndex: 'siteNo', key: 'siteNo' },
+      { title: '负责人', dataIndex: 'name', key: 'name' },
+      {
+        title: '操作',
+        key: 'operation',
+        render: (_, record: SiteItem) => (
+          <Space className="operation">
+            <a className="operation-item insert" onClick={() => handleAddPool(record)}>
+              新增塘
+            </a>
+            <a className="operation-item edit" onClick={() => handleSiteEdit(record)}>
+              编辑
+            </a>
+            <Popconfirm title="确认删除?" onConfirm={() => handleDeleteSite(record)}>
+              <a className="operation-item delete">删除</a>
+            </Popconfirm>
+          </Space>
+        ),
+      },
+    ];
 
     const handleAddPool = (record: SiteItem) => {
       setOperationSite(record.siteNo);
       setAddPoolModalOpen(true);
+    };
+
+    const handleSiteEdit = (record: SiteItem) => {
+      setEditSiteModalOpen(true);
+      setEditingRecord(record);
     };
 
     const expandedRowRender = (props: SiteItem) => {
@@ -247,14 +273,24 @@ const SitePoolManage: React.FC = () => {
         { title: '新/老', dataIndex: 'type', key: 'type' },
         { title: '塘的面积（亩）', dataIndex: 'area', key: 'area' },
         { title: '数量（尾）', dataIndex: 'quantity', key: 'quantity' },
-        { title: '重量（kg）', dataIndex: 'weight', key: 'weight' },
+        {
+          title: '重量（kg）',
+          dataIndex: 'weight',
+          key: 'weight',
+          render: (value) => {
+            if (typeof value === 'number') return value.toFixed(2);
+            return value;
+          },
+        },
         {
           title: '操作',
           dataIndex: 'operation',
           key: 'operation',
           render: (_, record: PoolItem) => (
             <Space className="operation">
-              <a className="operation-item">编辑</a>
+              {/* <a className="operation-item" onClick={handlePoolEdit}>
+                编辑
+              </a> */}
               <Popconfirm title="确认删除?" onConfirm={() => handleDeletePool(record)}>
                 <a className="operation-item delete">删除</a>
               </Popconfirm>
@@ -348,27 +384,66 @@ const SitePoolManage: React.FC = () => {
         </Modal>
       );
     };
+    const EditSiteModal = (props: { record: SiteItem }) => {
+      const { record } = props;
+      function handleOk() {
+        setConfirmLoading(true);
+        form
+          .validateFields()
+          .then((res) => {
+            request.basic.updateCustodian({ custodianId: res.custodianId, siteNo: record.siteNo }).then((res) => {
+              if (res.code === 200) {
+                message.success('修改成功', 2);
+              } else message.error('修改失败', 2);
+            });
+          })
+          .catch((err) => {})
+          .finally(() => {
+            setConfirmLoading(false);
+            setEditSiteModalOpen(false);
+            setOperationSite('');
+            request.basic.getSite().then((res) => {
+              dispatch.app.update({ sites: res.data });
+            });
+          });
+      }
 
-    const columns: TableColumnsType<SiteItem> = [
-      { title: '场名', dataIndex: 'siteName', key: 'siteName' },
-      { title: '场号', dataIndex: 'siteNo', key: 'siteNo' },
-      { title: '负责人', dataIndex: 'name', key: 'name' },
-      {
-        title: '操作',
-        key: 'operation',
-        render: (_, record: SiteItem) => (
-          <Space className="operation">
-            <a className="operation-item insert" onClick={() => handleAddPool(record)}>
-              新增塘
-            </a>
-            <a className="operation-item edit">编辑</a>
-            <Popconfirm title="确认删除?" onConfirm={() => handleDeleteSite(record)}>
-              <a className="operation-item delete">删除</a>
-            </Popconfirm>
-          </Space>
-        ),
-      },
-    ];
+      return (
+        <Modal
+          title="编辑场块信息"
+          open={editSiteModalOpen}
+          onOk={handleOk}
+          confirmLoading={confirmLoading}
+          onCancel={() => setEditSiteModalOpen(false)}
+          cancelText="取消"
+          okText="确认"
+        >
+          <Form
+            style={{ padding: '20px' }}
+            wrapperCol={{ span: 18 }}
+            form={form}
+            name="newSite"
+            autoComplete="off"
+            initialValues={{ items: [{}] }}
+          >
+            <Form.Item label="场名" name="siteName">
+              <Input disabled defaultValue={record.siteName} />
+            </Form.Item>
+            <Form.Item label="负责人" name="custodianId" rules={[{ required: true, message: '负责人为空' }]}>
+              <Select
+                defaultValue={custodianList.find((item) => record.custodianId === item.phone)?.name}
+                options={custodianList.map((value) => {
+                  return {
+                    value: value.userId,
+                    label: value.name,
+                  };
+                })}
+              />
+            </Form.Item>
+          </Form>
+        </Modal>
+      );
+    };
     return (
       <>
         <Table
@@ -381,6 +456,7 @@ const SitePoolManage: React.FC = () => {
           size="small"
         />
         <AddPoolModal />
+        <EditSiteModal record={editingRecord} />
       </>
     );
   };
