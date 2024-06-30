@@ -14,10 +14,16 @@ export default defineConfig({
   server: {
     proxy: {
       '/dev': {
-        target: 'http://8.134.155.193:8081',
+        target: 'https://www.taishangongrong.com',
         changeOrigin: true,
         ws: true,
         rewrite: (path) => path.replace(/^\/dev/, ''),
+      },
+      '/prod': {
+        target: 'https://www.taishangongrong.com',
+        changeOrigin: true,
+        ws: true,
+        rewrite: (path) => path.replace(/^\/prod/, ''),
       },
     },
   },

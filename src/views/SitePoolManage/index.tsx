@@ -33,7 +33,6 @@ const SitePoolManage: React.FC = () => {
             let area = 0;
             for (const pool of res.pools) {
               area += pool.area;
-              addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: res.siteNo }));
             }
             request.basic
               .addSite({
@@ -43,13 +42,18 @@ const SitePoolManage: React.FC = () => {
                 location: res.location,
                 custodianId: res.custodianId,
               })
-              .then((res) => {
-                if (res.code === 200) {
+              .then((addSiteRes) => {
+                if (addSiteRes.code === 200) {
                   // TODO：有可能新增之后塘号存在返回201
-                  Promise.all([...addPoolRequests]).then((res) => {
-                    dispatch.app.getInitialData();
-                    message.success('新增成功', 2);
-                  });
+                  for (const pool of res.pools) {
+                    addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: res.siteNo }));
+                  }
+                  Promise.all([...addPoolRequests])
+                    .catch((e) => {})
+                    .finally(() => {
+                      dispatch.app.getInitialData();
+                      message.success('新增成功', 2);
+                    });
                 }
               });
           })
@@ -388,24 +392,23 @@ const SitePoolManage: React.FC = () => {
       const { record } = props;
       function handleOk() {
         setConfirmLoading(true);
-        form
-          .validateFields()
-          .then((res) => {
-            request.basic.updateCustodian({ custodianId: res.custodianId, siteNo: record.siteNo }).then((res) => {
+        form.validateFields().then((res) => {
+          request.basic
+            .updateCustodian({ custodianId: res.custodianId, siteNo: record.siteNo })
+            .then((res) => {
               if (res.code === 200) {
                 message.success('修改成功', 2);
               } else message.error('修改失败', 2);
+            })
+            .finally(() => {
+              setConfirmLoading(false);
+              setEditSiteModalOpen(false);
+              setOperationSite('');
+              request.basic.getSite().then((res) => {
+                dispatch.app.update({ sites: res.data });
+              });
             });
-          })
-          .catch((err) => {})
-          .finally(() => {
-            setConfirmLoading(false);
-            setEditSiteModalOpen(false);
-            setOperationSite('');
-            request.basic.getSite().then((res) => {
-              dispatch.app.update({ sites: res.data });
-            });
-          });
+        });
       }
 
       return (
@@ -426,12 +429,11 @@ const SitePoolManage: React.FC = () => {
             autoComplete="off"
             initialValues={{ items: [{}] }}
           >
-            <Form.Item label="场名" name="siteName">
+            <Form.Item initialValue={record.siteName} label="场名" name="siteName">
               <Input disabled defaultValue={record.siteName} />
             </Form.Item>
             <Form.Item label="负责人" name="custodianId" rules={[{ required: true, message: '负责人为空' }]}>
               <Select
-                defaultValue={custodianList.find((item) => record.custodianId === item.phone)?.name}
                 options={custodianList.map((value) => {
                   return {
                     value: value.userId,
