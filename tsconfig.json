@@ -1,9 +1,7 @@
 {
-  "compileOnSave": false,
-  "buildOnSave": false,
   "compilerOptions": {
     "baseUrl": ".",
-    "outDir": "build",
+    "outDir": "dist",
     "module": "esnext",
     "target": "es6",
     "ignoreDeprecations": "5.0",
@@ -31,5 +29,5 @@
     }
   },
   "include": ["src", ".temp"],
-  "exclude": ["node_modules", "build"]
+  "exclude": ["node_modules", "build", "dist"]
 }
