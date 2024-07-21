@@ -159,7 +159,7 @@ const CustodianManage = () => {
         <Table
           dataSource={sheetData}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           columns={columns}
           id="custodian-table"

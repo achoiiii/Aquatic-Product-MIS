@@ -8,6 +8,7 @@ import { BasicSheetDataType, IPoolBasicRangeSearchParams } from '@/request/sheet
 import { ColumnsType } from 'antd/es/table';
 import request from '@/request';
 import { formatPoolNos } from '@/utils/format';
+import useDefaultPoolNos from '@/hooks/useDefaultPoolNos';
 
 const { RangePicker } = DatePicker;
 interface IProps {
@@ -25,9 +26,11 @@ const LossSheet: React.FC = () => {
 
   useEffect(() => {
     setShowLoading(true);
+    const defaultPoolNos = useDefaultPoolNos();
     request.sheet.clearLoss
       .getPoolLossSheetData({
         date: dateRange,
+        poolNos: defaultPoolNos,
       })
       .then((res) => {
         const sheetData: BasicSheetDataType[] = getBasicSheetData(res.data, dateRange);
@@ -94,7 +97,7 @@ const LossSheet: React.FC = () => {
         <Table
           dataSource={data}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           scroll={{ x: 'max-content', y: 600 }}
           columns={columns}

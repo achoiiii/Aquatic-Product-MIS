@@ -8,6 +8,8 @@ import { FeedSheetDataType, IPoolBasicRangeSearchParams } from '@/request/sheet/
 import request from '@/request';
 import { formatPoolNos } from '@/utils/format';
 import { ColumnsType } from 'antd/es/table';
+import { useSelector } from '@/store';
+import useDefaultPoolNos from '@/hooks/useDefaultPoolNos';
 
 const { RangePicker } = DatePicker;
 interface IProps {
@@ -25,9 +27,12 @@ const FeedSheet: React.FC = () => {
 
   useEffect(() => {
     setShowLoading(true);
+    const defaultPoolNos = useDefaultPoolNos();
+    // 默认取第一个场
     request.sheet.feedLoss
       .getPoolFeedSheetData({
         date: dateRange,
+        poolNos: defaultPoolNos,
       })
       .then((res) => {
         const sheetData: FeedSheetDataType[] = getFeedSheetData(res.data, dateRange);
@@ -94,7 +99,7 @@ const FeedSheet: React.FC = () => {
         <Table
           dataSource={data}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           scroll={{ x: 'max-content', y: 600 }}
           columns={columns}

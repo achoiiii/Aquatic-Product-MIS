@@ -39,7 +39,7 @@ const PoolStockSheet = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [date, setDate] = useState(formatDate(Date.now()));
   const sites = useSelector((state) => state.app.sites);
-  const [dataSource, setDataSource] = useState(getData(sites));
+  const [dataSource, setDataSource] = useState(getData([sites?.[0]]));
   const TableContainer = () => {
     const columns: ColumnsType<IPoolStockData> = [
       {
@@ -78,7 +78,7 @@ const PoolStockSheet = () => {
         <Table
           dataSource={dataSource}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           columns={columns}
           id="pool-stock-table"

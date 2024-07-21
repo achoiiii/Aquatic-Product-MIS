@@ -31,8 +31,9 @@ const SitePoolManage: React.FC = () => {
           .then((res: IAddSiteData) => {
             const addPoolRequests: any[] = [];
             let area = 0;
-            for (const pool of res.pools) {
-              area += pool.area;
+            const pools = res.pools || [];
+            for (const pool of pools) {
+              area += pool?.area;
             }
             request.basic
               .addSite({
@@ -45,7 +46,7 @@ const SitePoolManage: React.FC = () => {
               .then((addSiteRes) => {
                 if (addSiteRes.code === 200) {
                   // TODO：有可能新增之后塘号存在返回201
-                  for (const pool of res.pools) {
+                  for (const pool of pools) {
                     addPoolRequests.push(request.basic.addPool({ ...pool, siteNo: res.siteNo }));
                   }
                   Promise.all([...addPoolRequests])

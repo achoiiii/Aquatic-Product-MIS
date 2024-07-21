@@ -92,7 +92,7 @@ const SiteStockSheet = () => {
         <Table
           dataSource={dataSource}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           columns={columns}
           id="site-stock-table"

@@ -7,6 +7,7 @@ import exportTableToExcel from '@/utils/sheet/exportXlsx';
 import { Button, DatePicker, Form, Table } from 'antd';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import useDefaultPoolNos from '@/hooks/useDefaultPoolNos';
 const { RangePicker } = DatePicker;
 const PoolSummarySheet = () => {
   const [showLoading, setShowLoading] = useState(false);
@@ -17,7 +18,8 @@ const PoolSummarySheet = () => {
   ]);
   const [sheetData, setSheetData]: [PoolSummaryDataType[], any] = useState([]);
   useEffect(() => {
-    request.sheet.summary.getPoolSummarySheetData({ date: dateRange }).then((res) => {
+    const defaultPoolNos = useDefaultPoolNos();
+    request.sheet.summary.getPoolSummarySheetData({ date: dateRange, poolNos: defaultPoolNos }).then((res) => {
       setSheetData(getPoolSummaryData(res.data));
     });
   }, []);
@@ -76,7 +78,7 @@ const PoolSummarySheet = () => {
         <Table
           dataSource={sheetData}
           bordered
-          pagination={{ pageSize: 100 }}
+          pagination={{ pageSize: 1000 }}
           size="small"
           scroll={{ x: 3000, y: 600 }}
           columns={columns}
