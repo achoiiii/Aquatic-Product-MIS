@@ -17,8 +17,8 @@ const PoolSummarySheet = () => {
     dayjs().format('YYYY-MM-DD'),
   ]);
   const [sheetData, setSheetData]: [PoolSummaryDataType[], any] = useState([]);
+  const defaultPoolNos = useDefaultPoolNos();
   useEffect(() => {
-    const defaultPoolNos = useDefaultPoolNos();
     request.sheet.summary.getPoolSummarySheetData({ date: dateRange, poolNos: defaultPoolNos }).then((res) => {
       setSheetData(getPoolSummaryData(res.data));
     });

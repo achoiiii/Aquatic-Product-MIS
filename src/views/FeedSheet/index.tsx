@@ -24,10 +24,9 @@ const FeedSheet: React.FC = () => {
   ]);
   const [showLoading, setShowLoading] = useState(false);
   const [columns, setColumns]: [ColumnsType<FeedSheetDataType>, any] = useState([]);
-
+  const defaultPoolNos = useDefaultPoolNos();
   useEffect(() => {
     setShowLoading(true);
-    const defaultPoolNos = useDefaultPoolNos();
     // 默认取第一个场
     request.sheet.feedLoss
       .getPoolFeedSheetData({

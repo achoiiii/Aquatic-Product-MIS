@@ -3,7 +3,8 @@ import { useEffect, useState } from 'react';
 
 export default function useDefaultPoolNos() {
   const [defaultPoolNos, setDefaultPoolNos]: [string[], any] = useState([]);
-  const defaultSite = useSelector((state) => state.app.sites)?.[0] || [];
+  const defaultSite = useSelector((state) => state.app.sites)?.[0] || { pools: [] };
+
   useEffect(() => {
     let defaultPoolNos: string[] = [];
     for (const pool of defaultSite.pools) {

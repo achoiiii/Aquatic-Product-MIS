@@ -1,13 +1,12 @@
-import { InfoCircleOutlined, LockOutlined, UserOutlined } from '@ant-design/icons';
-import { Button, Checkbox, Form, Input, message } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Form, Input, message } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 import './index.scss';
-import { dispatch, useSelector } from '@/store';
+import { dispatch } from '@/store';
 
 const Login = () => {
   const navigateTo = useNavigate();
-  const isLogin = useSelector((state) => state.user.isLogin);
   const onFinish = (values: any) => {
     dispatch.user.login(values).then((res) => {
       if (res.code === 200) {

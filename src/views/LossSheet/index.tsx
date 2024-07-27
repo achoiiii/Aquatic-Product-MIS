@@ -23,10 +23,10 @@ const LossSheet: React.FC = () => {
   ]);
   const [showLoading, setShowLoading] = useState(false);
   const [columns, setColumns]: [ColumnsType<BasicSheetDataType>, any] = useState([]);
+  const defaultPoolNos = useDefaultPoolNos();
 
   useEffect(() => {
     setShowLoading(true);
-    const defaultPoolNos = useDefaultPoolNos();
     request.sheet.clearLoss
       .getPoolLossSheetData({
         date: dateRange,
